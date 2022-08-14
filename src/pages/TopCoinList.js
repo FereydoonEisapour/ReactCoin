@@ -3,6 +3,7 @@ import { Coin } from "../components";
 
 const TopCoinList = () => {
   const [coins, setCoins] = useState([]);
+  
   const [search, setSearch] = useState("");
   useEffect(() => {
     fetch(

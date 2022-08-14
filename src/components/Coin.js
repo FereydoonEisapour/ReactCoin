@@ -8,7 +8,7 @@ const Coin = ({ name, price, symbol, marketcap, volume, image, priceChange }) =>
       <div className="coin-row">
         <div className="coin">
           <img src={image} alt="crypto" />
-          <Link to={`/coin/${name}`} style={{ textDecoration: "none" }}>
+          <Link to={`/coin/${symbol}`} style={{ textDecoration: "none" }}>
             <h1>{name}</h1>
           </Link>
           <p className="coin-symbol">{symbol}</p>
