@@ -2,19 +2,24 @@ import React from "react";
 import PropTypes from "prop-types";
 import "../assets/styles/Coin.css";
 import { Link } from "react-router-dom";
+import CoinPirceLive from "./CoinPriceLive";
 const Coin = ({ name, price, symbol, marketcap, volume, image, priceChange }) => {
+
   return (
-    <div className="coin-container">
-      <div className="coin-row">
+    <div className="coin-container ">
+      <div className="coin-row bg-light m-1 px-3">
         <div className="coin">
           <img src={image} alt="crypto" />
-          <Link to={`/coin/${symbol}`} style={{ textDecoration: "none" }}>
+          <Link to={`/coin/${name}`} style={{ textDecoration: "none" }}>
             <h1>{name}</h1>
           </Link>
           <p className="coin-symbol">{symbol}</p>
         </div>
         <div className="coin-data">
-          <p className="coin-price">${price}</p>
+          {/* <p className="coin-price">${price} </p> */}
+          <div className="coin-price">
+            <CoinPirceLive symbol={symbol} />
+          </div>
           <p className="coin-volume">${volume.toLocaleString()}</p>
 
           {priceChange < 0 ? (

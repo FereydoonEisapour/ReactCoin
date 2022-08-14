@@ -5,8 +5,8 @@ import styled from "styled-components";
 
 const TradingChart = () => {
   const { coin } = useParams();
-  const tradingRef = useRef(null);
   const [symbol, setSymbol] = useState("BTCUSDT");
+  const tradingRef = useRef(null);
 
   useEffect(() => {
     //  console.log(tradingRef.current.props.symbol);

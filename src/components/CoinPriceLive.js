@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-const CoinPriceLive = (props) => {
+const CoinPriceLive = ({ symbol }) => {
   const { coin } = useParams();
+
   const [btcPriceBinance, setBtcPriceBinance] = useState(Number);
 
   useEffect(() => {
@@ -12,7 +13,8 @@ const CoinPriceLive = (props) => {
       binanceSocket.send(
         JSON.stringify({
           method: "SUBSCRIBE",
-          params: [`${coinL}usdt@trade`],
+          params: symbol === "usdt" ? [`usdc${symbol}@trade`] : [`${symbol}usdt@trade`],
+          //   params: [`${symbol}usdt@trade`],
           id: 1,
         })
       );
