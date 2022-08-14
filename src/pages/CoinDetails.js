@@ -20,7 +20,7 @@ const CoinDetails = (props) => {
   }, [coin]);
 
   return coinDetails ? (
-    <div className="d-flex col-12 justify-content-center  border-light" >
+    <div className="d-flex col-12 justify-content-center  border-light">
       <div className="col-10 my-4 bg-light ">
         <div className="list-group w-auto ">
           <div className="list-group-item list-group-item-action  align-items-center   d-flex gap-3 py-3">
@@ -35,13 +35,11 @@ const CoinDetails = (props) => {
               <div>
                 <h6 className="mb-0 mx-4 text-capitalize ">{coinDetails.id}</h6>
               </div>
-              <div className=" text-nowrap">
-                {/* <CoinPriceLive /> */} not working
-              </div>
+              <div className=" text-nowrap">{/* <CoinPriceLive /> */} not working</div>
             </div>
           </div>
         </div>
-        <div className="d-flex flex-wrap justify-content-start main-color" >
+        <div className="d-flex flex-wrap justify-content-start main-color">
           <div className="col-4 my-1 bg-light">
             <div className="list-group w-auto ">
               <div className="list-group-item list-group-item-action  align-items-center d-flex gap-3 py-3">
@@ -97,7 +95,11 @@ const CoinDetails = (props) => {
       </div>
     </div>
   ) : (
-    "loading"
+    <div className="d-flex justify-content-center align-items-center align-content-center">
+      <div class="spinner-border text-secondary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
   );
 };
 

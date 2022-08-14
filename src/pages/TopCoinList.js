@@ -3,7 +3,7 @@ import { Coin } from "../components";
 
 const TopCoinList = () => {
   const [coins, setCoins] = useState([]);
-  const [coinsListNumber, setCoinsListNumber] = useState(10);
+  const [coinsListNumber, setCoinsListNumber] = useState(3);
   const [search, setSearch] = useState("");
   useEffect(() => {
     fetch(
@@ -28,7 +28,7 @@ const TopCoinList = () => {
   return (
     <div className="coin-search ">
       <div className="coin-app">
-        <h1 className="coin-text"> Crypto</h1>
+        {/* <h1 className="coin-text"> Crypto</h1> */}
         <form>
           <input
             className="coin-input my-3"
