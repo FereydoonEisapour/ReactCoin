@@ -21,7 +21,7 @@ const CoinPriceLive = ({ symbol }) => {
     };
     binanceSocket.onmessage = function (event) {
       const BtcPriceNow = JSON.parse(event.data);
-      const price = parseFloat(BtcPriceNow.p).toFixed(4);
+      const price = parseFloat(BtcPriceNow.p).toFixed(0 );
       if (isNaN(price) === false) {
         setBtcPriceBinance(price);
       }
@@ -34,8 +34,8 @@ const CoinPriceLive = ({ symbol }) => {
         {btcPriceBinance ? (
           btcPriceBinance
         ) : (
-          <div class="spinner-grow spinner-grow-sm" role="status">
-            <span class="visually-hidden">Loading...</span>
+          <div className="spinner-grow spinner-grow-sm" role="status">
+            <span className="visually-hidden">Loading...</span>
           </div>
         )}
       </div>

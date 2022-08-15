@@ -9,10 +9,17 @@ const Navbar = () => {
           <div className="display-6">
             <Link className="text-decoration-none" to="/">
               Crypto
-            </Link >
+            </Link>
           </div>
           <div className=" mx-3 h4 mt-2">
-            <Link className="text-decoration-none" to="/coin/trading/btc">Trade</Link>
+            <Link className="text-decoration-none" to="/coin/trading/btc">
+              Trade
+            </Link>
+          </div>
+          <div className=" mx-3 h4 mt-2">
+            <Link className="text-decoration-none" to="/coin/buyfast/btc">
+              Buy Now
+            </Link>
           </div>
         </div>
 
