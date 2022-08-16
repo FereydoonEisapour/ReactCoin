@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import CoinPriceLive from "./../components/CoinPriceLive";
 const BuyFastCoins = () => {
@@ -6,17 +6,21 @@ const BuyFastCoins = () => {
 
   const [usdtWallet, setUsdtWallet] = useState(100000); //! Get Api  Send Api
   //const [usdtInput, setUsdtInput] = useState(0); //!
-  const [btcInput, setBtcInput] = useState(0); //! BTC INPUT
+  const [btcInput, setBtcInput] = useState(Number); //! BTC INPUT
   const [BTCPrice, setBTCPrice] = useState(Number); //  !  BTC PRICE from Coingecko
-  const [btcCanBuy, setBtcCanBuy] = useState();
-  const [usdtPay, setUsdtPay] = useState(0);
+  const [btcCanBuy, setBtcCanBuy] = useState(Number);
+  const [usdtPay, setUsdtPay] = useState(Number);
   const [btnDisabled, setBtnDisabled] = useState(false);
+  const inputRef = useRef();
+
   const btcInputHandler = (event) => {
     const btcAmount = parseFloat(event.target.value);
+    if(btcAmount===0){inputRef.current(0)}
+    
+    //  btcAmount.replace(/^0+/, "");
     setBtcInput(btcAmount);
     setUsdtPay((BTCPrice * btcAmount).toFixed(1));
     if (btcAmount === 0) setUsdtPay(0);
-
   };
 
   useEffect(() => {
@@ -41,14 +45,13 @@ const BuyFastCoins = () => {
               {coin.toUpperCase()}
             </span>
             <input
-              // value={BTC}
               onChange={(event) => btcInputHandler(event)}
               value={btcInput}
               type="number"
               className="form-control  border border-0"
               min="0"
               max="21000000"
-              placeholder="amount"
+              placeholder=""
             />
           </div>
 

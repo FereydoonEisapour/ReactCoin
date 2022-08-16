@@ -26,7 +26,7 @@ const CoinPriceLive = ({ symbol }) => {
         setBtcPriceBinance(price);
       }
     };
-  }, []);
+  }, [coin, symbol]);
 
   return (
     <>

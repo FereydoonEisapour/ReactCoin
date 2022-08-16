@@ -1,7 +1,7 @@
 import React from "react";
 
-const DetailsCoinItem = ({}) => {
-  console.log();
+const DetailsCoinItem = () => {
+ 
   return (
     <div className="col-4 my-1 bg-light">
       <div className="list-group w-auto ">
