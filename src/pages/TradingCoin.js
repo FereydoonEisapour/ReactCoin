@@ -3,8 +3,8 @@ import { useParams } from "react-router-dom";
 import CoinPriceLive from "../components/CoinPriceLive";
 import TradingChart from "./../components/TradingChart";
 const TradingCoin = () => {
-  // const { coin } = useParams();
-  const coin = "eth";
+  const { coin } = useParams();
+
   const [BTC, setBTC] = useState(Number); //  !  BTC PRICE
 
   const [usdtWallet, setUsdtWallet] = useState(100000); //! USDST Wallet
@@ -176,7 +176,7 @@ const TradingCoin = () => {
         </div>
         <div className="chart  justify-content-center">
           <div className="w-75"></div>
-            <TradingChart />
+          <TradingChart />
         </div>
       </div>
     </>

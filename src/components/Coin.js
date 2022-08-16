@@ -1,10 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 import "../assets/styles/Coin.css";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import CoinPirceLive from "./CoinPriceLive";
 const Coin = ({ name, price, symbol, marketcap, volume, image, priceChange }) => {
-
   return (
     <div className="coin-container ">
       <div className="coin-row bg-light m-1 px-3">
@@ -29,6 +28,11 @@ const Coin = ({ name, price, symbol, marketcap, volume, image, priceChange }) =>
           )}
 
           <p className="coin-marketcap">Mkt Cap: ${marketcap.toLocaleString()}</p>
+        </div>
+        <div className="p-1 px-3 mb-2">
+          <Link className="text-decoration-none" to={`/coin/trading/${symbol}`}>
+            Trade
+          </Link>
         </div>
       </div>
     </div>
