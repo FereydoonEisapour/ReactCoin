@@ -84,7 +84,7 @@ const TradingCoin = () => {
   return (
     <>
       <div className="d-flex row">
-        <div className="trade d-flex">
+        <div className="trade d-flex mb-5">
           <div className="w-50 m-3 p-3 border border-1">
             <div className="pb-3 text-center text-dark">Buy {coin.toLocaleUpperCase()}</div>
             <div className="">
@@ -174,7 +174,7 @@ const TradingCoin = () => {
             <CoinPriceLive symbol={coin} />
           </div>
         </div>
-        <div className="chart  justify-content-center">
+        <div className="chart  justify-content-center mt-5">
           <div className="w-75"></div>
           <TradingChart />
         </div>
