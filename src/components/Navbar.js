@@ -1,36 +1,49 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useAuthState } from "../contexts/AuthContext";
 
 const Navbar = () => {
+  const { user } = useAuthState();
   return (
-    <nav className="navbar navbar-expand-lg  ">
+    <nav className="navbar  ">
       <div className="container-fluid">
         <div className="d-flex align-items-center">
-          <div className="display-6">
-            <Link className="text-decoration-none" to="/">
+          <nav className="px-3 ">
+            <Link className="text-decoration-none px-3" to="/">
               Crypto
             </Link>
-          </div>
-          <div className=" mx-3 h4 mt-2">
-            <Link className="text-decoration-none" to="/coin/trading/btc">
-              Trade
-            </Link>
-          </div>
-          <div className=" mx-3 h4 mt-2">
-            <Link className="text-decoration-none" to="/coin/buyfast/btc">
-              Buy Now
-            </Link>
-          </div>
+            {!user ? (
+              <>
+                <Link className="text-decoration-none px-3" to="/coin/trading/btc">
+                  Trade
+                </Link>
+                <Link className="text-decoration-none px-3" to="/coin/buyfast/btc">
+                  Buy Now
+                </Link>
+              </>
+            ) : (
+              <></>
+            )}
+          </nav>
+          {/* <div className="display-6"></div>
+          <div className=" mx-3 h4 mt-2"></div> */}
+          {/* <div className=" mx-3 h4 mt-2"></div> */}
         </div>
 
         <div className="d-flex align-items-center px-1">
           <ul className="navbar-nav me-auto mb-2  my-2">
-            <li className="nav-item mx-2">Dashboard</li>
+            {!user ? (
+              <Link to="/dashboard" className="nav-item mx-2 text-decoration-none">
+                Dashboard
+              </Link>
+            ) : (
+              <></>
+            )}
           </ul>
           <div className="d-flex">
-            <button className="btn btn-outline-success" type="submit">
+            <Link to="/login" className="btn btn-outline-success" type="submit">
               Login
-            </button>
+            </Link>
           </div>
         </div>
       </div>
