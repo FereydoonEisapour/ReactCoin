@@ -1,4 +1,6 @@
 import React from "react";
+import { auth } from "../data/Firebase";
+import { useNavigate } from "react-router-dom";
 
 const AuthStateContext = React.createContext();
 const AuthDispatchContext = React.createContext();
@@ -21,7 +23,9 @@ function useAuthDispatch() {
 }
 const initialState = {
   user: null,
+  userEmail: null,
   error: null,
+  status: false,
 };
 
 function AuthProvider(props) {
@@ -33,5 +37,21 @@ function AuthProvider(props) {
     </AuthStateContext.Provider>
   );
 }
-
-export { AuthProvider, useAuthState, useAuthDispatch };
+function doSingUp(dispatch, emailInput, passwordInput) {
+  auth.createUserWithEmailAndPassword(emailInput, passwordInput).then((result) => {
+    dispatch({
+      user: result.user,
+    });
+  });
+}
+function doLogIn(dispatch, emailInput, passwordInput) {
+  auth
+    .signInWithEmailAndPassword(emailInput, passwordInput)
+    .then((result) => {
+      dispatch({
+        user: result.user,
+      });
+    })
+    
+}
+export { AuthProvider, useAuthState, useAuthDispatch, doSingUp, doLogIn };

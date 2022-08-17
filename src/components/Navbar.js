@@ -12,7 +12,7 @@ const Navbar = () => {
             <Link className="text-decoration-none px-3" to="/">
               Crypto
             </Link>
-            {!user ? (
+            {user ? (
               <>
                 <Link className="text-decoration-none px-3" to="/coin/trading/btc">
                   Trade
@@ -25,14 +25,10 @@ const Navbar = () => {
               <></>
             )}
           </nav>
-          {/* <div className="display-6"></div>
-          <div className=" mx-3 h4 mt-2"></div> */}
-          {/* <div className=" mx-3 h4 mt-2"></div> */}
         </div>
-
         <div className="d-flex align-items-center px-1">
           <ul className="navbar-nav me-auto mb-2  my-2">
-            {!user ? (
+            {user ? (
               <Link to="/dashboard" className="nav-item mx-2 text-decoration-none">
                 Dashboard
               </Link>
@@ -41,9 +37,11 @@ const Navbar = () => {
             )}
           </ul>
           <div className="d-flex">
-            <Link to="/login" className="btn btn-outline-success" type="submit">
-              Login
-            </Link>
+            {user ? null : (
+              <Link to="/login" className="nav-item mx-2 text-decoration-none" type="submit">
+                Login
+              </Link>
+            )}
           </div>
         </div>
       </div>
