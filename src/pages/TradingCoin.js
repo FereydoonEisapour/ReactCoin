@@ -1,16 +1,21 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import CoinPriceLive from "../components/CoinPriceLive";
+import { useAuthState } from "../contexts/AuthContext";
 import TradingChart from "./../components/TradingChart";
+import db from "./../data/Firebase";
+import firebase from "firebase/compat/app";
 const TradingCoin = () => {
   const { coin } = useParams();
+  // const { user } = useAuthState();
+  const user = { email: "epfereydoon@gmail.com" };
+  const [coinPriceLive, setCoinPriceLive] = useState(Number); //  !  BTC PRICE
 
-  const [BTC, setBTC] = useState(Number); //  !  BTC PRICE
+  const [usdtWallet, setUsdtWallet] = useState(Number); //! USDST Wallet
+  const [usdtWalletId, setUsdtWalletId] = useState("");
 
-  const [usdtWallet, setUsdtWallet] = useState(100000); //! USDST Wallet
-
-  const [usdtInput, setUsdtInput] = useState(1); //! USDT INPUT
-  const [btcInput, setBtcInput] = useState(1); //! BTC INPUT
+  const [usdtInput, setUsdtInput] = useState(Number); //! USDT INPUT
+  const [coinInput, setCoinInput] = useState(Number); //! BTC INPUT
 
   const [btcBuy, setBtcBuy] = useState(Number);
   const [orders, setOrders] = useState([]);
@@ -18,73 +23,179 @@ const TradingCoin = () => {
   const [trades, setTrades] = useState([]);
 
   const usdtInputHandler = (event) => {
-    setUsdtInput(event.target.value);
-    setBtcBuy(usdtInput * btcInput);
+    setUsdtInput(Number(event.target.value));
+    setBtcBuy(usdtInput * coinInput);
   };
-  const btcInputHandler = (event) => {
-    setBtcInput(event.target.value);
-    setBtcBuy(usdtInput * btcInput);
+  const coinInputHandler = (event) => {
+    setCoinInput(Number(event.target.value));
+    setBtcBuy(usdtInput * coinInput);
   };
   useEffect(() => {
-    setBtcBuy(usdtInput * btcInput);
-  }, [btcInput, usdtInput]);
+    setBtcBuy(usdtInput * coinInput);
+  }, [coinInput, usdtInput]);
 
+  // ! Get USDT
   useEffect(() => {
-    fetch(`https://api.coingecko.com/api/v3/coins/bitcoin`)
-      .then((response) => response.json())
-      .then((data) => setBTC(data.market_data.current_price.usd))
+    db.collection(user.email)
+      .doc(user.email)
+      .collection("coins")
+      .where("coin", "==", "USDT")
+      .onSnapshot((snapshot) => {
+        snapshot.docChanges().forEach((change) => {
+          if (change.type === "added") {
+            if (change.doc.data().amount !== undefined) {
+              setUsdtWallet(Number(change.doc.data().amount));
+              setUsdtWalletId(change.doc.id);
+            }
+          }
+        });
+      });
+  }, [user.email]);
+  // ! GET
+  // useEffect(() => {
+  //   fetch(`https://api.coingecko.com/api/v3/coins/bitcoin`)
+  //     .then((response) => response.json())
+  //     .then((data) => setCoinPriceLive(data.market_data.current_price.usd))
 
-      .catch((err) => console.error(err));
-  }, []);
+  //     .catch((err) => console.error(err));
+  // }, []);
 
   const setOrderHandler = (e) => {
     e.preventDefault();
     if (btcBuy === 0) return;
-    const newOrder = {
-      id: Date.now(),
-      ordersCoinName: coin.toUpperCase(),
-      orderCoinAmount: btcInput,
-      orderCointPrice: usdtInput,
-    };
-    setOrders([...orders, newOrder]);
-    // todo  Your recent orders
-    // Side	Order price	the amount of	currency	Total Amount	full	Actions
-    // Buy	17,000	0.045	BTC	765 Tether	0%	Cancel the order
+    db.collection(user.email).doc(user.email).collection("orders").add({
+      coin: coin.toLocaleLowerCase(),
+      amount: coinInput,
+      inPrice: usdtInput,
+      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+    });
   };
-  const priceRef = useRef();
-  //const [orderMatch, setOrderMatch] = useState([]);
+  // ! GET ORDERS
+  useEffect(() => {
+    db.collection(user.email)
+      .doc(user.email)
+      .collection("orders")
+      .onSnapshot((snapshot) => {
+        setOrders(
+          snapshot.docs.map((doc) => ({
+            id: doc.id,
+            coin: doc.data().coin,
+            amount: Number(doc.data().amount),
+            inPrice: Number(doc.data().inPrice),
+          }))
+        );
+      });
+  }, [user.email]);
+  // ! GET TRADES
+  useEffect(() => {
+    db.collection(user.email)
+      .doc(user.email)
+      .collection("trades")
+      .onSnapshot((snapshot) => {
+        setTrades(
+          snapshot.docs.map((doc) => ({
+            id: doc.id,
+            coin: doc.data().coin,
+            amount: doc.data().amount,
+            inPrice: doc.data().inPrice,
+          }))
+        );
+      });
+  }, [user.email]);
+
+  // const priceRef = useRef();
+  // useEffect(() => {
+  //   const prifeaa = Number(priceRef.current.innerText);
+  //   setCoinPriceLive(prifeaa);
+  // },[]);
+  // // useEffect(() => {
+  // if (CoinPriceLive && orders.length > 0) {
+  //   setInterval(() => {
+  //     // const priceNow = Number(priceRef.current.innerText);
+
+  //     const orderMatchFind = orders.find((item) => item.inPrice === coinPriceLive);
+  //     console.log(orderMatchFind);
+
+  //     if (orderMatchFind !== undefined) {
+  //       setOrders(orders.filter((item) => item.id !== orderMatchFind.id));
+  //       console.log(orderMatchFind);
+  //       db.collection(user.email).doc(user.email).collection("trades").add({
+  //         coin: coin,
+  //         amount: orderMatchFind.orderamount,
+  //         inPrice: orderMatchFind.orderCointPrice,
+  //       });
+  //       setUsdtWallet(usdtWallet - orderMatchFind.orderCointPrice);
+  //     }
+  //   }, 1000); // interval time 10
+  // }
+  // //}, [coin, coinPriceLive, orders, usdtWallet, user.email]);
+
+  // useEffect(() => {
+  //   console.log(coinPriceLive);
+  // }, [coinPriceLive]);
+  useEffect(() => {
+    if (orders.length > 0) {
+      const orderMatchFind = orders.find((item) => item.inPrice === Number(coinPriceLive));
+
+      // setOrders(orders.filter((item) => item.id !== orderMatchFind.id));
+      //  console.log(orderMatchFind);
+      if (orderMatchFind !== undefined) {
+        db.collection(user.email)
+          .doc(user.email)
+          .collection("trades")
+          .add({
+            coin: coin,
+            amount: Number(orderMatchFind.amount),
+            inPrice: Number(orderMatchFind.inPrice),
+          });
+        db.collection(user.email)
+          .doc(user.email)
+          .collection("orders")
+          .doc(orderMatchFind.id)
+          .delete();
+        //
+
+        const newWaletUsdts = usdtWallet - Number(orderMatchFind.inPrice);
+
+        db.collection(user.email).doc(user.email).collection("coins").doc(usdtWalletId).set(
+          {
+            amount: newWaletUsdts,
+          },
+          {
+            merge: true,
+          }
+        );
+        //  setUsdtWallet(usdtWallet - Number(orderMatchFind.orderCointPrice));
+      }
+    }
+  }, [coin, coinPriceLive, orders, usdtWallet, usdtWalletId, user.email]);
 
   useEffect(() => {
-    if (BTC && orders.length > 0) {
-      setInterval(() => {
-        const priceNow = priceRef.current.innerText;
-        // if (priceNow === orders[0].orderCointPrice) {
-        //   confirmOrder();
-        // }
-        const orderMatchFind = orders.find((item) => item.orderCointPrice === priceNow);
-        //if (orderMatchFind === true)
-        if (orderMatchFind !== undefined) {
-          //  setOrderMatch(orderMatchFind);
-          setOrders(orders.filter((item) => item.id !== orderMatchFind.id));
+    const binanceSocket = new WebSocket("wss://stream.binance.com:9443/ws");
 
-          ///////////////////////////////
-          const newTrade = {
-            id: Date.now(),
-            tradeCoinName: coin.toUpperCase(),
-            tradeCoinAmount: orderMatchFind.orderCoinAmount,
-            tradeCoinPrice: orderMatchFind.orderCointPrice,
-          };
-          setTrades([...trades, newTrade]);
-          setUsdtWallet(usdtWallet - orderMatchFind.orderCointPrice);
-        }
-      }, 10);
-    }
-  }, [BTC, orders, trades, usdtWallet]);
-
+    binanceSocket.onopen = function () {
+      binanceSocket.send(
+        JSON.stringify({
+          method: "SUBSCRIBE",
+          params: coin === "usdt" ? [`usdc${coin}@trade`] : [`${coin}usdt@trade`],
+          //   params: [`${symbol}usdt@trade`],
+          id: 1,
+        })
+      );
+    };
+    binanceSocket.onmessage = function (event) {
+      const BtcPriceNow = JSON.parse(event.data);
+      const price = parseFloat(BtcPriceNow.p).toFixed(0);
+      if (isNaN(price) === false) {
+        setCoinPriceLive(Number(price));
+      }
+    };
+  }, [coin]);
+  if (!user) return <Navigate to="/" />;
   return (
     <>
       <div className="d-flex row">
-        <div className="trade d-flex mb-5">
+        <div className="trade d-flex mb-">
           <div className="w-50 m-3 p-3 border border-1">
             <div className="pb-3 text-center text-dark">Buy {coin.toLocaleUpperCase()}</div>
             <div className="">
@@ -113,8 +224,8 @@ const TradingCoin = () => {
                   {coin.toUpperCase()}
                 </span>
                 <input
-                  value={btcInput}
-                  onChange={(event) => btcInputHandler(event)}
+                  value={coinInput}
+                  onChange={(event) => coinInputHandler(event)}
                   type="number"
                   className="form-control"
                   aria-label="Sizing example input"
@@ -144,9 +255,9 @@ const TradingCoin = () => {
                     className="d-flex justify-content-between border border-1 p-1 m-3"
                     key={item.id}
                   >
-                    <div className="">{item.ordersCoinName}</div>
-                    <div className="">{item.orderCoinAmount}</div>
-                    <div className="">{item.orderCointPrice}</div>
+                    <div className="">{item.coin}</div>
+                    <div className="">{item.amount}</div>
+                    <div className="">{item.inPrice}</div>
                   </div>
                 ))
               : null}
@@ -159,24 +270,27 @@ const TradingCoin = () => {
                     key={item.id}
                   >
                     <div className=""> You Buy </div>
-                    <div className=""> : {item.tradeCoinAmount}</div>
+                    {/* <div className=""> : {item.tradeamount}</div>
                     <div className=""> {item.tradeCoinName}</div>
-                    <div className=""> in {item.tradeCoinPrice} USDT</div>
+                    <div className=""> in {item.tradeCoinPrice} USDT</div> */}
+                    <div className="">{item.coin}</div>
+                    <div className="">{item.amount}</div>
+                    <div className="">{item.inPrice}</div>
                   </div>
                 ))
               : null}
           </div>
           <div
             className="display-3 d-flex justify-content-center align-items-center w-50"
-            ref={priceRef}
+            // ref={priceRef}
           >
-            {/* {BTC} */}
-            <CoinPriceLive symbol={coin} />
+            {coinPriceLive}
+            {/* <CoinPriceLive symbol={coin} /> */}
           </div>
         </div>
         <div className="chart  justify-content-center mt-5">
           <div className="w-75"></div>
-          <TradingChart />
+          {/* <TradingChart /> */}
         </div>
       </div>
     </>
@@ -184,3 +298,27 @@ const TradingCoin = () => {
 };
 
 export default TradingCoin;
+
+// useEffect(() => {
+//   // ! Get USDT
+//   db.collection(user.email)
+//     .doc(user.email)
+//     .collection("coins")
+//     .where("coin", "==", "USDT")
+//     .onSnapshot((snapshot) => {
+//       snapshot.docChanges().forEach((change) => {
+//         if (change.type === "added") {
+//           if (change.doc.data().amount !== undefined) {
+//             setUsdtWallet(change.doc.data().amount);
+//             setUsdtWalletId(change.doc.id);
+//           }
+//         }
+//         if (change.type === "modified") {
+//           console.log("Modified city: ", change.doc.data());
+//         }
+//         if (change.type === "removed") {
+//           console.log("Removed city: ", change.doc.data());
+//         }
+//       });
+//     });
+// }, [user.email]);

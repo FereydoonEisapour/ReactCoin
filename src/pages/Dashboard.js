@@ -6,8 +6,7 @@ import firebase from "firebase/compat/app";
 const Dashboard = () => {
   const { user } = useAuthState();
   const [coins, setCoins] = useState([]);
-  if (!user) return <Navigate to="/" />;
-  // eslint-disable-next-line react-hooks/rules-of-hooks
+
   useEffect(() => {
     db.collection(user.email)
       .doc(user.email)
@@ -26,19 +25,23 @@ const Dashboard = () => {
   const addCoin = (e) => {
     e.preventDefault();
     db.collection(user.email).doc(user.email).collection("coins").add({
-      coin: "ADA",
-      amount: "100",
+      coin: "USDT",
+      amount: 100000,
       timestamp: firebase.firestore.FieldValue.serverTimestamp(),
     });
   };
+  if (!user) return <Navigate to="/" />;
 
   return (
     <div className="container d-flex  p-1  ">
       <div className="col-12 d-flex row  p-3 mx-4">
         {coins.map((item) => (
-          <div className="col-5 p-4 m-2 d-flex border justify-content-around bg-info text-light display-6" key={item.id}>
+          <div
+            className="col-5 p-4 m-2 d-flex border justify-content-around bg-info text-light display-6"
+            key={item.id}
+          >
             <div className="">{item.coin} </div>
-            <div className="">  {item.amount}</div>
+            <div className=""> {item.amount}</div>
           </div>
         ))}
       </div>
