@@ -9,7 +9,9 @@
   color: #fff; */
  
 }
-
+.bg-white{
+  background-color: #ffffff;
+}
 .main-color{
   background-color: #ebf2f9;
 }

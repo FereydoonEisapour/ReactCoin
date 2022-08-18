@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import TradingViewWidget, { Themes, IntervalTypes } from "react-tradingview-widget";
-import styled from "styled-components";
 
-const TradingChart = () => {
+
+const TradingChart = ({ height, width }) => {
   const { coin } = useParams();
   const [symbol, setSymbol] = useState("BTCUSDT");
   const tradingRef = useRef(null);
@@ -14,15 +14,15 @@ const TradingChart = () => {
   }, [coin]);
 
   return (
-    <div>
-      <TradingViewWidget
-        symbol={symbol}
-        theme={Themes.LIGHT}
-        locale="en"
-        ref={tradingRef}
-        IntervalTypes={IntervalTypes.W}
-      />
-    </div>
+    <TradingViewWidget
+      height={height}
+      width={width}
+      symbol={symbol}
+      theme={Themes.LIGHT}
+      locale="en"
+      ref={tradingRef}
+      IntervalTypes={IntervalTypes.W}
+    />
   );
 };
 export default TradingChart;

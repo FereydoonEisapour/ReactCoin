@@ -9,7 +9,7 @@ const OrderItem = ({ coin, amount, inPrice, id }) => {
   };
   return (
     <>
-      <div className="d-flex justify-content-between border border-1 p-1 m-3">
+      <div className="d-flex justify-content-between rounded-3 p-1 m-2 order-success">
         <div className="">{coin}</div>
         <div className="">{amount}</div>
         <div className="">{inPrice}</div>

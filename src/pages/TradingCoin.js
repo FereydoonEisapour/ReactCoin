@@ -5,7 +5,7 @@ import { useAuthState } from "../contexts/AuthContext";
 import TradingChart from "./../components/TradingChart";
 import db from "./../data/Firebase";
 import firebase from "firebase/compat/app";
-
+import "../assets/styles/tradeingCoin.css";
 import { OrderItem, TradeItem } from "../components";
 const TradingCoin = () => {
   const { coin } = useParams();
@@ -169,100 +169,184 @@ const TradingCoin = () => {
 
   if (!user) return <Navigate to="/" />;
   return (
-    <>
-      <div className="d-flex row">
-        <div className="trade d-flex mb-">
-          <div className="w-50 m-3 p-3 border border-1">
-            <div className="pb-3 text-center text-dark">Buy {coin.toLocaleUpperCase()}</div>
-            <div className="">
-              <div className="input-group mb-3 px-4">
-                <span
-                  className="input-group-text"
-                  style={{ padding: "8px  44px" }}
-                  id="inputGroup-sizing-default"
-                >
-                  USDT
-                </span>
-                <input
-                  value={usdtInput}
-                  onChange={(event) => usdtInputHandler(event)}
-                  type="number"
-                  className="form-control"
-                />
-              </div>
-
-              <div className="input-group mb-3 px-4">
-                <span
-                  className="input-group-text  "
-                  style={{ padding: "8px  50px" }}
-                  id="inputGroup-sizing-default"
-                >
-                  {coin.toUpperCase()}
-                </span>
-                <input
-                  value={coinInput}
-                  onChange={(event) => coinInputHandler(event)}
-                  type="number"
-                  className="form-control"
-                  aria-label="Sizing example input"
-                  aria-describedby="inputGroup-sizing-default"
-                />
-              </div>
-              <div className="input-group   mb-3 px-4 d-flex">
-                <span className="input-group-text w-75 border border-0 ">USDT in WALLET</span>
-                <span className="input-group-text w-25 border border-0 ">{usdtWallet}</span>
-              </div>
-            </div>
-            <div className="">You recived : {calcOrder}</div>
-            <div className="  mb-3 px-4">
-              <button
-                className="btn  btn-primary w-100"
-                disabled={calcOrder > usdtWallet}
-                onClick={(e) => setOrderHandler(e)}
-              >
-                Buy
-              </button>
-              <span>{calcOrder > usdtWallet ? "Please Deposit USDT" : ""}</span>
-            </div>
-            <h1>Orders</h1>
-
-            {orders.map((order) => (
-              <OrderItem
-                key={order.id}
-                coin={order.coin}
-                amount={order.amount}
-                inPrice={order.inPrice}
-                id={order.id}
-              />
-            ))}
-
-            <hr />
-            <h1>Trades</h1>
-            {trades.map((trade) => (
-              <TradeItem
-                key={trade.id}
-                id={trade.id}
-                coin={trade.coin}
-                amount={trade.amount}
-                inPrice={trade.inPrice}
-              />
-            ))}
+    <div className="containerTrade ">
+      <div className="livePrice  d-flex justify-content-between p-2 m-2 p-3 bg-white rounded-3">
+        <div className="coinName">{coin.toLocaleUpperCase()}/USDT</div>
+        <div className="coinPrice">{coinPriceLive}</div>
+      </div>
+      <div className="trade row  m-2 p-3 bg-white rounded-3">
+        <div className="p-4">
+          <div className="input-group mb-3 px-4">
+            <span
+              className="input-group-text"
+              style={{ padding: "8px  44px" }}
+              id="inputGroup-sizing-default"
+            >
+              USDT
+            </span>
+            <input
+              value={usdtInput}
+              onChange={(event) => usdtInputHandler(event)}
+              type="number"
+              className="form-control"
+            />
           </div>
-          <div className="display-3 d-flex justify-content-center align-items-center w-50">
-            {coinPriceLive}
-            {/* <CoinPriceLive symbol={coin} /> */}
+          <div className="input-group mb-3 px-4">
+            <span
+              className="input-group-text  "
+              style={{ padding: "8px  50px" }}
+              id="inputGroup-sizing-default"
+            >
+              {coin.toUpperCase()}
+            </span>
+            <input
+              value={coinInput}
+              onChange={(event) => coinInputHandler(event)}
+              type="number"
+              className="form-control"
+              aria-label="Sizing example input"
+              aria-describedby="inputGroup-sizing-default"
+            />
           </div>
         </div>
-        <div className="chart  justify-content-center mt-5">
-          <div className="w-75"></div>
-          {/* <TradingChart /> */}
+        <div className="">You recived : {calcOrder}</div>
+        <div className="  mb-3 px-4">
+          <button
+            className="btn  btn-primary w-100"
+            disabled={calcOrder > usdtWallet}
+            onClick={(e) => setOrderHandler(e)}
+          >
+            Buy
+          </button>
+          <span>{calcOrder > usdtWallet ? "Please Deposit USDT" : ""}</span>
         </div>
       </div>
-    </>
+      <div className="chart  m-2 rounded-3">
+        {<TradingChart height="500" width="840" />}
+      </div>
+      <div className="balance  m-2 p-3 bg-white rounded-3">
+        <h1> balance</h1>
+        <div className="input-group   mb-3 px-4 d-flex">
+          <span className="input-group-text w-75 ">USDT in WALLET</span>
+          <span className="input-group-text w-25 ">{usdtWallet}</span>
+        </div>
+      </div>
+      <div className="order  m-2 p-3 bg-white rounded-3">
+        {orders.map((order) => (
+          <OrderItem
+            key={order.id}
+            coin={order.coin}
+            amount={order.amount}
+            inPrice={order.inPrice}
+            id={order.id}
+          />
+        ))}
+      </div>
+      <div className="trades  m-2 p-3 bg-white rounded-3">
+        {trades.map((trade) => (
+          <TradeItem
+            key={trade.id}
+            id={trade.id}
+            coin={trade.coin}
+            amount={trade.amount}
+            inPrice={trade.inPrice}
+          />
+        ))}
+      </div>
+    </div>
   );
 };
 
 export default TradingCoin;
+
+// <div className="d-flex row">
+//   <div className="trade d-flex mb-">
+//     <div className="w-50 m-3 p-3 border border-1">
+//       <div className="pb-3 text-center text-dark">Buy {coin.toLocaleUpperCase()}</div>
+//       <div className="">
+//         <div className="input-group mb-3 px-4">
+//           <span
+//             className="input-group-text"
+//             style={{ padding: "8px  44px" }}
+//             id="inputGroup-sizing-default"
+//           >
+//             USDT
+//           </span>
+//           <input
+//             value={usdtInput}
+//             onChange={(event) => usdtInputHandler(event)}
+//             type="number"
+//             className="form-control"
+//           />
+//         </div>
+
+//         <div className="input-group mb-3 px-4">
+//           <span
+//             className="input-group-text  "
+//             style={{ padding: "8px  50px" }}
+//             id="inputGroup-sizing-default"
+//           >
+//             {coin.toUpperCase()}
+//           </span>
+//           <input
+//             value={coinInput}
+//             onChange={(event) => coinInputHandler(event)}
+//             type="number"
+//             className="form-control"
+//             aria-label="Sizing example input"
+//             aria-describedby="inputGroup-sizing-default"
+//           />
+//         </div>
+//         <div className="input-group   mb-3 px-4 d-flex">
+//           <span className="input-group-text w-75 border border-0 ">USDT in WALLET</span>
+//           <span className="input-group-text w-25 border border-0 ">{usdtWallet}</span>
+//         </div>
+//       </div>
+//       <div className="">You recived : {calcOrder}</div>
+//       <div className="  mb-3 px-4">
+//         <button
+//           className="btn  btn-primary w-100"
+//           disabled={calcOrder > usdtWallet}
+//           onClick={(e) => setOrderHandler(e)}
+//         >
+//           Buy
+//         </button>
+//         <span>{calcOrder > usdtWallet ? "Please Deposit USDT" : ""}</span>
+//       </div>
+//       <h1>Orders</h1>
+
+//       {orders.map((order) => (
+//         <OrderItem
+//           key={order.id}
+//           coin={order.coin}
+//           amount={order.amount}
+//           inPrice={order.inPrice}
+//           id={order.id}
+//         />
+//       ))}
+
+//       <hr />
+//       <h1>Trades</h1>
+//       {trades.map((trade) => (
+//         <TradeItem
+//           key={trade.id}
+//           id={trade.id}
+//           coin={trade.coin}
+//           amount={trade.amount}
+//           inPrice={trade.inPrice}
+//         />
+//       ))}
+//     </div>
+//     <div className="display-3 d-flex justify-content-center align-items-center w-50">
+//       {coinPriceLive}
+//       {/* <CoinPriceLive symbol={coin} /> */}
+//     </div>
+//   </div>
+//   <div className="chart  justify-content-center mt-5">
+//     <div className="w-75"></div>
+//     {/* <TradingChart /> */}
+//   </div>
+// </div>;
 
 // useEffect(() => {
 //   // ! Get USDT

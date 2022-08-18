@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 const TradeItem = ({ id, coin, amount, inPrice }) => {
   return (
-    <div className="d-flex justify-content-between border border-1 p-1 m-3" key={id}>
+    <div className="d-flex justify-content-between p-2 m-2 rounded-3 trade-success" key={id}>
       <div className=""> You Buy </div>
       <div className="">{coin}</div>
       <div className="">{amount}</div>
