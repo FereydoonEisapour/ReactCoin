@@ -1,57 +1,60 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Navigate, useParams } from "react-router-dom";
 import CoinPriceLive from "../components/CoinPriceLive";
 import { useAuthState } from "../contexts/AuthContext";
 import TradingChart from "./../components/TradingChart";
 import db from "./../data/Firebase";
 import firebase from "firebase/compat/app";
+
+import { OrderItem, TradeItem } from "../components";
 const TradingCoin = () => {
   const { coin } = useParams();
   // const { user } = useAuthState();
   const user = { email: "epfereydoon@gmail.com" };
-  const [coinPriceLive, setCoinPriceLive] = useState(Number); //  !  BTC PRICE
+  const [coinPriceLive, setCoinPriceLive] = useState(Number); //*  BTC PRICE
 
-  const [usdtWallet, setUsdtWallet] = useState(Number); //! USDST Wallet
+  const [usdtWallet, setUsdtWallet] = useState(Number); //* USDT Wallet
   const [usdtWalletId, setUsdtWalletId] = useState("");
 
-  const [usdtInput, setUsdtInput] = useState(Number); //! USDT INPUT
-  const [coinInput, setCoinInput] = useState(Number); //! BTC INPUT
+  const [usdtInput, setUsdtInput] = useState(Number); //*   USDT INPUT
+  const [coinInput, setCoinInput] = useState(Number); //*   BTC INPUT
 
-  const [btcBuy, setBtcBuy] = useState(Number);
+  const [calcOrder, setCalcOrder] = useState(Number);
   const [orders, setOrders] = useState([]);
 
   const [trades, setTrades] = useState([]);
 
   const usdtInputHandler = (event) => {
     setUsdtInput(Number(event.target.value));
-    setBtcBuy(usdtInput * coinInput);
+    setCalcOrder(usdtInput * coinInput);
   };
   const coinInputHandler = (event) => {
     setCoinInput(Number(event.target.value));
-    setBtcBuy(usdtInput * coinInput);
+    setCalcOrder(usdtInput * coinInput);
   };
   useEffect(() => {
-    setBtcBuy(usdtInput * coinInput);
+    setCalcOrder(usdtInput * coinInput);
   }, [coinInput, usdtInput]);
-
-  // ! Get USDT
+  // * GET USDT FROM API
   useEffect(() => {
     db.collection(user.email)
       .doc(user.email)
       .collection("coins")
       .where("coin", "==", "USDT")
       .onSnapshot((snapshot) => {
-        snapshot.docChanges().forEach((change) => {
-          if (change.type === "added") {
-            if (change.doc.data().amount !== undefined) {
-              setUsdtWallet(Number(change.doc.data().amount));
-              setUsdtWalletId(change.doc.id);
-            }
-          }
-        });
+        setUsdtWallet(snapshot.docs[0].data().amount);
+        setUsdtWalletId(snapshot.docs[0].id);
+        // snapshot.docChanges().forEach((change) => {
+        //   if (change.type === "added") {
+        //     if (change.doc.data().amount !== undefined) {
+        //       setUsdtWallet(Number(change.doc.data().amount));
+        //       setUsdtWalletId(change.doc.id);
+        //     }
+        //   }
+        // });
       });
   }, [user.email]);
-  // ! GET
+  // * GET
   // useEffect(() => {
   //   fetch(`https://api.coingecko.com/api/v3/coins/bitcoin`)
   //     .then((response) => response.json())
@@ -60,9 +63,10 @@ const TradingCoin = () => {
   //     .catch((err) => console.error(err));
   // }, []);
 
+  // * Add Order To API
   const setOrderHandler = (e) => {
     e.preventDefault();
-    if (btcBuy === 0) return;
+    if (calcOrder === 0) return;
     db.collection(user.email).doc(user.email).collection("orders").add({
       coin: coin.toLocaleLowerCase(),
       amount: coinInput,
@@ -70,11 +74,12 @@ const TradingCoin = () => {
       timestamp: firebase.firestore.FieldValue.serverTimestamp(),
     });
   };
-  // ! GET ORDERS
+  // * GET ORDERS FROM API
   useEffect(() => {
     db.collection(user.email)
       .doc(user.email)
       .collection("orders")
+      .orderBy("inPrice", "desc")
       .onSnapshot((snapshot) => {
         setOrders(
           snapshot.docs.map((doc) => ({
@@ -86,11 +91,12 @@ const TradingCoin = () => {
         );
       });
   }, [user.email]);
-  // ! GET TRADES
+  // *GET TRADES FROM API
   useEffect(() => {
     db.collection(user.email)
       .doc(user.email)
       .collection("trades")
+      .orderBy("timestamp", "desc")
       .onSnapshot((snapshot) => {
         setTrades(
           snapshot.docs.map((doc) => ({
@@ -102,43 +108,10 @@ const TradingCoin = () => {
         );
       });
   }, [user.email]);
-
-  // const priceRef = useRef();
-  // useEffect(() => {
-  //   const prifeaa = Number(priceRef.current.innerText);
-  //   setCoinPriceLive(prifeaa);
-  // },[]);
-  // // useEffect(() => {
-  // if (CoinPriceLive && orders.length > 0) {
-  //   setInterval(() => {
-  //     // const priceNow = Number(priceRef.current.innerText);
-
-  //     const orderMatchFind = orders.find((item) => item.inPrice === coinPriceLive);
-  //     console.log(orderMatchFind);
-
-  //     if (orderMatchFind !== undefined) {
-  //       setOrders(orders.filter((item) => item.id !== orderMatchFind.id));
-  //       console.log(orderMatchFind);
-  //       db.collection(user.email).doc(user.email).collection("trades").add({
-  //         coin: coin,
-  //         amount: orderMatchFind.orderamount,
-  //         inPrice: orderMatchFind.orderCointPrice,
-  //       });
-  //       setUsdtWallet(usdtWallet - orderMatchFind.orderCointPrice);
-  //     }
-  //   }, 1000); // interval time 10
-  // }
-  // //}, [coin, coinPriceLive, orders, usdtWallet, user.email]);
-
-  // useEffect(() => {
-  //   console.log(coinPriceLive);
-  // }, [coinPriceLive]);
+  // *  ORDER TO TRADE => // DELL ORDER // ADD TRADE // USDT WALLET DEC//
   useEffect(() => {
     if (orders.length > 0) {
       const orderMatchFind = orders.find((item) => item.inPrice === Number(coinPriceLive));
-
-      // setOrders(orders.filter((item) => item.id !== orderMatchFind.id));
-      //  console.log(orderMatchFind);
       if (orderMatchFind !== undefined) {
         db.collection(user.email)
           .doc(user.email)
@@ -147,6 +120,7 @@ const TradingCoin = () => {
             coin: coin,
             amount: Number(orderMatchFind.amount),
             inPrice: Number(orderMatchFind.inPrice),
+            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
           });
         db.collection(user.email)
           .doc(user.email)
@@ -169,7 +143,7 @@ const TradingCoin = () => {
       }
     }
   }, [coin, coinPriceLive, orders, usdtWallet, usdtWalletId, user.email]);
-
+  // * GET COIN PRICE FROM BINANCE API
   useEffect(() => {
     const binanceSocket = new WebSocket("wss://stream.binance.com:9443/ws");
 
@@ -191,6 +165,8 @@ const TradingCoin = () => {
       }
     };
   }, [coin]);
+  // * IF NOT LOGED
+
   if (!user) return <Navigate to="/" />;
   return (
     <>
@@ -237,53 +213,42 @@ const TradingCoin = () => {
                 <span className="input-group-text w-25 border border-0 ">{usdtWallet}</span>
               </div>
             </div>
-            <div className="">You recived : {btcBuy}</div>
+            <div className="">You recived : {calcOrder}</div>
             <div className="  mb-3 px-4">
               <button
                 className="btn  btn-primary w-100"
-                disabled={btcBuy > usdtWallet}
+                disabled={calcOrder > usdtWallet}
                 onClick={(e) => setOrderHandler(e)}
               >
                 Buy
               </button>
-              <span>{btcBuy > usdtWallet ? "Please Deposit USDT" : ""}</span>
+              <span>{calcOrder > usdtWallet ? "Please Deposit USDT" : ""}</span>
             </div>
             <h1>Orders</h1>
-            {orders.length
-              ? orders.map((item) => (
-                  <div
-                    className="d-flex justify-content-between border border-1 p-1 m-3"
-                    key={item.id}
-                  >
-                    <div className="">{item.coin}</div>
-                    <div className="">{item.amount}</div>
-                    <div className="">{item.inPrice}</div>
-                  </div>
-                ))
-              : null}
+
+            {orders.map((order) => (
+              <OrderItem
+                key={order.id}
+                coin={order.coin}
+                amount={order.amount}
+                inPrice={order.inPrice}
+                id={order.id}
+              />
+            ))}
+
             <hr />
             <h1>Trades</h1>
-            {trades.length > 0
-              ? trades.map((item) => (
-                  <div
-                    className="d-flex justify-content-between border border-1 p-1 m-3"
-                    key={item.id}
-                  >
-                    <div className=""> You Buy </div>
-                    {/* <div className=""> : {item.tradeamount}</div>
-                    <div className=""> {item.tradeCoinName}</div>
-                    <div className=""> in {item.tradeCoinPrice} USDT</div> */}
-                    <div className="">{item.coin}</div>
-                    <div className="">{item.amount}</div>
-                    <div className="">{item.inPrice}</div>
-                  </div>
-                ))
-              : null}
+            {trades.map((trade) => (
+              <TradeItem
+                key={trade.id}
+                id={trade.id}
+                coin={trade.coin}
+                amount={trade.amount}
+                inPrice={trade.inPrice}
+              />
+            ))}
           </div>
-          <div
-            className="display-3 d-flex justify-content-center align-items-center w-50"
-            // ref={priceRef}
-          >
+          <div className="display-3 d-flex justify-content-center align-items-center w-50">
             {coinPriceLive}
             {/* <CoinPriceLive symbol={coin} /> */}
           </div>
