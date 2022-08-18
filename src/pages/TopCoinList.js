@@ -26,7 +26,7 @@ const TopCoinList = () => {
     setCoinsListNumber((prev) => prev + 10);
   };
   return (
-    <div className="coin-search ">
+    <div className="coin-search m-3 ">
       <div className="coin-app">
         {/* <h1 className="coin-text"> Crypto</h1> */}
         <form>

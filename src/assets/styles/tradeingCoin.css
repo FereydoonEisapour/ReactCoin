@@ -1,0 +1,52 @@
+.container {  display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1.3fr 0.7fr;
+    grid-template-rows: 0.4fr 1.9fr 0.7fr 1fr;
+    gap: 0px 0px;
+    grid-auto-flow: row;
+    grid-template-areas:
+      "live-price live-price live-price trade trade"
+      "chart chart chart trade trade"
+      "balance balance balance trade trade"
+      "orders orders orders orders orders";
+  }
+  
+  .live-price { grid-area: live-price; }
+  
+  .chart { grid-area: chart; }
+  
+  .balance {  display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    gap: 0px 0px;
+    grid-auto-flow: row;
+    grid-template-areas:
+      ". . ."
+      ". . ."
+      ". . .";
+    grid-area: balance;
+  }
+  
+  .orders {  display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    gap: 0px 0px;
+    grid-auto-flow: row;
+    grid-template-areas:
+      ". . ."
+      ". . ."
+      ". . .";
+    grid-area: orders;
+  }
+  
+  .trade {  display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 0.4fr 1.9fr 0.7fr;
+    gap: 0px 0px;
+    grid-auto-flow: row;
+    grid-template-areas:
+      ". . ."
+      ". . ."
+      ". . .";
+    grid-area: trade;
+  }
+  
