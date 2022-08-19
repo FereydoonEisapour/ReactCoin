@@ -10,7 +10,7 @@ const Navbar = () => {
         <div className="d-flex align-items-center">
           <nav className="px-2 ">
             <Link className="text-decoration-none px-3 text-dark fw-bold" to="/">
-              Crypto
+            ReactCoin
             </Link>
             {user ? (
               <>

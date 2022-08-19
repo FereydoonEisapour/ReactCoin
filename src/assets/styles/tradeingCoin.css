@@ -1,35 +1,24 @@
 .containerTrade {  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr  1fr;
+  grid-template-rows: 80px 1fr  max-content max-content;
   gap: 0px 0px;
   grid-auto-flow: row;
   grid-template-areas:
-    "livePrice livePrice livePrice livePrice livePrice livePrice livePrice livePrice livePrice livePrice livePrice"
-    "chart chart chart chart chart chart chart trade trade trade trade"
-    "chart chart chart chart chart chart chart trade trade trade trade"
-    "chart chart chart chart chart chart chart trade trade trade trade"
-    "chart chart chart chart chart chart chart trade trade trade trade"
-    "chart chart chart chart chart chart chart trade trade trade trade"
- 
-    "order order order order order order order balance balance balance balance"
-    "order order order order order order order balance balance balance balance"
-    "order order order order order order order balance balance balance balance"
-    "order order order order order order order balance balance balance balance"
-    "trades trades trades trades trades trades trades trades trades trades trades"
-    "trades trades trades trades trades trades trades trades trades trades trades"
-    "trades trades trades trades trades trades trades trades trades trades trades";
+    "livePrice livePrice livePrice"
+    "chart chart trade"
+    "order order balance"
+    "trades trades trades";
 }
 
 .livePrice { grid-area: livePrice; }
 
+.chart { grid-area: chart; }
+
 .trade { grid-area: trade; }
 
-.chart { grid-area: chart; 
-}
+.order { grid-area: order; }
 
 .balance { grid-area: balance; }
-
-.order { grid-area: order; }
 
 .trades { grid-area: trades; }
 

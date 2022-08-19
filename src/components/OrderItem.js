@@ -9,12 +9,12 @@ const OrderItem = ({ coin, amount, inPrice, id }) => {
   };
   return (
     <>
-      <div className="d-flex justify-content-between rounded-3 p-1 m-2 order-success">
-        <div className="">{coin}</div>
+      <div className="d-flex justify-content-between rounded-3 px-4 py-1 m-2 order-success">
+        <div className="">{coin.toUpperCase()}</div>
         <div className="">{amount}</div>
         <div className="">{inPrice}</div>
-        <button onClick={(e) => deleteOrder(e)} className="btn ">
-          del
+        <button onClick={(e) => deleteOrder(e)} className=" ">
+          ❌
         </button>
       </div>
     </>

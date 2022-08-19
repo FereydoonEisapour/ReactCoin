@@ -26,8 +26,8 @@ const Dashboard = () => {
   const addCoin = (e) => {
     e.preventDefault();
     db.collection(user.email).doc(user.email).collection("coins").add({
-      coin: "ADA",
-      amount: 100,
+      coin: "USDT",
+      amount: 1000000,
       timestamp: firebase.firestore.FieldValue.serverTimestamp(),
     });
   };

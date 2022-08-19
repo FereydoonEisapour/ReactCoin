@@ -30,7 +30,7 @@ const Coin = ({ name, price, symbol, marketcap, volume, image, priceChange }) =>
           {/* <p className="coin-marketcap">Mkt Cap: ${marketcap.toLocaleString()}</p> */}
         </div>
         <div className="coin-btn p-1 px-3 mb-3 d-flex align-items-center justify-content-between ">
-          <Link className="text-decoration-none px-3" to={`/coin/trading/${symbol}`}>
+          <Link className="text-decoration-none px-3" to={`/trade/${symbol}`}>
             Trade
           </Link>
           <Link to={`/coin/${name}`} style={{ textDecoration: "none" }}>
