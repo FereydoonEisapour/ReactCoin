@@ -13,7 +13,7 @@ const Login = () => {
 
   const [emailInput, setEmailInput] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
-  if (user) return <Navigate to="/coin/trading/btc" />;
+  if (user) return <Navigate to="/trade/btc" />;
 
   const emailInputHandler = (e) => {
     setEmailInput(e.target.value);

@@ -28,7 +28,6 @@ const TopCoinList = () => {
   return (
     <div className="coin-search m-3 ">
       <div className="coin-app">
-        {/* <h1 className="coin-text"> Crypto</h1> */}
         <form>
           <input
             className="coin-input my-3"
@@ -37,6 +36,21 @@ const TopCoinList = () => {
             placeholder="Search"
           />
         </form>
+      </div>
+      <div className="coin-container">
+        <div className="coin-row bg-light m-1 px-3">
+          <div className="coin">
+            <div></div>
+            <h1 className="px-5">Coin</h1>
+            <div className="coin-symbol">Symbol</div>
+          </div>
+          <div className="d-flex px-1 ">
+            <p className="px-5">Price</p>
+            <p className="px-5">Volume</p>
+            <p className="px-5">Change</p>
+          </div>
+  
+        </div>
       </div>
       {filteredCoins.map((coin) => {
         return (
@@ -53,10 +67,7 @@ const TopCoinList = () => {
         );
       })}
       <div className="d-flex align-items-center justify-content-center my-3">
-        <button
-          className="btn btn-info w-25  text-light"
-          onClick={moreCoins}
-        >
+        <button className="btn btn-info w-25  text-light" onClick={moreCoins}>
           More
         </button>
       </div>

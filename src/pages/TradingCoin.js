@@ -6,18 +6,19 @@ import TradingChart from "./../components/TradingChart";
 import db from "./../data/Firebase";
 import firebase from "firebase/compat/app";
 import "../assets/styles/tradeingCoin.css";
-import { OrderItem, TradeItem } from "../components";
+import { OrderItem, TradeItem, Balance } from "../components";
 const TradingCoin = () => {
   const { coin } = useParams();
+
   // const { user } = useAuthState();
   const user = { email: "epfereydoon@gmail.com" };
-  const [coinPriceLive, setCoinPriceLive] = useState(Number); //*  BTC PRICE
+  const [coinPriceLive, setCoinPriceLive] = useState(Number); //*  COIN PRICE LIVE
 
   const [usdtWallet, setUsdtWallet] = useState(Number); //* USDT Wallet
   const [usdtWalletId, setUsdtWalletId] = useState("");
 
-  const [usdtInput, setUsdtInput] = useState(Number); //*   USDT INPUT
-  const [coinInput, setCoinInput] = useState(Number); //*   BTC INPUT
+  const [usdtInput, setUsdtInput] = useState(""); //*   USDT INPUT
+  const [coinInput, setCoinInput] = useState(""); //*   BTC INPUT
 
   const [calcOrder, setCalcOrder] = useState(Number);
   const [orders, setOrders] = useState([]);
@@ -64,6 +65,7 @@ const TradingCoin = () => {
   // }, []);
 
   // * Add Order To API
+  //* CREATE ORDER
   const setOrderHandler = (e) => {
     e.preventDefault();
     if (calcOrder === 0) return;
@@ -151,8 +153,8 @@ const TradingCoin = () => {
       binanceSocket.send(
         JSON.stringify({
           method: "SUBSCRIBE",
-          params: coin === "usdt" ? [`usdc${coin}@trade`] : [`${coin}usdt@trade`],
-          //   params: [`${symbol}usdt@trade`],
+          //  params: coin === "usdt" ? [`usdc${coin}@trade`] : [`${coin}usdt@trade`],
+          params: [`${coin}usdt@trade`],
           id: 1,
         })
       );
@@ -170,16 +172,18 @@ const TradingCoin = () => {
   if (!user) return <Navigate to="/" />;
   return (
     <div className="containerTrade ">
-      <div className="livePrice  d-flex justify-content-between p-2 m-2 p-3 bg-white rounded-3">
-        <div className="coinName">{coin.toLocaleUpperCase()}/USDT</div>
-        <div className="coinPrice">{coinPriceLive}</div>
+      <div className="livePrice  d-flex justify-content-between  m-2 p-3 bg-white rounded-3">
+        <div className="coinName fw-bold p-3">{coin.toLocaleUpperCase()} / USDT</div>
+        <div className="coinPrice fw-bolder display-6 px-4">{coinPriceLive}</div>
       </div>
-      <div className="trade row  m-2 p-3 bg-white rounded-3">
-        <div className="p-4">
+      {/* ////////////////////////////// */}
+      <div className="trade row   m-2 p-3 bg-white rounded-3">
+        <div className="p-4 mt-5">
+        <div className="coinName fw-bold text-center py-4 display-6">{coin.toLocaleUpperCase()} / USDT</div>
           <div className="input-group mb-3 px-4">
             <span
               className="input-group-text"
-              style={{ padding: "8px  44px" }}
+              style={{ padding: "8px  18px" }}
               id="inputGroup-sizing-default"
             >
               USDT
@@ -187,14 +191,14 @@ const TradingCoin = () => {
             <input
               value={usdtInput}
               onChange={(event) => usdtInputHandler(event)}
-              type="number"
+              type="text"
               className="form-control"
             />
           </div>
           <div className="input-group mb-3 px-4">
             <span
               className="input-group-text  "
-              style={{ padding: "8px  50px" }}
+              style={{ padding: "8px  24px" }}
               id="inputGroup-sizing-default"
             >
               {coin.toUpperCase()}
@@ -202,14 +206,14 @@ const TradingCoin = () => {
             <input
               value={coinInput}
               onChange={(event) => coinInputHandler(event)}
-              type="number"
+              type="text"
               className="form-control"
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-default"
             />
           </div>
         </div>
-        <div className="">You recived : {calcOrder}</div>
+        {/* <div className="">You recived : {calcOrder}</div> */}
         <div className="  mb-3 px-4">
           <button
             className="btn  btn-primary w-100"
@@ -221,17 +225,13 @@ const TradingCoin = () => {
           <span>{calcOrder > usdtWallet ? "Please Deposit USDT" : ""}</span>
         </div>
       </div>
-      <div className="chart  m-2 rounded-3">
-        {<TradingChart height="500" width="840" />}
-      </div>
+
+      <div className="chart  m-2 rounded-3 ">{<TradingChart autosize className="" />}</div>
       <div className="balance  m-2 p-3 bg-white rounded-3">
-        <h1> balance</h1>
-        <div className="input-group   mb-3 px-4 d-flex">
-          <span className="input-group-text w-75 ">USDT in WALLET</span>
-          <span className="input-group-text w-25 ">{usdtWallet}</span>
-        </div>
+        <Balance />
       </div>
       <div className="order  m-2 p-3 bg-white rounded-3">
+        <h3 className="text-center">Orders</h3>
         {orders.map((order) => (
           <OrderItem
             key={order.id}
@@ -243,6 +243,7 @@ const TradingCoin = () => {
         ))}
       </div>
       <div className="trades  m-2 p-3 bg-white rounded-3">
+        <h3 className="text-center">Trades History</h3>
         {trades.map((trade) => (
           <TradeItem
             key={trade.id}

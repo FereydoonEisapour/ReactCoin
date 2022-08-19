@@ -6,26 +6,28 @@ const CoinPriceLive = ({ symbol }) => {
   const [btcPriceBinance, setBtcPriceBinance] = useState(Number);
 
   useEffect(() => {
-    const binanceSocket = new WebSocket("wss://stream.binance.com:9443/ws");
 
-    binanceSocket.onopen = function () {
-      const coinL = coin;
-      binanceSocket.send(
-        JSON.stringify({
-          method: "SUBSCRIBE",
-          params: symbol === "usdt" ? [`usdc${symbol}@trade`] : [`${symbol}usdt@trade`],
-          //   params: [`${symbol}usdt@trade`],
-          id: 1,
-        })
-      );
-    };
-    binanceSocket.onmessage = function (event) {
-      const BtcPriceNow = JSON.parse(event.data);
-      const price = parseFloat(BtcPriceNow.p).toFixed(0 );
-      if (isNaN(price) === false) {
-        setBtcPriceBinance(price);
-      }
-    };
+      const binanceSocket = new WebSocket("wss://stream.binance.com:9443/ws");
+
+      binanceSocket.onopen = function () {
+        const coinL = coin;
+        binanceSocket.send(
+          JSON.stringify({
+            method: "SUBSCRIBE",
+            params: symbol === "usdt" ? [`usdc${symbol}@trade`] : [`${symbol}usdt@trade`],
+            //   params: [`${symbol}usdt@trade`],
+            id: 1,
+          })
+        );
+      };
+      binanceSocket.onmessage = function (event) {
+        const BtcPriceNow = JSON.parse(event.data);
+        const price = parseFloat(BtcPriceNow.p).toFixed(0);
+        if (isNaN(price) === false) {
+          setBtcPriceBinance(price);
+        }
+      };
+ 
   }, [coin, symbol]);
 
   return (

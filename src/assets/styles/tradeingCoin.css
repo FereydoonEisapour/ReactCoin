@@ -4,13 +4,13 @@
   gap: 0px 0px;
   grid-auto-flow: row;
   grid-template-areas:
-    "livePrice livePrice livePrice livePrice livePrice livePrice livePrice trade trade trade trade"
+    "livePrice livePrice livePrice livePrice livePrice livePrice livePrice livePrice livePrice livePrice livePrice"
     "chart chart chart chart chart chart chart trade trade trade trade"
     "chart chart chart chart chart chart chart trade trade trade trade"
     "chart chart chart chart chart chart chart trade trade trade trade"
     "chart chart chart chart chart chart chart trade trade trade trade"
     "chart chart chart chart chart chart chart trade trade trade trade"
-    "chart chart chart chart chart chart chart trade trade trade trade"
+ 
     "order order order order order order order balance balance balance balance"
     "order order order order order order order balance balance balance balance"
     "order order order order order order order balance balance balance balance"

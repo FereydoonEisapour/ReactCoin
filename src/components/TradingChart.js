@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import TradingViewWidget, { Themes, IntervalTypes } from "react-tradingview-widget";
 
-
 const TradingChart = ({ height, width }) => {
   const { coin } = useParams();
   const [symbol, setSymbol] = useState("BTCUSDT");
@@ -21,7 +20,8 @@ const TradingChart = ({ height, width }) => {
       theme={Themes.LIGHT}
       locale="en"
       ref={tradingRef}
-      IntervalTypes={IntervalTypes.W}
+      IntervalTypes={IntervalTypes.D}
+      autosize
     />
   );
 };

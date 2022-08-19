@@ -3,6 +3,7 @@ import { useAuthState } from "../contexts/AuthContext";
 import { Navigate } from "react-router-dom";
 import db from "./../data/Firebase";
 import firebase from "firebase/compat/app";
+import { Balance } from "../components";
 const Dashboard = () => {
   const { user } = useAuthState();
   const [coins, setCoins] = useState([]);
@@ -25,8 +26,8 @@ const Dashboard = () => {
   const addCoin = (e) => {
     e.preventDefault();
     db.collection(user.email).doc(user.email).collection("coins").add({
-      coin: "USDT",
-      amount: 100000,
+      coin: "ADA",
+      amount: 100,
       timestamp: firebase.firestore.FieldValue.serverTimestamp(),
     });
   };
@@ -34,8 +35,9 @@ const Dashboard = () => {
 
   return (
     <div className="container d-flex  p-1  ">
-      <div className="col-12 d-flex row  p-3 mx-4">
-        {coins.map((item) => (
+      <div className="col-10 d-flex row  p-3 mx-4">
+        <Balance />
+        {/* {coins.map((item) => (
           <div
             className="col-5 p-4 m-2 d-flex border justify-content-around bg-info text-light display-6"
             key={item.id}
@@ -43,11 +45,11 @@ const Dashboard = () => {
             <div className="">{item.coin} </div>
             <div className=""> {item.amount}</div>
           </div>
-        ))}
+        ))} */}
       </div>
-      {/* <div className="">
+      <div className="">
         <button onClick={(e) => addCoin(e)}>add usdt</button>
-      </div> */}
+      </div>
     </div>
   );
 };

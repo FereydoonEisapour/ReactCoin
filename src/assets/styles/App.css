@@ -10,7 +10,11 @@
  
 }
 .bg-white{
-  background-color: #ffffff;
+  background-color: #ffffff ;
+ 
+}
+.text-white{
+  color: #ffffff;
 }
 .main-color{
   background-color: #ebf2f9;

@@ -9,9 +9,9 @@ const Coin = ({ name, price, symbol, marketcap, volume, image, priceChange }) =>
       <div className="coin-row bg-light m-1 px-3">
         <div className="coin">
           <img src={image} alt="crypto" />
-          <Link to={`/coin/${name}`} style={{ textDecoration: "none" }}>
-            <h1>{name}</h1>
-          </Link>
+
+          <h1>{name}</h1>
+
           <p className="coin-symbol">{symbol}</p>
         </div>
         <div className="coin-data">
@@ -29,9 +29,12 @@ const Coin = ({ name, price, symbol, marketcap, volume, image, priceChange }) =>
 
           {/* <p className="coin-marketcap">Mkt Cap: ${marketcap.toLocaleString()}</p> */}
         </div>
-        <div className="coin-btn p-1 px-3 mb-3">
-          <Link className="text-decoration-none" to={`/coin/trading/${symbol}`}>
+        <div className="coin-btn p-1 px-3 mb-3 d-flex align-items-center justify-content-between ">
+          <Link className="text-decoration-none px-3" to={`/coin/trading/${symbol}`}>
             Trade
+          </Link>
+          <Link to={`/coin/${name}`} style={{ textDecoration: "none" }}>
+            Details
           </Link>
         </div>
       </div>
