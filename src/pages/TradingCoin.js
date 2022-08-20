@@ -254,7 +254,7 @@ const TradingCoin = () => {
         </div>
       </div>
 
-      <div className="chart  m-2 rounded-3 ">{<TradingChart autosize className="" />}</div>
+      {/* <div className="chart  m-2 rounded-3 ">{<TradingChart autosize className="" />}</div> */}
       <div className="balance  m-2 p-3 bg-white rounded-3">
         <Balance />
       </div>
