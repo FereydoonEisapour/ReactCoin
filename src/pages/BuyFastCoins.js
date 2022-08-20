@@ -2,54 +2,79 @@ import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import CoinPriceLive from "./../components/CoinPriceLive";
 import toast from "react-hot-toast";
+import db from "../data/Firebase";
+import { useAuthState } from "../contexts/AuthContext";
+import firebase from "firebase/compat/app";
+import { TradeItem } from "../components";
 const BuyFastCoins = () => {
   const { coin } = useParams();
-  console.log(coin);
-  const [USDTWallet, setUSDTWallet] = useState(100000); //! Get Api  Send Api
+  //  const { user } = useAuthState();
+  const user = { email: "epfereydoon@gmail.com" };
+
+  const [usdtWallet, setUsdtWallet] = useState(Number); //* USDT Wallet
+  const [usdtWalletId, setUsdtWalletId] = useState("");
+
+  const [coinTrade, setCoinTrade] = useState(Number);
+  const [coinTradeId, setCoinTradeId] = useState("");
+
   const [coinPriceLive, setCoinPriceLive] = useState(Number); //*  BTC PRICE
+  const [bestPirceTrades, setBestPriceTrades] = useState([]);
   //const [USDTInput, setUSDTInput] = useState(0); //!
   const [USDTInput, setUSDTInput] = useState(Number); //! BTC INPUT
-  const [BTCPrice, setBTCPrice] = useState(Number); //  !  BTC PRICE from Coingecko
-  const [btcCanBuy, setBtcCanBuy] = useState(Number);
-  const [USDTPay, setUSDTPay] = useState(Number);
-  const [btnDisabled, setBtnDisabled] = useState(false);
 
-  const inputRef = useRef();
+  // * GET USDT AND COIN  FROM API
+  useEffect(() => {
+    db.collection(user.email)
+      .doc(user.email)
+      .collection("coins")
+      .where("coin", "==", "USDT")
+      .onSnapshot((snapshot) => {
+        if (typeof snapshot.docs[0] === "undefined") {
+          db.collection(user.email).doc(user.email).collection("coins").add({
+            coin: "USDT",
+            amount: 0,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+          });
+        } else {
+          db.collection(user.email)
+            .doc(user.email)
+            .collection("coins")
+            .where("coin", "==", "USDT")
+            .onSnapshot((snapshot) => {
+              setUsdtWallet(snapshot.docs[0].data().amount);
+              setUsdtWalletId(snapshot.docs[0].id);
+            });
+        }
+      });
+  }, [user.email]);
 
-  const USDTInputHandler = (event) => {
-    const usdtAmount = parseFloat(event.target.value);
-    if (usdtAmount === 0) {
-      inputRef.current(0);
-    }
-    if (usdtAmount > USDTWallet) {
-      toast.error("not enough USDT , Please Deposit");
-    } else if (usdtAmount > 0) {
-      const order = USDTWallet / coinPriceLive;
-      console.log(USDTWallet + ":" + coinPriceLive);
-      console.log(order);
-    }
-    //  usdtAmount.replace(/^0+/, "");
-    setUSDTInput(usdtAmount);
-    setUSDTPay((BTCPrice * usdtAmount).toFixed(1));
-    if (usdtAmount === 0) setUSDTPay(0);
-  };
+  useEffect(() => {
+    db.collection(user.email)
+      .doc(user.email)
+      .collection("bestMarketBuy")
+      .orderBy("timestamp", "desc")
+      .onSnapshot((snapshot) => {
+        setBestPriceTrades(
+          snapshot.docs.map((doc) => ({
+            id: doc.id,
+            coin: doc.data().coin,
+            amount: doc.data().amount,
+            inPrice: doc.data().inPrice,
+          }))
+        );
+      });
 
-  // useEffect(() => {
-  //   fetch(`https://api.coingecko.com/api/v3/coins/bitcoin`)
-  //     .then((response) => response.json())
-  //     .then((data) => setBTCPrice(data.market_data.current_price.usd))
-  //     .catch((err) => console.error(err));
-  // }, []);
-  // * GET COIN PRICE FROM BINANCE API
+    return () => {};
+  }, [user.email]);
+
   useEffect(() => {
     const binanceSocket = new WebSocket("wss://stream.binance.com:9443/ws");
-
     binanceSocket.onopen = function () {
       binanceSocket.send(
         JSON.stringify({
           method: "SUBSCRIBE",
-          params: coin === "USDT" ? [`usdc${coin}@trade`] : [`${coin}USDT@trade`],
-          //   params: [`${symbol}USDT@trade`],
+          //  params: coin === "usdt" ? [`usdc${coin}@trade`] : [`${coin}usdt@trade`],
+          params: [`${coin}usdt@trade`],
           id: 1,
         })
       );
@@ -62,10 +87,83 @@ const BuyFastCoins = () => {
       }
     };
   }, [coin]);
+
+  const USDTInputHandler = (event) => {
+    setUSDTInput(parseFloat(event.target.value));
+  };
+  // * GET COIN OR CREATE COIN
+  useEffect(() => {
+    db.collection(user.email)
+      .doc(user.email)
+      .collection("coins")
+      .where("coin", "==", `${coin.toLocaleUpperCase()}`)
+      .onSnapshot((snapshot) => {
+        if (typeof snapshot.docs[0] === "undefined") {
+          db.collection(user.email).doc(user.email).collection("coins").add({
+            coin: coin.toLocaleUpperCase(),
+            amount: 0,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+          });
+        } else {
+          db.collection(user.email)
+            .doc(user.email)
+            .collection("coins")
+            .where("coin", "==", `${coin.toLocaleUpperCase()}`)
+            .onSnapshot((snapshot) => {
+              setCoinTrade(snapshot.docs[0].data().amount);
+              setCoinTradeId(snapshot.docs[0].id);
+            });
+        }
+      });
+    return () => {};
+  }, [coin, user.email]);
+
+  const bestMarketPrice = () => {
+    if (USDTInput > usdtWallet) {
+      toast.error("not enough USDT , Please Deposit");
+    } else if (USDTInput > 0) {
+      const order = (USDTInput / coinPriceLive).toFixed(5);
+      db.collection(user.email)
+        .doc(user.email)
+        .collection("bestMarketBuy")
+        .add({
+          coin: coin.toLocaleUpperCase(),
+          amount: Number(order),
+          inPrice: coinPriceLive,
+          timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+        });
+
+      db.collection(user.email)
+        .doc(user.email)
+        .collection("coins")
+        .doc(usdtWalletId)
+        .set(
+          {
+            amount: usdtWallet - USDTInput,
+          },
+          {
+            merge: true,
+          }
+        );
+      db.collection(user.email)
+        .doc(user.email)
+        .collection("coins")
+        .doc(coinTradeId)
+        .set(
+          {
+            amount: coinTrade + Number(order),
+          },
+          {
+            merge: true,
+          }
+        );
+    }
+  };
+
   return (
     <>
-      <div className="d-flex justify-content-center align-content-center">
-        <div className="w-50 m-3 p-3 rounded-4 bg-white">
+      <div className="  d-flex row col-12 justify-content-center">
+        <div className="col-6 m-3 p-3 rounded-4 bg-white">
           {coinPriceLive}
           <div className=" text-center text-dark p-4 fw-bold">Best Market Price </div>
           <div className=" text-center text-dark p-1 fw-bold">{coin.toUpperCase()}</div>
@@ -73,12 +171,9 @@ const BuyFastCoins = () => {
             <div className="input-group mb-3 px-4">
               <input
                 onChange={(event) => USDTInputHandler(event)}
-                value={USDTInput}
+                // value={USDTInput}
                 type="number"
                 className="form-control "
-                // min="0"
-                // max="21000000"
-                // placeholder=""
               />
               <span
                 className="input-group-text   border border-0 fw-bold"
@@ -94,10 +189,29 @@ const BuyFastCoins = () => {
               className="btn  btn-primary w-100"
               //  disabled={USDTPay > USDTWallet}
               // disabled={USDTPay > USDTWallet}
+              onClick={(e) => bestMarketPrice(e)}
             >
               Buy now
             </button>
           </div>
+        </div>
+
+        <div className=" col-8">
+          <div className="d-flex justify-content-between p-2 m-2 rounded-3 trade-success">
+            <div className="">Buy</div>
+            <div className="">Coin</div>
+            <div className="">Amount</div>
+            <div className="">Price</div>
+          </div>
+          {bestPirceTrades.map((trade) => (
+            <TradeItem
+              key={trade.id}
+              id={trade.id}
+              coin={trade.coin}
+              amount={trade.amount}
+              inPrice={trade.inPrice}
+            />
+          ))}
         </div>
       </div>
     </>
