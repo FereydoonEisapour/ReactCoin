@@ -5,50 +5,72 @@ import db from "./../data/Firebase";
 import firebase from "firebase/compat/app";
 import { Balance } from "../components";
 const Dashboard = () => {
-  const { user } = useAuthState();
-  const [coins, setCoins] = useState([]);
+  //  const { user } = useAuthState();
+  const user = { email: "epfereydoon@gmail.com" };
 
+  const [usdtWallet, setUsdtWallet] = useState(Number); //* USDT Wallet
+  const [usdtWalletId, setUsdtWalletId] = useState("");
+  const [depositInput, setDepositInput] = useState(Number);
+  // * GET USDT AND COIN  FROM API
   useEffect(() => {
     db.collection(user.email)
       .doc(user.email)
       .collection("coins")
+      .where("coin", "==", "USDT")
       .onSnapshot((snapshot) => {
-        setCoins(
-          snapshot.docs.map((doc) => ({
-            id: doc.id,
-            coin: doc.data().coin,
-            amount: doc.data().amount,
-          }))
-        );
+        if (typeof snapshot.docs[0] === "undefined") {
+          db.collection(user.email).doc(user.email).collection("coins").add({
+            coin: "USDT",
+            amount: 0,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+          });
+        } else {
+          db.collection(user.email)
+            .doc(user.email)
+            .collection("coins")
+            .where("coin", "==", "USDT")
+            .onSnapshot((snapshot) => {
+              setUsdtWallet(snapshot.docs[0].data().amount);
+              setUsdtWalletId(snapshot.docs[0].id);
+            });
+        }
       });
   }, [user.email]);
-
-  const addCoin = (e) => {
-    e.preventDefault();
-    db.collection(user.email).doc(user.email).collection("coins").add({
-      coin: "USDT",
-      amount: 1000000,
-      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-    });
+  const depositInputHander = (e) => {
+    setDepositInput(Number(e.target.value));
+  };
+  const depositButton = () => {
+    db.collection(user.email)
+      .doc(user.email)
+      .collection("coins")
+      .doc(usdtWalletId)
+      .set(
+        {
+          amount: usdtWallet + depositInput,
+        },
+        { merge: true }
+      );
   };
   if (!user) return <Navigate to="/" />;
-
   return (
-    <div className="container d-flex  p-1  ">
+    <div className="container d-flex justify-content-center  p-1 row ">
+      <div className="col-6 ">
+        <div className="input-group mb-3 px-4">
+          <span
+            className="input-group-text"
+            style={{ padding: "8px  18px" }}
+            id="inputGroup-sizing-default"
+          >
+            USDT
+          </span>
+          <input type="number" className="form-control" onChange={depositInputHander} />
+        </div>
+        <button className="btn btn-primary w-100" onClick={depositButton}>
+          Deposit
+        </button>
+      </div>
       <div className="col-10 d-flex row  p-3 mx-4">
         <Balance />
-        {/* {coins.map((item) => (
-          <div
-            className="col-5 p-4 m-2 d-flex border justify-content-around bg-info text-light display-6"
-            key={item.id}
-          >
-            <div className="">{item.coin} </div>
-            <div className=""> {item.amount}</div>
-          </div>
-        ))} */}
-      </div>
-      <div className="">
-        <button onClick={(e) => addCoin(e)}>add usdt</button>
       </div>
     </div>
   );
