@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import CoinPirceLive from "./CoinPriceLive";
-const Coin = ({ name, price, symbol, marketcap, volume, image, priceChange }) => {
+const Coin = ({ name, price, symbol, marketcap, volume, image, priceChange, id }) => {
   return (
     <div className="coin-container">
       <div className="coin-row bg-light m-1 px-3">
@@ -26,7 +26,7 @@ const Coin = ({ name, price, symbol, marketcap, volume, image, priceChange }) =>
           <Link className="text-decoration-none px-3" to={`/trade/${symbol}`}>
             Trade
           </Link>
-          <Link to={`/coin/${name}`} style={{ textDecoration: "none" }}>
+          <Link to={`/coin/${id}`} style={{ textDecoration: "none" }}>
             Details
           </Link>
         </div>
@@ -35,6 +35,7 @@ const Coin = ({ name, price, symbol, marketcap, volume, image, priceChange }) =>
   );
 };
 Coin.propTypes = {
+  id:PropTypes.string,
   name: PropTypes.string,
   price: PropTypes.number,
   symbol: PropTypes.string,

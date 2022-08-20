@@ -1,6 +1,6 @@
 import React from "react";
 import toast from "react-hot-toast";
-import { auth } from "../data/Firebase";
+import db, { auth } from "../data/Firebase";
 
 const AuthStateContext = React.createContext();
 const AuthDispatchContext = React.createContext();
@@ -22,7 +22,8 @@ function useAuthDispatch() {
   return context;
 }
 const initialState = {
-  user: null,
+ // user: { email: "epfereydoon@gmail.com" },
+ user:null,
   userEmail: null,
   error: null,
   status: false,
@@ -76,4 +77,8 @@ function resetPass(dispatch, emailInput) {
       console.log(error);
     });
 }
+
+// const dbCoins = db.collection(initialState.user.email).doc(initialState.user.email).collection("coins");
+// const dbOrders = db.collection(initialState.user.email).doc(initialState.user.email).collection("orders");
+// const dbTrades = db.collection(initialState.user.email).doc(initialState.user.email).collection("trades");
 export { AuthProvider, useAuthState, useAuthDispatch, doSingUp, doLogIn, resetPass };

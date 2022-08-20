@@ -1,3 +1,22 @@
+// import React from "react";
+// import { AdvancedRealTimeChart } from "react-ts-tradingview-widgets";
+
+// const TradingChart = () => {
+//   const [symbol, setSymbol] = React.useState("BTCUSDT");
+//   return (
+//     <div className="">
+//       <AdvancedRealTimeChart
+//         theme="light"
+//         symbol={symbol}
+
+//           autosize={true}
+//       ></AdvancedRealTimeChart>
+//     </div>
+//   );
+// };
+
+// export default TradingChart;
+
 import React from "react";
 import { useParams } from "react-router-dom";
 import TradingViewWidget, { Themes, IntervalTypes } from "react-tradingview-widget";

@@ -4,28 +4,25 @@ import { Navigate } from "react-router-dom";
 import db from "./../data/Firebase";
 import firebase from "firebase/compat/app";
 import { Balance } from "../components";
+import { dbCoins } from "../data/db";
 const Dashboard = () => {
   const { user } = useAuthState();
-  const [usdtWallet, setUsdtWallet] = React.useState(Number); 
+  const [usdtWallet, setUsdtWallet] = React.useState(Number);
   const [usdtWalletId, setUsdtWalletId] = React.useState("");
   const [depositInput, setDepositInput] = React.useState(Number);
 
   React.useEffect(() => {
-    db.collection(user.email)
-      .doc(user.email)
-      .collection("coins")
+    dbCoins(user)
       .where("coin", "==", "USDT")
       .onSnapshot((snapshot) => {
         if (typeof snapshot.docs[0] === "undefined") {
-          db.collection(user.email).doc(user.email).collection("coins").add({
+          dbCoins(user).add({
             coin: "USDT",
             amount: 0,
             timestamp: firebase.firestore.FieldValue.serverTimestamp(),
           });
         } else {
-          db.collection(user.email)
-            .doc(user.email)
-            .collection("coins")
+          dbCoins(user)
             .where("coin", "==", "USDT")
             .onSnapshot((snapshot) => {
               setUsdtWallet(snapshot.docs[0].data().amount);
@@ -33,22 +30,16 @@ const Dashboard = () => {
             });
         }
       });
-  }, [user.email]);
+  }, [user, user.email]);
   const depositInputHander = (e) => {
     setDepositInput(Number(e.target.value));
   };
   const depositButton = () => {
-    db.collection(user.email)
-      .doc(user.email)
-      .collection("coins")
+    dbCoins(user)
       .doc(usdtWalletId)
-      .set(
-        {
-          amount: usdtWallet + depositInput,
-        },
-        { merge: true }
-      );
+      .set({ amount: usdtWallet + depositInput }, { merge: true });
   };
+
   if (!user) return <Navigate to="/" />;
   return (
     <div className="container d-flex justify-content-center  p-1 row ">

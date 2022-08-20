@@ -6,7 +6,8 @@ import { Balance, OrderItem, TradeItem } from "../components";
 import { useAuthState } from "../contexts/AuthContext";
 import TradingChart from "./../components/TradingChart";
 import db from "./../data/Firebase";
-
+//import { AdvancedRealTimeChart } from "react-ts-tradingview-widgets";
+import { dbCoins, dbOrders, dbTrades } from "../data/db";
 const TradingCoin = () => {
   const { coin } = useParams();
 
@@ -41,9 +42,7 @@ const TradingCoin = () => {
 
   // * GET USDT  FROM API
   React.useEffect(() => {
-    db.collection(user.email)
-      .doc(user.email)
-      .collection("coins")
+    dbCoins(user)
       .where("coin", "==", "USDT")
       .onSnapshot((snapshot) => {
         if (typeof snapshot.docs[0] === "undefined") {
@@ -53,9 +52,7 @@ const TradingCoin = () => {
             timestamp: firebase.firestore.FieldValue.serverTimestamp(),
           });
         } else {
-          db.collection(user.email)
-            .doc(user.email)
-            .collection("coins")
+          dbCoins(user)
             .where("coin", "==", "USDT")
             .onSnapshot((snapshot) => {
               setUsdtWallet(snapshot.docs[0].data().amount);
@@ -63,13 +60,11 @@ const TradingCoin = () => {
             });
         }
       });
-  }, [user.email]);
+  }, [user]);
 
   // * GET COIN OR CREATE COIN
   React.useEffect(() => {
-    db.collection(user.email)
-      .doc(user.email)
-      .collection("coins")
+    dbCoins(user)
       .where("coin", "==", `${coin.toLocaleUpperCase()}`)
       .onSnapshot((snapshot) => {
         if (typeof snapshot.docs[0] === "undefined") {
@@ -79,9 +74,7 @@ const TradingCoin = () => {
             timestamp: firebase.firestore.FieldValue.serverTimestamp(),
           });
         } else {
-          db.collection(user.email)
-            .doc(user.email)
-            .collection("coins")
+          dbCoins(user)
             .where("coin", "==", `${coin.toLocaleUpperCase()}`)
             .onSnapshot((snapshot) => {
               setCoinTrade(snapshot.docs[0].data().amount);
@@ -90,13 +83,13 @@ const TradingCoin = () => {
         }
       });
     return () => {};
-  }, [coin, user.email]);
+  }, [coin, user, user.email]);
   // * Add Order To API
   //* CREATE ORDER
   const setOrderHandler = (e) => {
     e.preventDefault();
     if (calcOrder === 0) return;
-    db.collection(user.email).doc(user.email).collection("orders").add({
+    dbOrders(user).add({
       coin: coin.toLocaleLowerCase(),
       amount: coinInput,
       inPrice: usdtInput,
@@ -105,9 +98,7 @@ const TradingCoin = () => {
   };
   // * GET ORDERS FROM API
   React.useEffect(() => {
-    db.collection(user.email)
-      .doc(user.email)
-      .collection("orders")
+    dbOrders(user)
       .orderBy("inPrice", "desc")
       .onSnapshot((snapshot) => {
         setOrders(
@@ -119,12 +110,10 @@ const TradingCoin = () => {
           }))
         );
       });
-  }, [user.email]);
+  }, [user, user.email]);
   // *GET TRADES FROM API
   React.useEffect(() => {
-    db.collection(user.email)
-      .doc(user.email)
-      .collection("trades")
+    dbTrades(user)
       .orderBy("timestamp", "desc")
       .onSnapshot((snapshot) => {
         setTrades(
@@ -136,45 +125,37 @@ const TradingCoin = () => {
           }))
         );
       });
-  }, [user.email]);
+  }, [user.email, user]);
   // *  ORDER TO TRADE => // DELL ORDER // ADD TRADE // USDT WALLET DEC//
   React.useEffect(() => {
     if (orders.length > 0) {
       const orderMatchFind = orders.find((item) => item.inPrice === Number(coinPriceLive));
       if (orderMatchFind !== undefined) {
-        db.collection(user.email)
-          .doc(user.email)
-          .collection("trades")
-          .add({
-            coin: coin,
-            amount: Number(orderMatchFind.amount),
-            inPrice: Number(orderMatchFind.inPrice),
-            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-          });
-        db.collection(user.email)
-          .doc(user.email)
-          .collection("orders")
-          .doc(orderMatchFind.id)
-          .delete();
+        dbTrades(user).add({
+          coin: coin,
+          amount: Number(orderMatchFind.amount),
+          inPrice: Number(orderMatchFind.inPrice),
+          timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+        });
+        dbOrders(user).doc(orderMatchFind.id).delete();
 
         const newWaletUsdts = usdtWallet - Number(orderMatchFind.inPrice);
         const newCoinAmount = coinTrade + Number(orderMatchFind.amount);
-        db.collection(user.email).doc(user.email).collection("coins").doc(usdtWalletId).set(
-          {
-            amount: newWaletUsdts,
-          },
-          {
-            merge: true,
-          }
-        );
-        db.collection(user.email)
-          .doc(user.email)
-          .collection("coins")
-          .doc(coinTradeId)
-          .set({ amount: newCoinAmount }, { merge: true });
+        dbCoins(user).doc(usdtWalletId).set({ amount: newWaletUsdts }, { merge: true });
+        dbCoins(user).doc(coinTradeId).set({ amount: newCoinAmount }, { merge: true });
       }
     }
-  }, [coin, coinPriceLive, coinTrade, coinTradeId, orders, usdtWallet, usdtWalletId, user.email]);
+  }, [
+    coin,
+    coinPriceLive,
+    coinTrade,
+    coinTradeId,
+    orders,
+    usdtWallet,
+    usdtWalletId,
+    user,
+    user.email,
+  ]);
   // * GET COIN PRICE FROM BINANCE API
   React.useEffect(() => {
     const binanceSocket = new WebSocket("wss://stream.binance.com:9443/ws");
@@ -222,6 +203,7 @@ const TradingCoin = () => {
               onChange={(event) => usdtInputHandler(event)}
               type="number"
               className="form-control"
+              min="0"
             />
           </div>
           <div className="input-group mb-3 px-4">
@@ -237,8 +219,7 @@ const TradingCoin = () => {
               onChange={(event) => coinInputHandler(event)}
               type="number"
               className="form-control"
-              aria-label="Sizing example input"
-              aria-describedby="inputGroup-sizing-default"
+              min="0"
             />
           </div>
         </div>
@@ -254,7 +235,11 @@ const TradingCoin = () => {
         </div>
       </div>
 
-      {/* <div className="chart  m-2 rounded-3 ">{<TradingChart autosize className="" />}</div> */}
+      <div className="chart  m-2 rounded-3 ">
+        {/* <AdvancedRealTimeChart theme="light" autosize={true}></AdvancedRealTimeChart> */}
+        {/* <AdvancedChart widgetProps={{"theme": "dark"}} />; */}
+        {<TradingChart />}
+      </div>
       <div className="balance  m-2 p-3 bg-white rounded-3">
         <Balance />
       </div>

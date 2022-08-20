@@ -3,7 +3,7 @@ import { Coin } from "../components";
 
 const TopCoinList = () => {
   const [coins, setCoins] = React.useState([]);
-  const [coinsListNumber, setCoinsListNumber] = React.useState(2);
+  const [coinsListNumber, setCoinsListNumber] = React.useState(10);
   const [search, setSearch] = React.useState("");
   React.useEffect(() => {
     fetch(
@@ -11,6 +11,7 @@ const TopCoinList = () => {
     )
       .then((response) => response.json())
       .then((data) => setCoins(data))
+      //  .then((data) => console.log(data))
       .catch((err) => console.error(err));
   }, [coinsListNumber]);
 
@@ -54,6 +55,7 @@ const TopCoinList = () => {
         return (
           <Coin
             key={coin.id}
+            id={coin.id}
             name={coin.name}
             price={coin.current_price}
             symbol={coin.symbol}

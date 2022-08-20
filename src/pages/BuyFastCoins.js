@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import { TradeItem } from "../components";
 import { useAuthState } from "../contexts/AuthContext";
 import db from "../data/Firebase";
+import { dbCoins, dbBestMarketBuy } from "../data/db";
 const BuyFastCoins = () => {
   const { coin } = useParams();
   const { user } = useAuthState();
@@ -20,21 +21,17 @@ const BuyFastCoins = () => {
 
   // * GET USDT AND COIN  FROM API
   React.useEffect(() => {
-    db.collection(user.email)
-      .doc(user.email)
-      .collection("coins")
+    dbCoins(user)
       .where("coin", "==", "USDT")
       .onSnapshot((snapshot) => {
         if (typeof snapshot.docs[0] === "undefined") {
-          db.collection(user.email).doc(user.email).collection("coins").add({
+          dbCoins(user).add({
             coin: "USDT",
             amount: 0,
             timestamp: firebase.firestore.FieldValue.serverTimestamp(),
           });
         } else {
-          db.collection(user.email)
-            .doc(user.email)
-            .collection("coins")
+          dbCoins(user)
             .where("coin", "==", "USDT")
             .onSnapshot((snapshot) => {
               setUsdtWallet(snapshot.docs[0].data().amount);
@@ -42,12 +39,10 @@ const BuyFastCoins = () => {
             });
         }
       });
-  }, [user.email]);
+  }, [user, user.email]);
 
   React.useEffect(() => {
-    db.collection(user.email)
-      .doc(user.email)
-      .collection("bestMarketBuy")
+    dbBestMarketBuy(user)
       .orderBy("timestamp", "desc")
       .onSnapshot((snapshot) => {
         setBestPriceTrades(
@@ -59,7 +54,7 @@ const BuyFastCoins = () => {
           }))
         );
       });
-  }, [user.email]);
+  }, [user, user.email]);
 
   React.useEffect(() => {
     const binanceSocket = new WebSocket("wss://stream.binance.com:9443/ws");
@@ -87,9 +82,7 @@ const BuyFastCoins = () => {
   };
   // * GET COIN OR CREATE COIN
   React.useEffect(() => {
-    db.collection(user.email)
-      .doc(user.email)
-      .collection("coins")
+    dbCoins(user)
       .where("coin", "==", `${coin.toLocaleUpperCase()}`)
       .onSnapshot((snapshot) => {
         if (typeof snapshot.docs[0] === "undefined") {
@@ -99,9 +92,7 @@ const BuyFastCoins = () => {
             timestamp: firebase.firestore.FieldValue.serverTimestamp(),
           });
         } else {
-          db.collection(user.email)
-            .doc(user.email)
-            .collection("coins")
+          dbCoins(user)
             .where("coin", "==", `${coin.toLocaleUpperCase()}`)
             .onSnapshot((snapshot) => {
               setCoinTrade(snapshot.docs[0].data().amount);
@@ -109,48 +100,25 @@ const BuyFastCoins = () => {
             });
         }
       });
-    return () => {};
-  }, [coin, user.email]);
+  }, [coin, user, user.email]);
 
   const bestMarketPrice = () => {
     if (USDTInput > usdtWallet) {
       toast.error("not enough USDT , Please Deposit");
     } else if (USDTInput > 0) {
       const order = (USDTInput / coinPriceLive).toFixed(5);
-      db.collection(user.email)
-        .doc(user.email)
-        .collection("bestMarketBuy")
-        .add({
-          coin: coin.toLocaleUpperCase(),
-          amount: Number(order),
-          inPrice: coinPriceLive,
-          timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-        });
-
-      db.collection(user.email)
-        .doc(user.email)
-        .collection("coins")
+      dbBestMarketBuy(user).add({
+        coin: coin.toLocaleUpperCase(),
+        amount: Number(order),
+        inPrice: coinPriceLive,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+      });
+      dbCoins(user)
         .doc(usdtWalletId)
-        .set(
-          {
-            amount: usdtWallet - USDTInput,
-          },
-          {
-            merge: true,
-          }
-        );
-      db.collection(user.email)
-        .doc(user.email)
-        .collection("coins")
+        .set({ amount: usdtWallet - USDTInput }, { merge: true });
+      dbCoins(user)
         .doc(coinTradeId)
-        .set(
-          {
-            amount: coinTrade + Number(order),
-          },
-          {
-            merge: true,
-          }
-        );
+        .set({ amount: coinTrade + Number(order) }, { merge: true });
     }
   };
   return (
@@ -176,8 +144,12 @@ const BuyFastCoins = () => {
             </div>
           </div>
           <div className="  mb-3 px-4">
-            <button className="btn  btn-primary w-100" onClick={(e) => bestMarketPrice(e)}>
-              Buy now
+            <button
+              className="btn  btn-primary w-100"
+              onClick={(e) => bestMarketPrice(e)}
+              disabled={coinPriceLive === 0}
+            >
+              {coinPriceLive === 0 ? "Please Wait" : "Buy now"}
             </button>
           </div>
         </div>

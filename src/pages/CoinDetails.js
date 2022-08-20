@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 const CoinDetails = (props) => {
   const { coin } = useParams();
   const [coinDetails, setCoinDetails] = React.useState("");
-
   React.useEffect(() => {
     fetch(`https://api.coingecko.com/api/v3/coins/${coin.toLowerCase()}`)
       .then((response) => response.json())
@@ -27,7 +26,7 @@ const CoinDetails = (props) => {
               <div>
                 <h6 className="mb-0 mx-4 text-capitalize ">{coinDetails.id}</h6>
               </div>
-              <div className=" text-nowrap">{/* <CoinPriceLive /> */} not working</div>
+              <div className=" text-nowrap">{/* <CoinPriceLive /> */}</div>
             </div>
           </div>
         </div>
