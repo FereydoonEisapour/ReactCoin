@@ -9,7 +9,7 @@ function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
-      <Toaster />
+        <Toaster />
         <div className="App ">
           <Navbar />
           <Routes>

@@ -1,4 +1,5 @@
 import React from "react";
+import toast from "react-hot-toast";
 import { auth } from "../data/Firebase";
 
 const AuthStateContext = React.createContext();
@@ -37,11 +38,18 @@ function AuthProvider(props) {
   );
 }
 function doSingUp(dispatch, emailInput, passwordInput) {
-  auth.createUserWithEmailAndPassword(emailInput, passwordInput).then((result) => {
-    dispatch({
-      user: result.user,
+  auth
+    .createUserWithEmailAndPassword(emailInput, passwordInput)
+    .then((result) => {
+      dispatch({
+        user: result.user,
+      });
+    })
+    .catch((error) => {
+      if (error.code === "auth/email-already-in-use") {
+        toast.error("Email alredy in use . Please login ");
+      }
     });
-  });
 }
 function doLogIn(dispatch, emailInput, passwordInput) {
   auth
@@ -50,6 +58,22 @@ function doLogIn(dispatch, emailInput, passwordInput) {
       dispatch({
         user: result.user,
       });
-    })   
+    })
+    .catch((error) => {
+      if (error.code === "auth/user-not-found") {
+        toast.error("Email not found , Please Signup");
+      }
+    });
 }
-export { AuthProvider, useAuthState, useAuthDispatch, doSingUp, doLogIn };
+function resetPass(dispatch, emailInput) {
+  auth
+    .sendPasswordResetEmail(emailInput)
+    .then(() => {
+      toast.success("We send reset password link to your Mail");
+    })
+    .catch((error) => {
+      toast.error(error.code);
+      console.log(error);
+    });
+}
+export { AuthProvider, useAuthState, useAuthDispatch, doSingUp, doLogIn, resetPass };

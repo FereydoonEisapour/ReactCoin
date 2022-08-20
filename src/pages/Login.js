@@ -1,6 +1,6 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
-import { doSingUp, doLogIn, useAuthDispatch, useAuthState } from "../contexts/AuthContext";
+import { doSingUp, doLogIn, resetPass,useAuthDispatch, useAuthState } from "../contexts/AuthContext";
 
 const Login = () => {
   const { user } = useAuthState();
@@ -27,6 +27,9 @@ const Login = () => {
     e.preventDefault();
     doLogIn(dispatch, emailInput, passwordInput);
   };
+  const resetPassword=()=>{
+    resetPass(dispatch,emailInput)
+  }
   if (user) return <Navigate to="/dashboard" />;
   return (
     <div className="d-flex justify-content-center align-items-center vh-100 col-12">
@@ -44,21 +47,21 @@ const Login = () => {
             className="m-2 p-2"
             type="password"
             name="password"
-            onChange={() => passwordInputHandler()}
+            onChange={(e) => passwordInputHandler(e)}
           />
         </div>
         <div className="buttons m-4">
           {loginModal ? (
             <button
               className="btn btn-primary col-12 "
-              onClick={() => LogInUserWithEmailAndPassword()}
+              onClick={(e) => LogInUserWithEmailAndPassword(e)}
             >
               Login
             </button>
           ) : (
             <button
               className="btn btn-primary col-12 "
-              onClick={() => SignInUserWithEmailAndPassword()}
+              onClick={(e) => SignInUserWithEmailAndPassword(e)}
             >
               Signup
             </button>
@@ -66,18 +69,18 @@ const Login = () => {
         </div>
         <div className="rest ">
           {loginModal ? (
-            <button className="btn btn-outline-primary col-12">rest password</button>
+            <button className="btn btn-outline-primary col-12" onClick={resetPassword}>rest password</button>
           ) : (
             <></>
           )}
         </div>
         <div className="setlogin text-center p-2">
           {loginModal ? (
-            <button className="btn btn-light" onClick={() => modalHandler()}>
+            <button className="btn btn-light" onClick={(e) => modalHandler(e)}>
               Dont have account
             </button>
           ) : (
-            <button className="btn btn-light" onClick={() => modalHandler()}>
+            <button className="btn btn-light" onClick={(e) => modalHandler(e)}>
               Do have account . Please Login
             </button>
           )}

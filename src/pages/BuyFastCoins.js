@@ -157,7 +157,6 @@ const BuyFastCoins = () => {
     <>
       <div className="  d-flex row col-12 justify-content-center">
         <div className="col-6 m-3 p-3 rounded-4 bg-white">
-          {coinPriceLive}
           <div className=" text-center text-dark p-4 fw-bold">Best Market Price </div>
           <div className=" text-center text-dark p-1 fw-bold">{coin.toUpperCase()}</div>
           <div className="">
