@@ -1,20 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useParams } from "react-router-dom";
-
-
-import { CoinPriceLive } from "../components";
-import { TradingChart } from "../components";
-import DetailsCoinItem from "../components/DetailsCoinItem";
-
 const CoinDetails = (props) => {
   const { coin } = useParams();
+  const [coinDetails, setCoinDetails] = React.useState("");
 
-  const [coinDetails, setCoinDetails] = useState("");
-
-  useEffect(() => {
+  React.useEffect(() => {
     fetch(`https://api.coingecko.com/api/v3/coins/${coin.toLowerCase()}`)
       .then((response) => response.json())
-      //  .then((data) => console.log(data))
       .then((data) => setCoinDetails(data))
       .catch((err) => console.error(err));
   }, [coin]);

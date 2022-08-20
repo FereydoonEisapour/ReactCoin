@@ -1,18 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useAuthState } from "../contexts/AuthContext";
 import { Navigate } from "react-router-dom";
 import db from "./../data/Firebase";
 import firebase from "firebase/compat/app";
 import { Balance } from "../components";
 const Dashboard = () => {
-  //  const { user } = useAuthState();
-  const user = { email: "epfereydoon@gmail.com" };
+  const { user } = useAuthState();
+  const [usdtWallet, setUsdtWallet] = React.useState(Number); 
+  const [usdtWalletId, setUsdtWalletId] = React.useState("");
+  const [depositInput, setDepositInput] = React.useState(Number);
 
-  const [usdtWallet, setUsdtWallet] = useState(Number); //* USDT Wallet
-  const [usdtWalletId, setUsdtWalletId] = useState("");
-  const [depositInput, setDepositInput] = useState(Number);
-  // * GET USDT AND COIN  FROM API
-  useEffect(() => {
+  React.useEffect(() => {
     db.collection(user.email)
       .doc(user.email)
       .collection("coins")

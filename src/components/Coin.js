@@ -1,7 +1,5 @@
-import React from "react";
 import PropTypes from "prop-types";
-
-import { Link, NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import CoinPirceLive from "./CoinPriceLive";
 const Coin = ({ name, price, symbol, marketcap, volume, image, priceChange }) => {
   return (
@@ -9,13 +7,10 @@ const Coin = ({ name, price, symbol, marketcap, volume, image, priceChange }) =>
       <div className="coin-row bg-light m-1 px-3">
         <div className="coin">
           <img src={image} alt="crypto" />
-
           <h1>{name}</h1>
-
           <p className="coin-symbol">{symbol}</p>
         </div>
         <div className="coin-data">
-          {/* <p className="coin-price">${price} </p> */}
           <div className="coin-price">
             <CoinPirceLive symbol={symbol} />
           </div>
@@ -26,8 +21,6 @@ const Coin = ({ name, price, symbol, marketcap, volume, image, priceChange }) =>
           ) : (
             <p className="coin-percent green">{priceChange.toFixed(2)}%</p>
           )}
-
-          {/* <p className="coin-marketcap">Mkt Cap: ${marketcap.toLocaleString()}</p> */}
         </div>
         <div className="coin-btn p-1 px-3 mb-3 d-flex align-items-center justify-content-between ">
           <Link className="text-decoration-none px-3" to={`/trade/${symbol}`}>

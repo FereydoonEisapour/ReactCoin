@@ -1,7 +1,5 @@
-import React, { useState, useEffect } from "react";
-
+import React from "react";
 import "./assets/styles/App.css";
-
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { TopCoinList, CoinDetails, TradingCoin, BuyFastCoins, Login, Dashboard } from "./pages";
 import { Navbar } from "./components";
@@ -27,5 +25,4 @@ function App() {
     </AuthProvider>
   );
 }
-
 export default App;

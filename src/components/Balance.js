@@ -1,11 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
 import db from "../data/Firebase";
 import { useAuthState } from "../contexts/AuthContext";
 const Balance = () => {
-  // const { user } = useAuthState();
-  const user = { email: "epfereydoon@gmail.com" };
-  const [balance, setBalance] = useState([]);
-  useEffect(() => {
+  const { user } = useAuthState();
+  const [balance, setBalance] = React.useState([]);
+  React.useEffect(() => {
     db.collection(user.email)
       .doc(user.email)
       .collection("coins")
@@ -21,7 +20,6 @@ const Balance = () => {
       });
     return () => {};
   }, [user.email]);
-
   return (
     <>
       <h1 className="text-center"> Balance</h1>
@@ -34,5 +32,4 @@ const Balance = () => {
     </>
   );
 };
-
 export default Balance;

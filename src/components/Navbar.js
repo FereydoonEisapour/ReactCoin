@@ -1,7 +1,5 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import { useAuthState } from "../contexts/AuthContext";
-
 const Navbar = () => {
   const { user } = useAuthState();
   return (
@@ -10,7 +8,7 @@ const Navbar = () => {
         <div className="d-flex align-items-center">
           <nav className="px-2 ">
             <Link className="text-decoration-none px-3 text-dark fw-bold" to="/">
-            ReactCoin
+              ReactCoin
             </Link>
             {user ? (
               <>
@@ -55,5 +53,4 @@ const Navbar = () => {
     </nav>
   );
 };
-
 export default Navbar;

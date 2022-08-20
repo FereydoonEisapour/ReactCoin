@@ -1,6 +1,4 @@
-import React from "react";
 import PropTypes from "prop-types";
-
 const TradeItem = ({ id, coin, amount, inPrice }) => {
   return (
     <div className="d-flex justify-content-between p-2 m-2 rounded-3 trade-success" key={id}>

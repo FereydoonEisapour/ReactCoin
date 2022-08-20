@@ -1,16 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Coin } from "../components";
 
 const TopCoinList = () => {
-  const [coins, setCoins] = useState([]);
-  const [coinsListNumber, setCoinsListNumber] = useState(2);
-  const [search, setSearch] = useState("");
-  useEffect(() => {
+  const [coins, setCoins] = React.useState([]);
+  const [coinsListNumber, setCoinsListNumber] = React.useState(2);
+  const [search, setSearch] = React.useState("");
+  React.useEffect(() => {
     fetch(
       `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=${coinsListNumber}&page=1&sparkline=false`
     )
       .then((response) => response.json())
-      //.then(data=>console.log(data))
       .then((data) => setCoins(data))
       .catch((err) => console.error(err));
   }, [coinsListNumber]);
@@ -49,7 +48,6 @@ const TopCoinList = () => {
             <p className="px-5">Volume</p>
             <p className="px-5">Change</p>
           </div>
-  
         </div>
       </div>
       {filteredCoins.map((coin) => {

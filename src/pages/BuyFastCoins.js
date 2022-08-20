@@ -1,29 +1,25 @@
-import React, { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
-import CoinPriceLive from "./../components/CoinPriceLive";
-import toast from "react-hot-toast";
-import db from "../data/Firebase";
-import { useAuthState } from "../contexts/AuthContext";
 import firebase from "firebase/compat/app";
+import React from "react";
+import toast from "react-hot-toast";
+import { useParams } from "react-router-dom";
 import { TradeItem } from "../components";
+import { useAuthState } from "../contexts/AuthContext";
+import db from "../data/Firebase";
 const BuyFastCoins = () => {
   const { coin } = useParams();
-  //  const { user } = useAuthState();
-  const user = { email: "epfereydoon@gmail.com" };
+  const { user } = useAuthState();
+  const [usdtWallet, setUsdtWallet] = React.useState(Number);
+  const [usdtWalletId, setUsdtWalletId] = React.useState("");
 
-  const [usdtWallet, setUsdtWallet] = useState(Number); //* USDT Wallet
-  const [usdtWalletId, setUsdtWalletId] = useState("");
+  const [coinTrade, setCoinTrade] = React.useState(Number);
+  const [coinTradeId, setCoinTradeId] = React.useState("");
 
-  const [coinTrade, setCoinTrade] = useState(Number);
-  const [coinTradeId, setCoinTradeId] = useState("");
-
-  const [coinPriceLive, setCoinPriceLive] = useState(Number); //*  BTC PRICE
-  const [bestPirceTrades, setBestPriceTrades] = useState([]);
-  //const [USDTInput, setUSDTInput] = useState(0); //!
-  const [USDTInput, setUSDTInput] = useState(Number); //! BTC INPUT
+  const [coinPriceLive, setCoinPriceLive] = React.useState(Number);
+  const [bestPirceTrades, setBestPriceTrades] = React.useState([]);
+  const [USDTInput, setUSDTInput] = React.useState(Number);
 
   // * GET USDT AND COIN  FROM API
-  useEffect(() => {
+  React.useEffect(() => {
     db.collection(user.email)
       .doc(user.email)
       .collection("coins")
@@ -48,7 +44,7 @@ const BuyFastCoins = () => {
       });
   }, [user.email]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     db.collection(user.email)
       .doc(user.email)
       .collection("bestMarketBuy")
@@ -63,11 +59,9 @@ const BuyFastCoins = () => {
           }))
         );
       });
-
-    return () => {};
   }, [user.email]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const binanceSocket = new WebSocket("wss://stream.binance.com:9443/ws");
     binanceSocket.onopen = function () {
       binanceSocket.send(
@@ -92,7 +86,7 @@ const BuyFastCoins = () => {
     setUSDTInput(parseFloat(event.target.value));
   };
   // * GET COIN OR CREATE COIN
-  useEffect(() => {
+  React.useEffect(() => {
     db.collection(user.email)
       .doc(user.email)
       .collection("coins")
@@ -159,7 +153,6 @@ const BuyFastCoins = () => {
         );
     }
   };
-
   return (
     <>
       <div className="  d-flex row col-12 justify-content-center">
@@ -171,7 +164,6 @@ const BuyFastCoins = () => {
             <div className="input-group mb-3 px-4">
               <input
                 onChange={(event) => USDTInputHandler(event)}
-                // value={USDTInput}
                 type="number"
                 className="form-control "
               />
@@ -185,12 +177,7 @@ const BuyFastCoins = () => {
             </div>
           </div>
           <div className="  mb-3 px-4">
-            <button
-              className="btn  btn-primary w-100"
-              //  disabled={USDTPay > USDTWallet}
-              // disabled={USDTPay > USDTWallet}
-              onClick={(e) => bestMarketPrice(e)}
-            >
+            <button className="btn  btn-primary w-100" onClick={(e) => bestMarketPrice(e)}>
               Buy now
             </button>
           </div>
@@ -217,26 +204,4 @@ const BuyFastCoins = () => {
     </>
   );
 };
-
 export default BuyFastCoins;
-
-{
-  /* 
-          <div className="input-group   mb-3 px-4 d-flex ">
-            <span className="input-group-text w-75 border border-0 ">BTC PRICE</span>
-            <span className="input-group-text w-25 border border-0 ">{BTCPrice}</span>
-          </div> */
-}
-
-{
-  /* <div className="input-group   mb-3 px-4 d-flex">
-          <span className="input-group-text w-75 border border-0  fw-bold ">USDT</span>
-          <span className="input-group-text w-25 border border-0 fw-bold">{USDTWallet}</span>
-        </div> */
-}
-{
-  /* <div className="input-group   mb-3 px-4 d-flex">
-          <span className="input-group-text w-75 border border-0 ">You Pay : </span>
-          <span className="input-group-text w-25 border border-0 ">{USDTPay}</span>
-        </div> */
-}

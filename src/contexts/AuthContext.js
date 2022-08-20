@@ -1,6 +1,5 @@
 import React from "react";
 import { auth } from "../data/Firebase";
-import { useNavigate } from "react-router-dom";
 
 const AuthStateContext = React.createContext();
 const AuthDispatchContext = React.createContext();
@@ -51,7 +50,6 @@ function doLogIn(dispatch, emailInput, passwordInput) {
       dispatch({
         user: result.user,
       });
-    })
-    
+    })   
 }
 export { AuthProvider, useAuthState, useAuthDispatch, doSingUp, doLogIn };
