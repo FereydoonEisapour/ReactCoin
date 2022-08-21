@@ -8,8 +8,7 @@
 //       <AdvancedRealTimeChart
 //         theme="light"
 //         symbol={symbol}
-
-//           autosize={true}
+//         autosize={true}
 //       ></AdvancedRealTimeChart>
 //     </div>
 //   );

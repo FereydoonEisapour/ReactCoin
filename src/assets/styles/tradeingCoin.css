@@ -1,14 +1,35 @@
-.containerTrade {  display: grid;
-  grid-template-columns: 1fr 1fr  1fr;
-  grid-template-rows: 80px 1fr  max-content max-content;
+.containerTrade { 
+  display: grid;
+  grid-template-columns: 1fr ;
+  grid-template-rows: 400px 80px max-content max-content max-content max-content;
   gap: 0px 0px;
   grid-auto-flow: row;
   grid-template-areas:
-    "livePrice livePrice livePrice"
-    "chart chart trade"
-    "order order balance"
-    "trades trades trades";
+    "chart"
+    "livePrice"
+    "trade"
+    "balance"
+    "order"
+    "trades";
 }
+
+@media only screen and (min-width: 50em) {
+.containerTrade {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  grid-template-rows: 80px 1fr   max-content max-content;
+  gap: 0px 0px;
+  grid-auto-flow: row;
+  grid-template-areas:
+    "livePrice livePrice livePrice livePrice livePrice"
+    "chart chart chart trade trade"
+    "order order order balance balance"
+    "trades trades trades trades trades";
+}
+}
+
+
+
 
 .livePrice { grid-area: livePrice; }
 
@@ -21,6 +42,32 @@
 .balance { grid-area: balance; }
 
 .trades { grid-area: trades; }
+
+.trade{
+
+}
+.trade-symbol{
+
+}
+.trade-input{
+
+
+}
+
+.trade-button{
+}
+
+.input-group{
+
+}
+
+
+
+
+
+
+
+
 
 .trade-success{
   background-color:#245a52;

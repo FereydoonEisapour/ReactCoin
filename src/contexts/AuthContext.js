@@ -22,8 +22,8 @@ function useAuthDispatch() {
   return context;
 }
 const initialState = {
- // user: { email: "epfereydoon@gmail.com" },
- user:null,
+  user: { email: "epfereydoon@gmail.com" },
+ //user:null,
   userEmail: null,
   error: null,
   status: false,
@@ -78,7 +78,4 @@ function resetPass(dispatch, emailInput) {
     });
 }
 
-// const dbCoins = db.collection(initialState.user.email).doc(initialState.user.email).collection("coins");
-// const dbOrders = db.collection(initialState.user.email).doc(initialState.user.email).collection("orders");
-// const dbTrades = db.collection(initialState.user.email).doc(initialState.user.email).collection("trades");
 export { AuthProvider, useAuthState, useAuthDispatch, doSingUp, doLogIn, resetPass };

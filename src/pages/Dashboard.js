@@ -1,7 +1,7 @@
 import React from "react";
 import { useAuthState } from "../contexts/AuthContext";
 import { Navigate } from "react-router-dom";
-import db from "./../data/Firebase";
+
 import firebase from "firebase/compat/app";
 import { Balance } from "../components";
 import { dbCoins } from "../data/db";

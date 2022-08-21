@@ -5,9 +5,9 @@ import "../assets/styles/tradeingCoin.css";
 import { Balance, OrderItem, TradeItem } from "../components";
 import { useAuthState } from "../contexts/AuthContext";
 import TradingChart from "./../components/TradingChart";
-import db from "./../data/Firebase";
-//import { AdvancedRealTimeChart } from "react-ts-tradingview-widgets";
+
 import { dbCoins, dbOrders, dbTrades } from "../data/db";
+import "../assets/styles/trade.css"
 const TradingCoin = () => {
   const { coin } = useParams();
 
@@ -27,6 +27,24 @@ const TradingCoin = () => {
   const [orders, setOrders] = React.useState([]);
 
   const [trades, setTrades] = React.useState([]);
+  ////
+  const [orderType, setOrderType] = React.useState(true)
+  const [btnDisabled, setBtnDisabled] = React.useState(false)
+  React.useEffect(() => {
+    if (orderType === true) {
+      calcOrder > usdtWallet ? setBtnDisabled(true) : setBtnDisabled(false)
+    }
+    if (orderType === false) {
+      coinInput > coinTrade ? setBtnDisabled(true) : setBtnDisabled(false)
+    }
+    //calcOrder > usdtWallet || coinInput > coinTrade
+  }, [calcOrder, usdtWallet, coinInput, coinTrade, orderType])
+
+  const orderTypeHandler = (e) => {
+    if (e.target.outerText === "Sell") setOrderType(false)
+    if (e.target.outerText === "Buy") setOrderType(true)
+  }
+
 
   const usdtInputHandler = (event) => {
     setUsdtInput(Number(event.target.value));
@@ -46,7 +64,7 @@ const TradingCoin = () => {
       .where("coin", "==", "USDT")
       .onSnapshot((snapshot) => {
         if (typeof snapshot.docs[0] === "undefined") {
-          db.collection(user.email).doc(user.email).collection("coins").add({
+          dbCoins(user).add({
             coin: "USDT",
             amount: 0,
             timestamp: firebase.firestore.FieldValue.serverTimestamp(),
@@ -68,7 +86,7 @@ const TradingCoin = () => {
       .where("coin", "==", `${coin.toLocaleUpperCase()}`)
       .onSnapshot((snapshot) => {
         if (typeof snapshot.docs[0] === "undefined") {
-          db.collection(user.email).doc(user.email).collection("coins").add({
+          dbCoins(user).add({
             coin: coin.toLocaleUpperCase(),
             amount: 0,
             timestamp: firebase.firestore.FieldValue.serverTimestamp(),
@@ -82,19 +100,36 @@ const TradingCoin = () => {
             });
         }
       });
-    return () => {};
+    return () => { };
   }, [coin, user, user.email]);
   // * Add Order To API
   //* CREATE ORDER
   const setOrderHandler = (e) => {
     e.preventDefault();
-    if (calcOrder === 0) return;
-    dbOrders(user).add({
-      coin: coin.toLocaleLowerCase(),
-      amount: coinInput,
-      inPrice: usdtInput,
-      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-    });
+    if (calcOrder > 0) {
+      if (orderType === true) {
+        dbOrders(user).add({
+          coin: coin.toLocaleLowerCase(),
+          type: orderType,
+          amount: coinInput,
+          inPrice: usdtInput,
+          timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+        });
+        const newWaletUsdts = usdtWallet - Number(usdtInput * coinInput);
+        dbCoins(user).doc(usdtWalletId).set({ amount: newWaletUsdts }, { merge: true });
+      }
+      if (orderType === false) {
+        dbOrders(user).add({
+          coin: coin.toLocaleLowerCase(),
+          type: orderType,
+          amount: coinInput,
+          inPrice: usdtInput,
+          timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+        });
+        const newCoinAmount = coinTrade - Number(coinInput)
+        dbCoins(user).doc(coinTradeId).set({ amount: newCoinAmount }, { merge: true });
+      }
+    }
   };
   // * GET ORDERS FROM API
   React.useEffect(() => {
@@ -104,6 +139,7 @@ const TradingCoin = () => {
         setOrders(
           snapshot.docs.map((doc) => ({
             id: doc.id,
+            type: doc.data().type,
             coin: doc.data().coin,
             amount: Number(doc.data().amount),
             inPrice: Number(doc.data().inPrice),
@@ -119,13 +155,14 @@ const TradingCoin = () => {
         setTrades(
           snapshot.docs.map((doc) => ({
             id: doc.id,
+            type: doc.data().type,
             coin: doc.data().coin,
             amount: doc.data().amount,
             inPrice: doc.data().inPrice,
           }))
         );
       });
-  }, [user.email, user]);
+  }, [user.email, user, orderType]);
   // *  ORDER TO TRADE => // DELL ORDER // ADD TRADE // USDT WALLET DEC//
   React.useEffect(() => {
     if (orders.length > 0) {
@@ -133,29 +170,25 @@ const TradingCoin = () => {
       if (orderMatchFind !== undefined) {
         dbTrades(user).add({
           coin: coin,
+          type: orderMatchFind.type,
           amount: Number(orderMatchFind.amount),
           inPrice: Number(orderMatchFind.inPrice),
           timestamp: firebase.firestore.FieldValue.serverTimestamp(),
         });
+
         dbOrders(user).doc(orderMatchFind.id).delete();
 
-        const newWaletUsdts = usdtWallet - Number(orderMatchFind.inPrice);
-        const newCoinAmount = coinTrade + Number(orderMatchFind.amount);
-        dbCoins(user).doc(usdtWalletId).set({ amount: newWaletUsdts }, { merge: true });
-        dbCoins(user).doc(coinTradeId).set({ amount: newCoinAmount }, { merge: true });
+        if (orderType === true) {
+          const newCoinAmount = coinTrade + Number(orderMatchFind.amount);
+          dbCoins(user).doc(coinTradeId).set({ amount: newCoinAmount }, { merge: true });
+        }
+        if (orderType === false) {
+          const newWaletUsdts = usdtWallet + Number(orderMatchFind.inPrice * orderMatchFind.amount);
+          dbCoins(user).doc(usdtWalletId).set({ amount: newWaletUsdts }, { merge: true });
+        }
       }
     }
-  }, [
-    coin,
-    coinPriceLive,
-    coinTrade,
-    coinTradeId,
-    orders,
-    usdtWallet,
-    usdtWalletId,
-    user,
-    user.email,
-  ]);
+  }, [coin, coinPriceLive, coinTrade, coinTradeId, orderType, orders, usdtWallet, usdtWalletId, user, user.email]);
   // * GET COIN PRICE FROM BINANCE API
   React.useEffect(() => {
     const binanceSocket = new WebSocket("wss://stream.binance.com:9443/ws");
@@ -186,60 +219,42 @@ const TradingCoin = () => {
         <div className="coinPrice fw-bolder display-6 px-4">{coinPriceLive}</div>
       </div>
       <div className="trade row   m-2 p-3 bg-white rounded-3">
+
+        <div className="trade-tabs">
+          <div className="tabs" >
+            <input type="radio" id="radio-1" name="tabs" checked={orderType} readOnly />
+            <label className="tab" htmlFor="radio-1" onClick={e => orderTypeHandler(e)}>Buy</label>
+            <input type="radio" id="radio-2" name="tabs" checked={!orderType} readOnly />
+            <label className="tab" htmlFor="radio-2" onClick={e => orderTypeHandler(e)}>Sell</label>
+            <span className="glider"></span>
+          </div>
+        </div>
+
         <div className="p-4 mt-5">
           <div className="coinName fw-bold text-center py-4 display-6">
             {coin.toLocaleUpperCase()} / USDT
           </div>
           <div className="input-group mb-3 px-4">
-            <span
-              className="input-group-text"
-              style={{ padding: "8px  18px" }}
-              id="inputGroup-sizing-default"
-            >
-              USDT
-            </span>
-            <input
-              value={usdtInput}
-              onChange={(event) => usdtInputHandler(event)}
-              type="number"
-              className="form-control"
-              min="0"
-            />
+            <span className="input-group-text" style={{ padding: "8px  18px" }} id="inputGroup-sizing-default"> USDT</span>
+            <input value={usdtInput} onChange={(event) => usdtInputHandler(event)} type="number" className="form-control" min="0" />
           </div>
           <div className="input-group mb-3 px-4">
-            <span
-              className="input-group-text  "
-              style={{ padding: "8px  24px" }}
-              id="inputGroup-sizing-default"
-            >
+            <span className="input-group-text  " style={{ padding: "8px  24px" }} id="inputGroup-sizing-default">
               {coin.toUpperCase()}
             </span>
-            <input
-              value={coinInput}
-              onChange={(event) => coinInputHandler(event)}
-              type="number"
-              className="form-control"
-              min="0"
-            />
+            <input value={coinInput} onChange={(event) => coinInputHandler(event)} type="number" className="form-control" min="0" />
           </div>
         </div>
-        <div className="  mb-3 px-4">
-          <button
-            className="btn  btn-primary w-100"
-            disabled={calcOrder > usdtWallet}
-            onClick={(e) => setOrderHandler(e)}
-          >
-            Buy
+        <div className="  mb-3 px-4 text-center">
+          <button className="btn  btn-primary w-50" disabled={btnDisabled}
+            onClick={(e) => setOrderHandler(e)}>
+            {orderType ? " Buy" : "Sell"}
           </button>
-          <span>{calcOrder > usdtWallet ? "Please Deposit USDT" : ""}</span>
+          {/* <span>{calcOrder > usdtWallet ? "Please Deposit USDT" : ""}</span> */}
         </div>
       </div>
 
-      <div className="chart  m-2 rounded-3 ">
-        {/* <AdvancedRealTimeChart theme="light" autosize={true}></AdvancedRealTimeChart> */}
-        {/* <AdvancedChart widgetProps={{"theme": "dark"}} />; */}
-        {<TradingChart />}
-      </div>
+      <div className="chart  m-2 rounded-3 ">{<TradingChart />}</div>
       <div className="balance  m-2 p-3 bg-white rounded-3">
         <Balance />
       </div>
@@ -249,9 +264,11 @@ const TradingCoin = () => {
           <OrderItem
             key={order.id}
             coin={order.coin}
+            type={order.type}
             amount={order.amount}
             inPrice={order.inPrice}
             id={order.id}
+            usdtId={usdtWalletId}
           />
         ))}
       </div>
@@ -261,6 +278,7 @@ const TradingCoin = () => {
           <TradeItem
             key={trade.id}
             id={trade.id}
+            type={trade.type}
             coin={trade.coin}
             amount={trade.amount}
             inPrice={trade.inPrice}
@@ -272,3 +290,10 @@ const TradingCoin = () => {
 };
 
 export default TradingCoin;
+
+
+
+
+
+
+
