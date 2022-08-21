@@ -22,8 +22,8 @@ function useAuthDispatch() {
   return context;
 }
 const initialState = {
-  user: { email: "epfereydoon@gmail.com" },
- //user:null,
+ 
+ user:null,
   userEmail: null,
   error: null,
   status: false,
