@@ -2,45 +2,49 @@ import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import CoinPirceLive from "./CoinPriceLive";
 import { useAuthState } from '../contexts/AuthContext'
+import "../assets/styles/Coin.css"
 const Coin = ({ name, price, symbol, marketcap, volume, image, priceChange, id }) => {
   const { userEmail } = useAuthState()
   return (
-    <div className="coin-container">
-      <div className="coin-row bg-light m-1 px-3">
-        <div className="coin">
-          <img src={image} alt="crypto" />
-          <h1>{name}</h1>
-          <p className="coin-symbol">{symbol}</p>
-        </div>
-        <div className="coin-data">
-          <div className="coin-price">
-            <CoinPirceLive symbol={symbol} />
-          </div>
-          <p className="coin-volume">${volume.toLocaleString()}</p>
-
-          {priceChange < 0 ? (
-            <p className="coin-percent red">{priceChange.toFixed(2)}%</p>
-          ) : (
-            <p className="coin-percent green">{priceChange.toFixed(2)}%</p>
-          )}
-        </div>
-        <div className="coin-btn p-1 px-3 mb-3 d-flex align-items-center justify-content-between ">
-          {userEmail ?
-            <Link className="text-decoration-none px-3" to={`/trade/${symbol}`}>
-              Trade
-            </Link>
-            :
-            <Link className="text-decoration-none px-3" to={`/login`}>
-              Trade
-            </Link>
-          }
-          {/* <Link className="text-decoration-none px-3" to={`/trade/${symbol}`}>
-            Trade
-          </Link> */}
-          <Link to={`/coin/${id}`} style={{ textDecoration: "none" }}>
-            Details
-          </Link>
-        </div>
+    <div className="col-12 d-flex justify-content-center">
+      <div className="col-10 ">
+        <table className="table">
+          <tbody >
+            <tr className="text-center bg-light d-flex">
+              <th scope="row" className="col-2 col-md-1">
+                <img className="coin-img " src={image} alt="coin" />
+              </th>
+              <td className="col-3 col-md-2 text-center  fw-bold">
+                <Link to={`/coin/${id}`} style={{ textDecoration: "none" }}>
+                  {name}
+                </Link>
+              </td>
+              <td className="col-2 d-none d-md-block ">
+                {symbol.toUpperCase()}
+              </td>
+              <td className="col-3 fw-bold ">
+                <CoinPirceLive symbol={symbol} />
+              </td>
+              <td className=" d-none d-md-block col-md-2 ">
+                {priceChange < 0 ? 
+                <div className=" red  ">{priceChange.toFixed(2)}%</div>
+                  :
+                <div className=" green">{priceChange.toFixed(2)}%</div>}
+              </td>
+              <td className="col-1 col-lg-2 ">
+                {userEmail ?
+                  <Link className="text-decoration-none " to={`/trade/${symbol}`}>
+                    Trade
+                  </Link>
+                  :
+                  <Link className="text-decoration-none " to={`/login`}>
+                    Trade
+                  </Link>
+                }
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   );

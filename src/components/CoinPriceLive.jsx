@@ -25,15 +25,13 @@ const CoinPriceLive = ({ symbol }) => {
   }, [coin, symbol]);
   return (
     <>
-      <div>
-        {btcPriceBinance ? (
-          btcPriceBinance
-        ) : (
-          <div className="spinner-grow spinner-grow-sm" role="status">
-            <span className="visually-hidden">Loading...</span>
-          </div>
-        )}
-      </div>
+      {btcPriceBinance ? (
+        btcPriceBinance
+      ) : (
+        <div className="spinner-grow spinner-grow-sm" role="status">
+          <span className="visually-hidden">Loading</span>
+        </div>
+      )}
     </>
   );
 };
