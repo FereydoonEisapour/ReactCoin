@@ -26,7 +26,7 @@ const Balance = () => {
       {balance.map((coin) => (
         <div className="input-group   mb-3 px-4 d-flex" key={coin.id}>
           <span className="input-group-text w-50 ">{coin.coin.toUpperCase()} </span>
-          <span className="input-group-text w-50 ">{coin.amount}</span>
+          <span className="input-group-text w-50 ">{(coin.amount).toFixed(4)}</span>
         </div>
       ))}
     </>

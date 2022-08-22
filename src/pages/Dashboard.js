@@ -42,9 +42,13 @@ const Dashboard = () => {
 
   if (!user) return <Navigate to="/" />;
   return (
-    <div className="container d-flex justify-content-center  p-1 row ">
-      <div className="col-6 ">
-        <div className="input-group mb-3 px-4">
+    <div className=" d-flex row justify-content-center col-12   ">
+
+      <div className="col-8  col-md-5  p-2 ">
+        <Balance />
+      </div>
+      <div className="col-8  col-md-5  p-2  mt-5">
+        <div className="input-group mb-3 ">
           <span
             className="input-group-text"
             style={{ padding: "8px  18px" }}
@@ -54,13 +58,11 @@ const Dashboard = () => {
           </span>
           <input type="number" className="form-control" onChange={depositInputHander} />
         </div>
-        <button className="btn btn-primary w-100" onClick={depositButton}>
+        <button className="btn btn-primary w-100" onClick={depositButton} disabled={depositInput < 1}>
           Deposit
         </button>
       </div>
-      <div className="col-10 d-flex row  p-3 mx-4">
-        <Balance />
-      </div>
+
     </div>
   );
 };

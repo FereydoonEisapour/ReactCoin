@@ -1,7 +1,9 @@
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import CoinPirceLive from "./CoinPriceLive";
+import { useAuthState } from '../contexts/AuthContext'
 const Coin = ({ name, price, symbol, marketcap, volume, image, priceChange, id }) => {
+  const { userEmail } = useAuthState()
   return (
     <div className="coin-container">
       <div className="coin-row bg-light m-1 px-3">
@@ -23,9 +25,18 @@ const Coin = ({ name, price, symbol, marketcap, volume, image, priceChange, id }
           )}
         </div>
         <div className="coin-btn p-1 px-3 mb-3 d-flex align-items-center justify-content-between ">
-          <Link className="text-decoration-none px-3" to={`/trade/${symbol}`}>
+          {userEmail ?
+            <Link className="text-decoration-none px-3" to={`/trade/${symbol}`}>
+              Trade
+            </Link>
+            :
+            <Link className="text-decoration-none px-3" to={`/login`}>
+              Trade
+            </Link>
+          }
+          {/* <Link className="text-decoration-none px-3" to={`/trade/${symbol}`}>
             Trade
-          </Link>
+          </Link> */}
           <Link to={`/coin/${id}`} style={{ textDecoration: "none" }}>
             Details
           </Link>
@@ -35,7 +46,7 @@ const Coin = ({ name, price, symbol, marketcap, volume, image, priceChange, id }
   );
 };
 Coin.propTypes = {
-  id:PropTypes.string,
+  id: PropTypes.string,
   name: PropTypes.string,
   price: PropTypes.number,
   symbol: PropTypes.string,
