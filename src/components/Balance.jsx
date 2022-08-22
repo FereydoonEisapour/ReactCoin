@@ -18,17 +18,20 @@ const Balance = () => {
           }))
         );
       });
-    return () => {};
+    return () => { };
   }, [user.email]);
   return (
     <>
       <h1 className="text-center"> Balance</h1>
       {balance.map((coin) => (
-        <div className="input-group   mb-3 px-4 d-flex" key={coin.id}>
-          <span className="input-group-text w-50 ">{coin.coin.toUpperCase()} </span>
-          <span className="input-group-text w-50 ">{(coin.amount).toFixed(4)}</span>
+        <div className={`${coin.amount === 0 ? "displaynone" : ""} `} key={coin.id} >
+          <div className="input-group   mb-3 px-4 d-flex" >
+            <span className="input-group-text w-50 ">{coin.coin.toUpperCase()} </span>
+            <span className="input-group-text w-50 ">{(coin.amount).toFixed(4)}</span>
+          </div>
         </div>
-      ))}
+      ))
+      }
     </>
   );
 };

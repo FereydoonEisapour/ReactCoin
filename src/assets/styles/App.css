@@ -9,6 +9,9 @@
   color: #fff; */
  
 }
+.displaynone{
+  display: none;
+}
 .bg-white{
   background-color: #ffffff ;
  
