@@ -22,8 +22,8 @@ function useAuthDispatch() {
   return context;
 }
 const initialState = {
- 
- user:null,
+
+  user: null,
   userEmail: null,
   error: null,
   status: false,
@@ -58,6 +58,7 @@ function doLogIn(dispatch, emailInput, passwordInput) {
     .then((result) => {
       dispatch({
         user: result.user,
+        userEmail: result.user.email
       });
     })
     .catch((error) => {
