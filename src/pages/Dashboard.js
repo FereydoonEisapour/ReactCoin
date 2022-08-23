@@ -44,7 +44,7 @@ const Dashboard = () => {
   return (
     <div className=" d-flex row justify-content-center col-12   ">
 
-      <div className="col-8  col-md-5  p-2 ">
+      <div className="col-8  col-md-5  p-2 my-2">
         <Balance />
       </div>
       <div className="col-8  col-md-5  p-2  mt-5">
@@ -58,7 +58,7 @@ const Dashboard = () => {
           </span>
           <input type="number" className="form-control" onChange={depositInputHander} />
         </div>
-        <button className="btn btn-primary w-100" onClick={depositButton} disabled={depositInput < 1}>
+        <button className="btn btn-primary w-100" onClick={depositButton} disabled={depositInput < 0}>
           Deposit
         </button>
       </div>

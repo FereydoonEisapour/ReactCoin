@@ -19,7 +19,7 @@ const TopCoinList = () => {
   return (
     <div className="coin-search m-3 ">
       <div className="col-12 d-flex justify-content-center">
-        <div className="col-10 ">
+        <div className="col-12 ">
           <table className="table">
             <thead className="">
               <tr className="text-center bg-light d-flex">

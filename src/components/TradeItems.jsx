@@ -1,9 +1,10 @@
+
 import React from 'react';
 import PropTypes from "prop-types";
 import { useAuthState } from "../contexts/AuthContext";
 import firebase from "firebase/compat/app";
 import { dbCoins, dbOrders } from "../data/db";
-const OrderItem = ({ coin, amount, inPrice, id, type, usdtId }) => {
+ const OrderItem = ({ coin, amount, inPrice, id, type, usdtId }) => {
   const { user } = useAuthState();
 
   const [usdtWallet, setUsdtWallet] = React.useState(Number);
@@ -76,4 +77,41 @@ OrderItem.propTypes = {
   amount: PropTypes.number,
   inPrice: PropTypes.number,
 };
-export default OrderItem;
+
+ const TradeItem = ({ id, coin, amount, inPrice, type }) => {
+    return (
+        <div className="d-flex justify-content-between p-2 m-2 rounded-3 trade-success" key={id}>
+            <div className="px-2">{type ? "Buy" : "Sell"}</div>
+            <div className="px-2">{coin.toUpperCase()}</div>
+            <div className="px-2">{amount}</div>
+            <div className="px-2">{inPrice}</div>
+        </div>
+    );
+};
+TradeItem.propTypes = {
+    id: PropTypes.string,
+    type: PropTypes.bool,
+    coin: PropTypes.string,
+    amount: PropTypes.number,
+    inPrice: PropTypes.number,
+};
+
+
+ const TradeBuyFast = ({ id, coin, amount, inPrice, }) => {
+    return (
+        <div className="d-flex justify-content-between p-2 m-2 rounded-3 trade-success" key={id}>
+            <div className="px-2">{coin.toUpperCase()}</div>
+            <div className="px-2">{amount}</div>
+            <div className="px-2">{inPrice}</div>
+        </div>
+    )
+}
+TradeBuyFast.propTypes = {
+    id: PropTypes.string,
+    coin: PropTypes.string,
+    amount: PropTypes.number,
+    inPrice: PropTypes.number,
+};
+
+
+export  {TradeBuyFast ,OrderItem,TradeItem}

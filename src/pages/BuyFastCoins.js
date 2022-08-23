@@ -2,10 +2,10 @@ import firebase from "firebase/compat/app";
 import React from "react";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
-import { TradeItem } from "../components";
 import { useAuthState } from "../contexts/AuthContext";
 import db from "../data/Firebase";
 import { dbCoins, dbBestMarketBuy } from "../data/db";
+import { TradeBuyFast } from "../components/TradeItems";
 const BuyFastCoins = () => {
   const { coin } = useParams();
   const { user } = useAuthState();
@@ -126,9 +126,9 @@ const BuyFastCoins = () => {
       <div className="  d-flex row col-12 justify-content-center">
         <div className="col-10 col-md-6 m-3 p-3 rounded-4 bg-white">
           <div className=" text-center text-dark p-4 fw-bold">Best Market Price </div>
-          <div className=" text-center text-dark p-1 fw-bold">{coin.toUpperCase()}</div>
+          <div className=" text-center text-dark p-1 fw-bold ">{coin.toUpperCase()}</div>
           <div className="">
-            <div className="input-group mb-3 px-4">
+            <div className="input-group mb-3 px-4 py-4">
               <input
                 onChange={(event) => USDTInputHandler(event)}
                 type="number"
@@ -151,15 +151,15 @@ const BuyFastCoins = () => {
             </button>
           </div>
         </div>
-        <div className=" col-10">
+        <div className=" col-10 col-md-7">
           <div className="d-flex justify-content-between p-2 m-2 rounded-3 trade-success">
-            <div className="">Buy</div>
+            {/* <div className="">Buy</div> */}
             <div className="">Coin</div>
             <div className="">Amount</div>
             <div className="">Price</div>
           </div>
           {bestPirceTrades.map((trade) => (
-            <TradeItem
+            <TradeBuyFast
               key={trade.id}
               id={trade.id}
               coin={trade.coin}

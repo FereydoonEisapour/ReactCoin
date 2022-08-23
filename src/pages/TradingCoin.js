@@ -3,7 +3,8 @@ import { Navigate, useParams } from "react-router-dom";
 import { useAuthState } from "../contexts/AuthContext";
 import firebase from "firebase/compat/app";
 import { dbCoins, dbOrders, dbTrades } from "../data/db";
-import { Balance, OrderItem, TradeItem, Loading } from "../components";
+import { Balance, Loading } from "../components";
+import { OrderItem, TradeItem } from '../components/TradeItems'
 import TradingChart from "./../components/TradingChart";
 import "../assets/styles/trade.css"
 import "../assets/styles/tradeingCoin.css";
@@ -30,9 +31,23 @@ const TradingCoin = () => {
   const [orderType, setOrderType] = React.useState(true)
   const [btnDisabled, setBtnDisabled] = React.useState(false)
   React.useEffect(() => {
-    if (orderType === true) calcOrder > usdtWallet ? setBtnDisabled(true) : setBtnDisabled(false)
-    if (orderType === false) coinInput > coinTrade ? setBtnDisabled(true) : setBtnDisabled(false)
-  }, [calcOrder, usdtWallet, coinInput, coinTrade, orderType])
+
+
+    if (orderType === true) {
+      calcOrder > usdtWallet ? setBtnDisabled(true) : setBtnDisabled(false)
+      if (usdtWallet === 0) setBtnDisabled(true)
+      if (coinInput === 0) { setBtnDisabled(true) }
+      if (usdtInput === 0) { setBtnDisabled(true) }
+    }
+    if (orderType === false) {
+      coinInput > coinTrade ? setBtnDisabled(true) : setBtnDisabled(false)
+      if (coinTrade === 0) { setBtnDisabled(true) }
+      if (coinInput === 0) { setBtnDisabled(true) }
+      if (usdtInput === 0) { setBtnDisabled(true) }
+    }
+
+
+  }, [calcOrder, usdtWallet, coinInput, coinTrade, orderType, usdtInput])
 
   const orderTypeHandler = (e) => {
     if (e.target.outerText === "Sell") setOrderType(false)
@@ -40,10 +55,12 @@ const TradingCoin = () => {
   }
 
   const usdtInputHandler = (e) => {
+
     setUsdtInput(Number(e.target.value));
     setCalcOrder(usdtInput * coinInput);
   };
   const coinInputHandler = (e) => {
+
     setCoinInput(Number(e.target.value));
     setCalcOrder(usdtInput * coinInput);
   };
@@ -54,35 +71,37 @@ const TradingCoin = () => {
   // * GET USDT
   React.useEffect(() => {
     dbCoins(user).where("coin", "==", "USDT").onSnapshot((snapshot) => {
-        if (typeof snapshot.docs[0] === "undefined") {
-          dbCoins(user).add({
-            coin: "USDT",
-            amount: 0,
-            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-          });
-        } else {
-          dbCoins(user).where("coin", "==", "USDT").onSnapshot((snapshot) => {
-              setUsdtWallet(snapshot.docs[0].data().amount);
-              setUsdtWalletId(snapshot.docs[0].id);
-            });
-        }});
+      if (typeof snapshot.docs[0] === "undefined") {
+        dbCoins(user).add({
+          coin: "USDT",
+          amount: 0,
+          timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+        });
+      } else {
+        dbCoins(user).where("coin", "==", "USDT").onSnapshot((snapshot) => {
+          setUsdtWallet(snapshot.docs[0].data().amount);
+          setUsdtWalletId(snapshot.docs[0].id);
+        });
+      }
+    });
   }, [user]);
 
   // * GET COIN OR CREATE COIN
   React.useEffect(() => {
     dbCoins(user).where("coin", "==", `${coin.toLocaleUpperCase()}`).onSnapshot((snapshot) => {
-        if (typeof snapshot.docs[0] === "undefined") {
-          dbCoins(user).add({
-            coin: coin.toLocaleUpperCase(),
-            amount: 0,
-            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-          });
-        } else {
-          dbCoins(user).where("coin", "==", `${coin.toLocaleUpperCase()}`).onSnapshot((snapshot) => {
-              setCoinTrade(snapshot.docs[0].data().amount);
-              setCoinTradeId(snapshot.docs[0].id);
-            });
-        }});
+      if (typeof snapshot.docs[0] === "undefined") {
+        dbCoins(user).add({
+          coin: coin.toLocaleUpperCase(),
+          amount: 0,
+          timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+        });
+      } else {
+        dbCoins(user).where("coin", "==", `${coin.toLocaleUpperCase()}`).onSnapshot((snapshot) => {
+          setCoinTrade(snapshot.docs[0].data().amount);
+          setCoinTradeId(snapshot.docs[0].id);
+        });
+      }
+    });
   }, [coin, user, user.email]);
 
   //*  CREATE ORDER
@@ -116,34 +135,34 @@ const TradingCoin = () => {
   // * GET ORDERS FROM API
   React.useEffect(() => {
     dbOrders(user).orderBy("inPrice", "desc").onSnapshot((snapshot) => {
-        setOrders( snapshot.docs.map((doc) => ({
-            id: doc.id,
-            type: doc.data().type,
-            coin: doc.data().coin,
-            amount: Number(doc.data().amount),
-            inPrice: Number(doc.data().inPrice),
-          })));
-      });
+      setOrders(snapshot.docs.map((doc) => ({
+        id: doc.id,
+        type: doc.data().type,
+        coin: doc.data().coin,
+        amount: Number(doc.data().amount),
+        inPrice: Number(doc.data().inPrice),
+      })));
+    });
   }, [user, user.email]);
 
   // *GET TRADES FROM API
   React.useEffect(() => {
     dbTrades(user).orderBy("timestamp", "desc").onSnapshot((snapshot) => {
-        setTrades( snapshot.docs.map((doc) => ({
-            id: doc.id,
-            type: doc.data().type,
-            coin: doc.data().coin,
-            amount: doc.data().amount,
-            inPrice: doc.data().inPrice,
-          }))
-        );
-      });
+      setTrades(snapshot.docs.map((doc) => ({
+        id: doc.id,
+        type: doc.data().type,
+        coin: doc.data().coin,
+        amount: doc.data().amount,
+        inPrice: doc.data().inPrice,
+      }))
+      );
+    });
   }, [user.email, user, orderType]);
 
   // *  ORDER TO TRADE => // DELL ORDER // ADD TRADE // USDT WALLET DEC//
   React.useEffect(() => {
-    if (orders.length > 0) 
-    {const orderMatchFind = orders.find((item) => item.inPrice === Number(coinPriceLive));
+    if (orders.length > 0) {
+      const orderMatchFind = orders.find((item) => item.inPrice === Number(coinPriceLive));
       if (orderMatchFind !== undefined) {
         dbTrades(user).add({
           coin: coin,
@@ -195,7 +214,7 @@ const TradingCoin = () => {
         <div className="coinName fw-bold p-3">{coin.toLocaleUpperCase()} / USDT</div>
         <div className="coinPrice fw-bolder display-6 px-4">{coinPriceLive === 0 ? <Loading /> : coinPriceLive}</div>
       </div>
-       {/*  Trade */}
+      {/*  Trade */}
       <div className="trade row   m-2 p-3 bg-white rounded-3 ">
         <div className="trade-tabs ">
           <div className="tabs " >
