@@ -24,3 +24,6 @@
   height: max-content;
   min-height: 100vh;
 }
+.text-overflow{
+  overflow-wrap: anywhere;
+}

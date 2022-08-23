@@ -79,7 +79,7 @@ const CoinDetails = () => {
               <div className=" list-group-item-action  align-items-center d-flex gap-3 py-3">
                 <div className="d-flex gap-2 justify-content-between px-2 ">
                  
-                  <div className="overflow-scroll">{coinDetails.description.en}</div>
+                  <div className="text-overflow">{coinDetails.description.en}</div>
                 </div>
               </div>
             </div>
