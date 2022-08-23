@@ -23,7 +23,6 @@ const TradingChart = ({ height, width }) => {
       IntervalTypes={IntervalTypes.D}
       autosize
     />
-
   );
 };
 export default TradingChart;

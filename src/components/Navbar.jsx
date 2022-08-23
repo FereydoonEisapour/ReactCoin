@@ -4,17 +4,15 @@ import './../assets/styles/navbar.css'
 const Navbar = () => {
   const { user } = useAuthState();
   return (
-
-
-    <div className="container-fluid   d-flex justify-content-between p-2 ">
+    <div className="container-fluid d-flex justify-content-between px-2 py-2 ">
       <div className="d-flex align-items-center">
         <nav className="px-1 ">
-          <Link className="text-decoration-none px-1 text-dark fw-bold" to="/">
+          <Link className="text-decoration-none px-1 text-dark fw-bold  " to="/">
             ReactCoin
           </Link>
           {user ? (
             <>
-              <Link className="text-decoration-none px-1 text-dark fw-bold " to="/trade/btc">
+              <Link className="text-decoration-none  px-1 text-dark fw-bold " to="/trade/btc">
                 Trade
               </Link>
               <Link className="text-decoration-none px-1 text-dark fw-bold" to="/buyfast/btc">

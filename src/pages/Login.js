@@ -33,43 +33,43 @@ const Login = () => {
   if (user) return <Navigate to="/dashboard" />;
   return (
     <div className="d-flex justify-content-center align-items-center vh-100 col-12">
-      <div className="form  col-6 bg-light p-3 m-3">
+      <div className="form  col-11 col-md-8 col-lg-6 bg-light p-3 m-3">
         <div className="inputs d-flex justify-content-center row  m-4">
           <label htmlFor="email">Email</label>
           <input
-            className="m-2 p-2"
+            className="m-2 p-1"
             type="email"
             name="email"
             onChange={(e) => emailInputHandler(e)}
           />
           <label htmlFor="password">Password</label>
           <input
-            className="m-2 p-2"
+            className="m-2 p-1"
             type="password"
             name="password"
             onChange={(e) => passwordInputHandler(e)}
           />
         </div>
-        <div className="buttons m-4">
+        <div className="buttons m-4 text-center">
           {loginModal ? (
             <button
-              className="btn btn-primary col-12 "
+              className="btn btn-primary col-8 "
               onClick={(e) => LogInUserWithEmailAndPassword(e)}
             >
               Login
             </button>
           ) : (
             <button
-              className="btn btn-primary col-12 "
+              className="btn btn-primary col-8 "
               onClick={(e) => SignInUserWithEmailAndPassword(e)}
             >
               Signup
             </button>
           )}
         </div>
-        <div className="rest ">
+        <div className="text-center ">
           {loginModal ? (
-            <button className="btn btn-outline-primary col-12" onClick={resetPassword}>rest password</button>
+            <button className="btn col-8 " onClick={resetPassword}>reset password</button>
           ) : (
             <></>
           )}
@@ -80,8 +80,8 @@ const Login = () => {
               Dont have account
             </button>
           ) : (
-            <button className="btn btn-light" onClick={(e) => modalHandler(e)}>
-              Do have account . Please Login
+            <button className="btn " onClick={(e) => modalHandler(e)}>
+              <small> have account .Please Login</small> 
             </button>
           )}
         </div>

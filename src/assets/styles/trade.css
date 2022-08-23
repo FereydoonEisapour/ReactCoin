@@ -1,22 +1,9 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap");
+
 :root {
   --primary-color: #185ee0;
   --secondary-color: #e6eef9;
 }
-
-*,
-*:after,
-*:before {
-  box-sizing: border-box;
-}
-
-body {
-  font-family: "Inter", sans-serif;
-  background-color: rgba(230, 238, 249, 0.5);
-}
-
 .trade-tabs {
-  /* position: absolute; */
   left: 0;
   top: 0;
   right: 0;
@@ -24,15 +11,6 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.tabs {
-  display: flex;
-  position: relative;
-  background-color: #fff;
-  box-shadow: 0 0 1px 0 rgba(24, 94, 224, 0.15), 0 6px 12px 0 rgba(24, 94, 224, 0.15);
-  padding: 0.75rem 1.5rem;
-  border-radius: 99px;
 }
 .tabs * {
   z-index: 2;
@@ -42,35 +20,42 @@ input[type=radio] {
   display: none;
 }
 
-.tab {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 54px;
-  width: 200px;
-  font-size: 1.25rem;
-  font-weight: 500;
-  border-radius: 99px;
-  cursor: pointer;
-  transition: color 0.15s ease-in;
-}
+  @media (min-width: 320px) {
 
-@media (min-width: 800px) {
-	.tabs {
-	  transform: scale(0.6);
-	}
-  } 
-.glider {
-	position: absolute;
-	display: flex;
-	height: 54px;
-	width: 200px;
-	background-color: var(--secondary-color);
-	z-index: 1;
-	border-radius: 99px;
-	transition: 0.25s ease-out;
-  }
-  
+    .tabs {
+      display: flex;
+      position: relative;
+      background-color: #fff;
+      box-shadow: 0 0 1px 0 rgba(24, 94, 224, 0.15), 0 6px 12px 0 rgba(24, 94, 224, 0.15);
+      padding: 0.75rem;
+      border-radius: 99px;
+      width: max-content;
+    }
+    .glider {
+      position: absolute;
+      display: flex;
+      height: 34px;
+      width: 120px;
+      background-color: var(--secondary-color);
+      z-index: 1;
+      border-radius: 99px;
+      transition: 0.25s ease-out;
+    }
+    .tab {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 34px;
+      width: 120px;
+      font-size: 1.25rem;
+      font-weight: 500;
+      border-radius: 99px;
+      cursor: pointer;
+      transition: color 0.15s ease-in;
+    }
+    } 
+
+
 
 input[type=radio]:checked + label {
   color: var(--primary-color);

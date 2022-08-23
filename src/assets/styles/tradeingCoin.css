@@ -1,19 +1,69 @@
+
 .containerTrade { 
   display: grid;
-  grid-template-columns: 1fr ;
-  grid-template-rows: 400px 80px max-content max-content max-content max-content;
+  grid-template-columns:320px ;
+  grid-template-rows:80px 370px  max-content max-content max-content max-content;
   gap: 0px 0px;
   grid-auto-flow: row;
   grid-template-areas:
-    "chart"
-    "livePrice"
-    "trade"
-    "balance"
+  "livePrice"
+  "chart"
+  "trade"
+  "balance"
     "order"
     "trades";
 }
 
-@media only screen and (min-width: 50em) {
+@media only screen and (min-width: 375px) {
+  .containerTrade { 
+    display: grid;
+    grid-template-columns:375px ;
+    grid-template-rows: 80px 370px  max-content max-content max-content max-content;
+    gap: 0px 0px;
+    grid-auto-flow: row;
+    grid-template-areas:
+    "livePrice"
+    "chart"
+    "trade"
+    "balance"
+      "order"
+      "trades";
+  }
+  }
+@media only screen and (min-width: 425px) {
+  .containerTrade { 
+    display: grid;
+    grid-template-columns:425px ;
+    grid-template-rows: 80px 370px  max-content max-content max-content max-content;
+    gap: 0px 0px;
+    grid-auto-flow: row;
+    grid-template-areas:
+    "livePrice"
+    "chart"
+    "trade"
+    "balance"
+      "order"
+      "trades";
+  }
+  }
+@media only screen and (min-width: 768px) {
+  .containerTrade { 
+    display: grid;
+    grid-template-columns :1fr 1fr ;
+    grid-template-rows: 80px 448px max-content max-content max-content max-content;
+    gap: 0px 0px;
+    grid-auto-flow: row;
+    grid-template-areas:
+    "livePrice livePrice"
+      "chart chart"
+      "trade balance"
+      "order order"
+      "trades trades";
+  }
+  }
+  
+
+@media only screen and (min-width: 1024px) {
 .containerTrade {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
@@ -29,8 +79,6 @@
 }
 
 
-
-
 .livePrice { grid-area: livePrice; }
 
 .chart { grid-area: chart; }
@@ -42,31 +90,6 @@
 .balance { grid-area: balance; }
 
 .trades { grid-area: trades; }
-
-.trade{
-
-}
-.trade-symbol{
-
-}
-.trade-input{
-
-
-}
-
-.trade-button{
-}
-
-.input-group{
-
-}
-
-
-
-
-
-
-
 
 
 .trade-success{

@@ -124,7 +124,7 @@ const BuyFastCoins = () => {
   return (
     <>
       <div className="  d-flex row col-12 justify-content-center">
-        <div className="col-6 m-3 p-3 rounded-4 bg-white">
+        <div className="col-10 col-md-6 m-3 p-3 rounded-4 bg-white">
           <div className=" text-center text-dark p-4 fw-bold">Best Market Price </div>
           <div className=" text-center text-dark p-1 fw-bold">{coin.toUpperCase()}</div>
           <div className="">
@@ -132,13 +132,11 @@ const BuyFastCoins = () => {
               <input
                 onChange={(event) => USDTInputHandler(event)}
                 type="number"
-                className="form-control "
+                className="form-control  col-8"
               />
               <span
-                className="input-group-text   border border-0 fw-bold"
-                style={{ padding: "8px  50px" }}
-                id="inputGroup-sizing-default"
-              >
+                className="input-group-text text-center   border border-0 fw-bold col-4"
+                id="inputGroup-sizing-default">
                 USDT
               </span>
             </div>
@@ -153,7 +151,6 @@ const BuyFastCoins = () => {
             </button>
           </div>
         </div>
-
         <div className=" col-8">
           <div className="d-flex justify-content-between p-2 m-2 rounded-3 trade-success">
             <div className="">Buy</div>

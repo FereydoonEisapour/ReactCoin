@@ -5,3 +5,4 @@ export { default as Navbar } from "./Navbar";
 export { default as OrderItem } from "./OrderItem";
 export { default as TradeItem } from "./TradeItem";
 export { default as Balance } from "./Balance";
+export {default as Loading} from './Loading'

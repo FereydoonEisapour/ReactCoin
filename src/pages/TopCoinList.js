@@ -23,7 +23,7 @@ const TopCoinList = () => {
           <table className="table">
             <thead className="">
               <tr className="text-center bg-light d-flex">
-                <th scope="col" className="col-2 col-md-1">Img</th>
+                <th scope="col" className="col-2 col-md-1"></th>
                 <th scope="col" className="col-3 col-md-2 text-center">Coin</th>
                 <th scope="col" className="d-none d-md-block col-md-2">Symbol</th>
                 <th scope="col" className="col-3 ">Price</th>

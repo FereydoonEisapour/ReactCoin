@@ -1,5 +1,6 @@
 import React from "react";
 import { useParams } from "react-router-dom";
+import { Loading } from "../components";
 const CoinDetails = (props) => {
   const { coin } = useParams();
   const [coinDetails, setCoinDetails] = React.useState("");
@@ -86,11 +87,7 @@ const CoinDetails = (props) => {
       </div>
     </div>
   ) : (
-    <div className="d-flex justify-content-center align-items-center align-content-center">
-      <div className="spinner-border text-secondary" role="status">
-        <span className="visually-hidden">Loading...</span>
-      </div>
-    </div>
+    <Loading />
   );
 };
 

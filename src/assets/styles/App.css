@@ -5,16 +5,12 @@
   margin: 0;
   padding: 0;
   font-family: 'Montserrat', sans-serif;
-  /* background-color: #1a1a1c;
-  color: #fff; */
- 
 }
 .displaynone{
   display: none;
 }
 .bg-white{
-  background-color: #ffffff ;
- 
+  background-color: #ffffff ; 
 }
 .text-white{
   color: #ffffff;
@@ -25,6 +21,6 @@
 .App{
   background-color: #ebf2f9;
   padding-bottom: 200px;
+  height: max-content;
   min-height: 100vh;
-
 }
