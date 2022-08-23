@@ -151,7 +151,7 @@ const BuyFastCoins = () => {
             </button>
           </div>
         </div>
-        <div className=" col-8">
+        <div className=" col-10">
           <div className="d-flex justify-content-between p-2 m-2 rounded-3 trade-success">
             <div className="">Buy</div>
             <div className="">Coin</div>
