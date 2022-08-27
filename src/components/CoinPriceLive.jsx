@@ -24,6 +24,7 @@ const CoinPriceLive = ({ symbol }) => {
       }
     };
   }, [coin, symbol]);
+
   return (
     <>
       {btcPriceBinance ? (

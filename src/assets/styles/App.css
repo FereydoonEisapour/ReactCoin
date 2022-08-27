@@ -27,3 +27,18 @@
 .text-overflow{
   overflow-wrap: anywhere;
 }
+.coin-img {
+  height: 30px;
+  width: 30px;
+  margin-right: 10px;
+}
+
+.red {
+  text-align: center;
+  color: #ec3535;
+}
+
+.green {
+  text-align: center;
+  color: #11d811;
+}

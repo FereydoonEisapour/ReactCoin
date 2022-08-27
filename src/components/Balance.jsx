@@ -18,13 +18,14 @@ const Balance = () => {
       });
     return () => { };
   }, [user.email]);
+
   return (
     <>
       <h3 className="text-center fw-bolder"> Balance</h3>
       {balance ?
         balance.map((coin) => (
           <div className={`${coin.amount === 0 ? "displaynone" : ""} `} key={coin.id} >
-            <div className="bg-light p-1 fw-bold rounded-2   mb-3 px-4 d-flex" >
+            <div className="bg-light p-1 fw-bold rounded-2   mb-3 px-1 d-flex" >
               <span className=" col-4 ">{coin.coin.toUpperCase()} </span>
               <span className=" col-8 ">
                 {/* {coin.amount.toFixed(6).replace(/\.0+$/,'')} */}

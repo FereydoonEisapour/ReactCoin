@@ -33,7 +33,7 @@ const Login = () => {
   if (user) return <Navigate to="/dashboard" />;
   return (
     <div className="d-flex justify-content-center align-items-center vh-100 col-12">
-      <div className="form  col-11 col-md-8 col-lg-6 bg-light p-3 m-3">
+      <div className="form  col-11 col-md-6 col-lg-4 bg-light p-3 m-3">
         <div className="inputs d-flex justify-content-center row  m-4">
           <label htmlFor="email">Email</label>
           <input

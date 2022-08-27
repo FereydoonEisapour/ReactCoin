@@ -13,12 +13,13 @@ const TopCoinList = () => {
       //  .then((data) => console.log(data))
       .catch((err) => console.error(err));
   }, [coinsListNumber]);
+  
   const moreCoins = () => {
     setCoinsListNumber((prev) => prev + 10);
   };
   return (
-    <div className="coin-search m-3 ">
-      <div className="col-12 d-flex justify-content-center">
+    <div className="d-flex flex-column  align-items-center m-3">
+      <div className="col-12 col-md-10 d-flex justify-content-center">
         <div className="col-12 ">
           <table className="table">
             <thead className="">
@@ -50,7 +51,7 @@ const TopCoinList = () => {
         );
       })}
       <div className="d-flex align-items-center justify-content-center my-3">
-        <button className="btn btn-info w-25  text-light" onClick={moreCoins}>
+        <button className="btn btn-info w-100  text-light" onClick={moreCoins}>
           More
         </button>
       </div>
@@ -62,17 +63,17 @@ export default TopCoinList;
 
 
 
-{/* <div className="coin-container">
-        <div className="coin-row bg-light m-1 px-3">
-          <div className="coin">
-            <div></div>
-            <h1 className="px-5">Coin</h1>
-            <div className="coin-symbol">Symbol</div>
-          </div>
-          <div className="d-flex px-1 ">
-            <p className="px-5">Price</p>
-            <p className="px-5">Volume</p>
-            <p className="px-5">Change</p>
-          </div>
-        </div>
-      </div> */}
+// {/* <div className="coin-container">
+//         <div className="coin-row bg-light m-1 px-3">
+//           <div className="coin">
+//             <div></div>
+//             <h1 className="px-5">Coin</h1>
+//             <div className="coin-symbol">Symbol</div>
+//           </div>
+//           <div className="d-flex px-1 ">
+//             <p className="px-5">Price</p>
+//             <p className="px-5">Volume</p>
+//             <p className="px-5">Change</p>
+//           </div>
+//         </div>
+//       </div> */}

@@ -10,7 +10,6 @@ const CoinDetails = () => {
       .then((data) => setCoinDetails(data))
       .catch((err) => console.error(err));
   }, [coin]);
-
   return coinDetails ? (
     <div className="d-flex col-12 justify-content-center  border-light">
       <div className="col-10 my-4 bg-light ">

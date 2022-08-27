@@ -44,10 +44,10 @@ const Dashboard = () => {
   return (
     <div className=" d-flex row justify-content-center col-12   ">
 
-      <div className="col-8  col-md-5  p-2 my-2">
+      <div className="col-10  col-md-5  p-2 my-2">
         <Balance />
       </div>
-      <div className="col-8  col-md-5  p-2  mt-5">
+      <div className="col-10  col-md-5  p-2  mt-5">
         <div className="input-group mb-3 ">
           <span
             className="input-group-text"
