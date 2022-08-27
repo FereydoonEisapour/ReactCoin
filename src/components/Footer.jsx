@@ -15,7 +15,7 @@ const Footer = () => {
                 <span className="mb-3 mb-md-0  fw-bold">© 2022 React Coin </span>
             </div>
             <div className="px-4">
-                <a href="https://github.com/FereydoonEisapour">
+                <a href="https://github.com/FereydoonEisapour/ReactCoin">
                     <img className="coin-img" src="https://cdn-icons-png.flaticon.com/512/25/25231.png?w=360" alt="" />
                 </a>
             </div>
