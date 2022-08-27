@@ -6,6 +6,13 @@
   padding: 0;
   font-family: 'Montserrat', sans-serif;
 }
+body {
+  position: relative;
+  margin: 0;
+  /* padding-bottom: 6rem; */
+  min-height: 100%;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+}
 .displaynone{
   display: none;
 }
@@ -41,4 +48,14 @@
 .green {
   text-align: center;
   color: #11d811;
+}
+
+.footer {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 1rem;
+  background-color: #ffffff;
+  text-align: center;
 }

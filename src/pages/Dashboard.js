@@ -42,13 +42,14 @@ const Dashboard = () => {
 
   if (!user) return <Navigate to="/" />;
   return (
-    <div className=" d-flex row justify-content-center col-12   ">
+    <div className=" d-flex row justify-content-center col-12  ">
 
-      <div className="col-10  col-md-5  p-2 my-2">
+      <div className="col-10  col-md-5  p-2 m-2 bg-white rounded-3">
         <Balance />
       </div>
-      <div className="col-10  col-md-5  p-2  mt-5">
-        <div className="input-group mb-3 ">
+      <div className="col-10  col-md-5  p-2 m-2  bg-white  rounded-3">
+        <h4 className="text-center fw-bold">Deposit USDT</h4>
+        <div className="input-group mb-3  mt-3 ">
           <span
             className="input-group-text"
             style={{ padding: "8px  18px" }}

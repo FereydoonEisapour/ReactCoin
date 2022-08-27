@@ -2,6 +2,7 @@ import React from "react";
 import "./assets/styles/App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { TopCoinList, CoinDetails, TradingCoin, BuyFastCoins, Login, Dashboard } from "./pages";
+import { Footer } from './components'
 import { Navbar } from "./components";
 import { AuthProvider } from "./contexts/AuthContext";
 import { Toaster } from "react-hot-toast";
@@ -20,6 +21,7 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />}></Route>
             <Route path="/login" element={<Login />}></Route>
           </Routes>
+          <Footer />
         </div>
       </BrowserRouter>
     </AuthProvider>
