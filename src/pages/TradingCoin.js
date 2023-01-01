@@ -70,39 +70,46 @@ const TradingCoin = () => {
 
   // * GET USDT
   React.useEffect(() => {
-    dbCoins(user).where("coin", "==", "USDT").onSnapshot((snapshot) => {
-      if (typeof snapshot.docs[0] === "undefined") {
-        dbCoins(user).add({
-          coin: "USDT",
-          amount: 0,
-          timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-        });
-      } else {
-        dbCoins(user).where("coin", "==", "USDT").onSnapshot((snapshot) => {
-          setUsdtWallet(snapshot.docs[0].data().amount);
-          setUsdtWalletId(snapshot.docs[0].id);
-        });
-      }
-    });
+    if (user) {
+      dbCoins(user).where("coin", "==", "USDT").onSnapshot((snapshot) => {
+        if (typeof snapshot.docs[0] === "undefined") {
+          dbCoins(user).add({
+            coin: "USDT",
+            amount: 0,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+          });
+        } else {
+          dbCoins(user).where("coin", "==", "USDT").onSnapshot((snapshot) => {
+            setUsdtWallet(snapshot.docs[0].data().amount);
+            setUsdtWalletId(snapshot.docs[0].id);
+          });
+        }
+      });
+    }
+
   }, [user]);
 
   // * GET COIN OR CREATE COIN
   React.useEffect(() => {
-    dbCoins(user).where("coin", "==", `${coin.toLocaleUpperCase()}`).onSnapshot((snapshot) => {
-      if (typeof snapshot.docs[0] === "undefined") {
-        dbCoins(user).add({
-          coin: coin.toLocaleUpperCase(),
-          amount: 0,
-          timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-        });
-      } else {
-        dbCoins(user).where("coin", "==", `${coin.toLocaleUpperCase()}`).onSnapshot((snapshot) => {
-          setCoinTrade(snapshot.docs[0].data().amount);
-          setCoinTradeId(snapshot.docs[0].id);
-        });
-      }
-    });
-  }, [coin, user, user.email]);
+
+    if (user) {
+      dbCoins(user).where("coin", "==", `${coin.toLocaleUpperCase()}`).onSnapshot((snapshot) => {
+        if (typeof snapshot.docs[0] === "undefined") {
+          dbCoins(user).add({
+            coin: coin.toLocaleUpperCase(),
+            amount: 0,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+          });
+        } else {
+          dbCoins(user).where("coin", "==", `${coin.toLocaleUpperCase()}`).onSnapshot((snapshot) => {
+            setCoinTrade(snapshot.docs[0].data().amount);
+            setCoinTradeId(snapshot.docs[0].id);
+          });
+        }
+      });
+    }
+
+  }, [coin, user]);
 
   //*  CREATE ORDER
   const setOrderHandler = () => {
@@ -134,7 +141,8 @@ const TradingCoin = () => {
 
   // * GET ORDERS FROM API
   React.useEffect(() => {
-    dbOrders(user).orderBy("inPrice", "desc").onSnapshot((snapshot) => {
+    if(user){
+          dbOrders(user).orderBy("inPrice", "desc").onSnapshot((snapshot) => {
       setOrders(snapshot.docs.map((doc) => ({
         id: doc.id,
         type: doc.data().type,
@@ -143,11 +151,14 @@ const TradingCoin = () => {
         inPrice: Number(doc.data().inPrice),
       })));
     });
-  }, [user, user.email]);
+    }
+
+  }, [user]);
 
   // *GET TRADES FROM API
   React.useEffect(() => {
-    dbTrades(user).orderBy("timestamp", "desc").onSnapshot((snapshot) => {
+    if(user){
+          dbTrades(user).orderBy("timestamp", "desc").onSnapshot((snapshot) => {
       setTrades(snapshot.docs.map((doc) => ({
         id: doc.id,
         type: doc.data().type,
@@ -157,11 +168,14 @@ const TradingCoin = () => {
       }))
       );
     });
-  }, [user.email, user, orderType]);
+    }
+
+  }, [ user, orderType]);
 
   // *  ORDER TO TRADE => // DELL ORDER // ADD TRADE // USDT WALLET DEC//
   React.useEffect(() => {
-    if (orders.length > 0) {
+    if(user){
+          if (orders.length > 0) {
       const orderMatchFind = orders.find((item) => item.inPrice === Number(coinPriceLive));
       if (orderMatchFind !== undefined) {
         dbTrades(user).add({
@@ -182,7 +196,9 @@ const TradingCoin = () => {
         }
       }
     }
-  }, [coin, coinPriceLive, coinTrade, coinTradeId, orderType, orders, usdtWallet, usdtWalletId, user, user.email]);
+    }
+
+  }, [coin, coinPriceLive, coinTrade, coinTradeId, orderType, orders, usdtWallet, usdtWalletId, user]);
 
   // * GET COIN PRICE FROM BINANCE API
   React.useEffect(() => {
@@ -206,7 +222,7 @@ const TradingCoin = () => {
     };
   }, [coin]);
 
-  if (!user) return <Navigate to="/" />;
+  // if (!user) return <Navigate to="/" />;
   return (
     <div className="containerTrade col-md-12 p-2">
       {/* Live Price from Binance  */}
@@ -241,10 +257,22 @@ const TradingCoin = () => {
           </div>
         </div>
         <div className="  mb-3 px-4 text-center">
-          <button className="btn  btn-primary w-50" disabled={btnDisabled}
-            onClick={(e) => setOrderHandler(e)}>
-            {orderType ? " Buy" : "Sell"}
-          </button>
+
+          {user ?
+            (<button className="btn  btn-primary w-50" disabled={btnDisabled}
+              onClick={(e) => setOrderHandler(e)}>
+              {orderType ? " Buy" : "Sell"}
+            </button>)
+            : (
+              <button className="btn  btn-primary w-50" disabled={true}
+              >
+                Please Login
+              </button>
+            )}
+
+
+
+
         </div>
       </div>
       {/*  Trading Chart  */}

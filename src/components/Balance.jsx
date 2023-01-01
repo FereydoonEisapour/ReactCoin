@@ -50,7 +50,12 @@ const Balance = () => {
           )}
         </>
       ) : (
+        <>
+        
+        <h3 className="text-center fw-bolder"> Balance</h3>
+
         <PleaseLogin />
+        </>
       )}
     </>
   );

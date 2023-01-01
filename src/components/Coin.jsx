@@ -33,15 +33,15 @@ const Coin = ({ name, price, symbol, marketcap, volume, image, priceChange, id }
                   <div className=" green">{priceChange.toFixed(2)}%</div>}
               </td>
               <td className="col-1 col-lg-2 fw-bold">
-                {userEmail ?
+                {/* {userEmail ? */}
                   <Link className="text-decoration-none " to={`/trade/${symbol}`}>
                     Trade
                   </Link>
-                  :
+                  {/* :
                   <Link className="text-decoration-none " to={`/login`}>
                     Trade
-                  </Link>
-                }
+                  </Link> */}
+                {/* } */}
               </td>
             </tr>
           </tbody>
