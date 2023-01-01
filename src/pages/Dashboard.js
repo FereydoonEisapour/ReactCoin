@@ -12,25 +12,28 @@ const Dashboard = () => {
   const [depositInput, setDepositInput] = React.useState(Number);
 
   React.useEffect(() => {
-    dbCoins(user)
-      .where("coin", "==", "USDT")
-      .onSnapshot((snapshot) => {
-        if (typeof snapshot.docs[0] === "undefined") {
-          dbCoins(user).add({
-            coin: "USDT",
-            amount: 0,
-            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-          });
-        } else {
-          dbCoins(user)
-            .where("coin", "==", "USDT")
-            .onSnapshot((snapshot) => {
-              setUsdtWallet(snapshot.docs[0].data().amount);
-              setUsdtWalletId(snapshot.docs[0].id);
+    if (user) {
+
+      dbCoins(user)
+        .where("coin", "==", "USDT")
+        .onSnapshot((snapshot) => {
+          if (typeof snapshot.docs[0] === "undefined") {
+            dbCoins(user).add({
+              coin: "USDT",
+              amount: 0,
+              timestamp: firebase.firestore.FieldValue.serverTimestamp(),
             });
-        }
-      });
-  }, [user, user.email]);
+          } else {
+            dbCoins(user)
+              .where("coin", "==", "USDT")
+              .onSnapshot((snapshot) => {
+                setUsdtWallet(snapshot.docs[0].data().amount);
+                setUsdtWalletId(snapshot.docs[0].id);
+              });
+          }
+        });
+    }
+  }, [user]);
   const depositInputHander = (e) => {
     setDepositInput(Number(e.target.value));
   };
@@ -40,7 +43,7 @@ const Dashboard = () => {
       .set({ amount: usdtWallet + depositInput }, { merge: true });
   };
 
-  if (!user) return <Navigate to="/" />;
+  //if (!user) return <Navigate to="/" />;
   return (
     <div className=" d-flex row justify-content-center col-12  ">
 
@@ -59,9 +62,18 @@ const Dashboard = () => {
           </span>
           <input type="number" className="form-control" onChange={depositInputHander} />
         </div>
-        <button className="btn btn-primary w-100" onClick={depositButton} disabled={depositInput < 0}>
-          Deposit
-        </button>
+        {
+          user ? (
+            <button className="btn btn-primary w-100" onClick={depositButton} disabled={depositInput < 0} >
+              Deposit
+            </button>
+
+          ) : (
+            <button className="btn btn-primary w-100" onClick={depositButton} disabled={true} >
+              Please Login
+            </button>
+          )
+        }
       </div>
 
     </div>
