@@ -6,6 +6,7 @@ import { useAuthState } from "../contexts/AuthContext";
 import db from "../data/Firebase";
 import { dbCoins, dbBestMarketBuy } from "../data/db";
 import { TradeBuyFast } from "../components/TradeItems";
+
 const BuyFastCoins = () => {
   const { coin } = useParams();
   const { user } = useAuthState();
@@ -21,105 +22,120 @@ const BuyFastCoins = () => {
 
   // * GET USDT AND COIN  FROM API
   React.useEffect(() => {
-    dbCoins(user)
-      .where("coin", "==", "USDT")
-      .onSnapshot((snapshot) => {
-        if (typeof snapshot.docs[0] === "undefined") {
-          dbCoins(user).add({
-            coin: "USDT",
-            amount: 0,
-            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-          });
-        } else {
-          dbCoins(user)
-            .where("coin", "==", "USDT")
-            .onSnapshot((snapshot) => {
-              setUsdtWallet(snapshot.docs[0].data().amount);
-              setUsdtWalletId(snapshot.docs[0].id);
+    if (user) {
+      dbCoins(user)
+        .where("coin", "==", "USDT")
+        .onSnapshot((snapshot) => {
+          if (typeof snapshot.docs[0] === "undefined") {
+            dbCoins(user).add({
+              coin: "USDT",
+              amount: 0,
+              timestamp: firebase.firestore.FieldValue.serverTimestamp(),
             });
-        }
-      });
-  }, [user, user.email]);
+          } else {
+            dbCoins(user)
+              .where("coin", "==", "USDT")
+              .onSnapshot((snapshot) => {
+                setUsdtWallet(snapshot.docs[0].data().amount);
+                setUsdtWalletId(snapshot.docs[0].id);
+              });
+          }
+        });
+    }
+
+  }, [user]);
 
   React.useEffect(() => {
-    dbBestMarketBuy(user)
-      .orderBy("timestamp", "desc")
-      .onSnapshot((snapshot) => {
-        setBestPriceTrades(
-          snapshot.docs.map((doc) => ({
-            id: doc.id,
-            coin: doc.data().coin,
-            amount: doc.data().amount,
-            inPrice: doc.data().inPrice,
-          }))
+    if (user) {
+      dbBestMarketBuy(user)
+        .orderBy("timestamp", "desc")
+        .onSnapshot((snapshot) => {
+          setBestPriceTrades(
+            snapshot.docs.map((doc) => ({
+              id: doc.id,
+              coin: doc.data().coin,
+              amount: doc.data().amount,
+              inPrice: doc.data().inPrice,
+            }))
+          );
+        });
+    }
+
+  }, [user]);
+
+  React.useEffect(() => {
+    if (user) {
+      const binanceSocket = new WebSocket("wss://stream.binance.com:9443/ws");
+      binanceSocket.onopen = function () {
+        binanceSocket.send(
+          JSON.stringify({
+            method: "SUBSCRIBE",
+            //  params: coin === "usdt" ? [`usdc${coin}@trade`] : [`${coin}usdt@trade`],
+            params: [`${coin}usdt@trade`],
+            id: 1,
+          })
         );
-      });
-  }, [user, user.email]);
+      };
+      binanceSocket.onmessage = function (event) {
+        const BtcPriceNow = JSON.parse(event.data);
+        const price = parseFloat(BtcPriceNow.p).toFixed(0);
+        if (isNaN(price) === false) {
+          setCoinPriceLive(Number(price));
+        }
+      };
+    }
 
-  React.useEffect(() => {
-    const binanceSocket = new WebSocket("wss://stream.binance.com:9443/ws");
-    binanceSocket.onopen = function () {
-      binanceSocket.send(
-        JSON.stringify({
-          method: "SUBSCRIBE",
-          //  params: coin === "usdt" ? [`usdc${coin}@trade`] : [`${coin}usdt@trade`],
-          params: [`${coin}usdt@trade`],
-          id: 1,
-        })
-      );
-    };
-    binanceSocket.onmessage = function (event) {
-      const BtcPriceNow = JSON.parse(event.data);
-      const price = parseFloat(BtcPriceNow.p).toFixed(0);
-      if (isNaN(price) === false) {
-        setCoinPriceLive(Number(price));
-      }
-    };
-  }, [coin]);
+  }, [coin, user]);
 
   const USDTInputHandler = (event) => {
     setUSDTInput(parseFloat(event.target.value));
   };
   // * GET COIN OR CREATE COIN
   React.useEffect(() => {
-    dbCoins(user)
-      .where("coin", "==", `${coin.toLocaleUpperCase()}`)
-      .onSnapshot((snapshot) => {
-        if (typeof snapshot.docs[0] === "undefined") {
-          db.collection(user.email).doc(user.email).collection("coins").add({
-            coin: coin.toLocaleUpperCase(),
-            amount: 0,
-            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-          });
-        } else {
-          dbCoins(user)
-            .where("coin", "==", `${coin.toLocaleUpperCase()}`)
-            .onSnapshot((snapshot) => {
-              setCoinTrade(snapshot.docs[0].data().amount);
-              setCoinTradeId(snapshot.docs[0].id);
+    if (user) {
+      dbCoins(user)
+        .where("coin", "==", `${coin.toLocaleUpperCase()}`)
+        .onSnapshot((snapshot) => {
+          if (typeof snapshot.docs[0] === "undefined") {
+            db.collection(user.email).doc(user.email).collection("coins").add({
+              coin: coin.toLocaleUpperCase(),
+              amount: 0,
+              timestamp: firebase.firestore.FieldValue.serverTimestamp(),
             });
-        }
-      });
-  }, [coin, user, user.email]);
+          } else {
+            dbCoins(user)
+              .where("coin", "==", `${coin.toLocaleUpperCase()}`)
+              .onSnapshot((snapshot) => {
+                setCoinTrade(snapshot.docs[0].data().amount);
+                setCoinTradeId(snapshot.docs[0].id);
+              });
+          }
+        });
+    }
+
+  }, [coin, user]);
 
   const bestMarketPrice = () => {
-    if (USDTInput > usdtWallet) {
-      toast.error("not enough USDT , Please Deposit");
-    } else if (USDTInput > 0) {
-      const order = (USDTInput / coinPriceLive).toFixed(5);
-      dbBestMarketBuy(user).add({
-        coin: coin.toLocaleUpperCase(),
-        amount: Number(order),
-        inPrice: coinPriceLive,
-        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-      });
-      dbCoins(user)
-        .doc(usdtWalletId)
-        .set({ amount: usdtWallet - USDTInput }, { merge: true });
-      dbCoins(user)
-        .doc(coinTradeId)
-        .set({ amount: coinTrade + Number(order) }, { merge: true });
+    if (user) {
+      if (USDTInput > usdtWallet) {
+        toast.error("not enough USDT , Please Deposit");
+      } else if (USDTInput > 0) {
+        const order = (USDTInput / coinPriceLive).toFixed(5);
+        dbBestMarketBuy(user).add({
+          coin: coin.toLocaleUpperCase(),
+          amount: Number(order),
+          inPrice: coinPriceLive,
+          timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+        });
+        dbCoins(user)
+          .doc(usdtWalletId)
+          .set({ amount: usdtWallet - USDTInput }, { merge: true });
+        dbCoins(user)
+          .doc(coinTradeId)
+          .set({ amount: coinTrade + Number(order) }, { merge: true });
+      }
     }
+
   };
   return (
     <>
@@ -142,13 +158,24 @@ const BuyFastCoins = () => {
             </div>
           </div>
           <div className="  mb-3 px-4">
-            <button
-              className="btn  btn-primary w-100"
-              onClick={(e) => bestMarketPrice(e)}
-              disabled={coinPriceLive === 0}
-            >
-              {coinPriceLive === 0 ? "Please Wait" : "Buy now"}
-            </button>
+
+            {user ?
+              (<button
+                className="btn  btn-primary w-100"
+                onClick={(e) => bestMarketPrice(e)}
+                disabled={coinPriceLive === 0}
+              >
+                {coinPriceLive === 0 ? "Please Wait" : "Buy now"}
+              </button>)
+              :
+              (<button
+                className="btn  btn-primary w-100"
+
+                disabled={true}
+              >
+                Please Login
+              </button>)}
+
           </div>
         </div>
         <div className=" col-10 col-md-7">
