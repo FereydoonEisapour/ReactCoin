@@ -178,23 +178,33 @@ const BuyFastCoins = () => {
 
           </div>
         </div>
-        <div className=" col-10 col-md-7">
-          <div className="d-flex justify-content-between p-2 m-2 rounded-3 trade-success">
-            {/* <div className="">Buy</div> */}
-            <div className="">Coin</div>
-            <div className="">Amount</div>
-            <div className="">Price</div>
-          </div>
-          {bestPirceTrades.map((trade) => (
-            <TradeBuyFast
-              key={trade.id}
-              id={trade.id}
-              coin={trade.coin}
-              amount={trade.amount}
-              inPrice={trade.inPrice}
-            />
-          ))}
-        </div>
+
+        {
+          user ?
+            (
+              <div className=" col-10 col-md-7">
+                <div className="d-flex justify-content-between p-2 m-2 rounded-3 trade-success">
+                  {/* <div className="">Buy</div> */}
+                  <div className="">Coin</div>
+                  <div className="">Amount</div>
+                  <div className="">Price</div>
+                </div>
+                {bestPirceTrades.map((trade) => (
+                  <TradeBuyFast
+                    key={trade.id}
+                    id={trade.id}
+                    coin={trade.coin}
+                    amount={trade.amount}
+                    inPrice={trade.inPrice}
+                  />
+                ))}
+              </div>
+            )
+            : null
+        }
+
+
+
       </div>
     </>
   );
