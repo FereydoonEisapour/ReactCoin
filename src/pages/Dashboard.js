@@ -5,26 +5,32 @@ import { Navigate } from "react-router-dom";
 import firebase from "firebase/compat/app";
 import { Balance } from "../components";
 import { dbCoins } from "../data/db";
+import { getCookie } from "../hooks/cookies";
+
 const Dashboard = () => {
-  const { user } = useAuthState();
+
+  const { userEmail } = useAuthState();
   const [usdtWallet, setUsdtWallet] = React.useState(Number);
   const [usdtWalletId, setUsdtWalletId] = React.useState("");
   const [depositInput, setDepositInput] = React.useState(Number);
 
-  React.useEffect(() => {
-    if (user) {
 
-      dbCoins(user)
+
+
+  React.useEffect(() => {
+    if (userEmail) {
+
+      dbCoins(userEmail)
         .where("coin", "==", "USDT")
         .onSnapshot((snapshot) => {
           if (typeof snapshot.docs[0] === "undefined") {
-            dbCoins(user).add({
+            dbCoins(userEmail).add({
               coin: "USDT",
               amount: 0,
               timestamp: firebase.firestore.FieldValue.serverTimestamp(),
             });
           } else {
-            dbCoins(user)
+            dbCoins(userEmail)
               .where("coin", "==", "USDT")
               .onSnapshot((snapshot) => {
                 setUsdtWallet(snapshot.docs[0].data().amount);
@@ -33,17 +39,17 @@ const Dashboard = () => {
           }
         });
     }
-  }, [user]);
+  }, [userEmail]);
   const depositInputHander = (e) => {
     setDepositInput(Number(e.target.value));
   };
   const depositButton = () => {
-    dbCoins(user)
+    dbCoins(userEmail)
       .doc(usdtWalletId)
       .set({ amount: usdtWallet + depositInput }, { merge: true });
   };
 
-  //if (!user) return <Navigate to="/" />;
+  //if (!userEmail) return <Navigate to="/" />;
   return (
     <div className=" d-flex row justify-content-center col-12  ">
 
@@ -63,7 +69,7 @@ const Dashboard = () => {
           <input type="number" className="form-control" onChange={depositInputHander} />
         </div>
         {
-          user ? (
+          userEmail ? (
             <button className="btn btn-primary w-100" onClick={depositButton} disabled={depositInput < 0} >
               Deposit
             </button>

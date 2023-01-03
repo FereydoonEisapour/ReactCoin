@@ -4,12 +4,12 @@ import { useAuthState } from "../contexts/AuthContext";
 import Loading from "./Loading";
 import PleaseLogin from "./PleaseLogin";
 const Balance = () => {
-  const { user } = useAuthState();
+  const { userEmail } = useAuthState();
   const [balance, setBalance] = React.useState([]);
   React.useEffect(() => {
-    if (user) {
-      db.collection(user.email)
-        .doc(user.email)
+    if (userEmail) {
+      db.collection(userEmail)
+        .doc(userEmail)
         .collection("coins")
         .orderBy("coin", "asc")
         .onSnapshot((snapshot) => {
@@ -23,14 +23,15 @@ const Balance = () => {
         });
       return () => {};
     }
-  }, [user]);
+  }, [userEmail]);
 
   return (
     <>
-      {user ? (
+      {userEmail ? (
         <>
           <h3 className="text-center fw-bolder"> Balance</h3>
-          {balance ? (
+          {balance ? 
+
             balance.map((coin) => (
               <div
                 className={`${coin.amount === 0 ? "displaynone" : ""} `}
@@ -43,17 +44,16 @@ const Balance = () => {
                     {coin.amount.toString()}
                   </span>
                 </div>
-              </div>
-            ))
-          ) : (
-            <Loading />
-          )}
+              </div>)) 
+              :
+              <div className="mt-4">
+                <Loading />
+              </div> 
+          }
         </>
       ) : (
         <>
-        
         <h3 className="text-center fw-bolder"> Balance</h3>
-
         <PleaseLogin />
         </>
       )}

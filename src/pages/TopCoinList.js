@@ -4,6 +4,7 @@ import { Coin } from "../components";
 const TopCoinList = () => {
   const [coins, setCoins] = React.useState([]);
   const [coinsListNumber, setCoinsListNumber] = React.useState(10);
+
   React.useEffect(() => {
     fetch(
       `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=${coinsListNumber}&page=1&sparkline=false`
@@ -13,10 +14,12 @@ const TopCoinList = () => {
       //  .then((data) => console.log(data))
       .catch((err) => console.error(err));
   }, [coinsListNumber]);
-  
+
   const moreCoins = () => {
     setCoinsListNumber((prev) => prev + 10);
   };
+
+
   return (
     <div className="d-flex flex-column  align-items-center m-3">
       <div className="col-12 col-md-10 d-flex justify-content-center">

@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useAuthState } from "../contexts/AuthContext";
 const Navbar = () => {
-  const { user } = useAuthState();
+  const { userEmail } = useAuthState();
   return (
     <div className="container-fluid d-flex justify-content-between px-2 py-2 ">
       <div className="d-flex align-items-center">
@@ -41,7 +41,7 @@ const Navbar = () => {
           <></>
         </ul> */}
         <div className="d-flex">
-          {user ? (
+          {userEmail ? (
             <div className="me-auto mb-2  my-2">
               <Link
                 to="/dashboard"

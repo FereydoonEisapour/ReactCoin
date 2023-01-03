@@ -1,6 +1,10 @@
 import React from "react";
+
 import toast from "react-hot-toast";
+
+
 import { auth } from "../data/Firebase";
+import { setCookie, removeCookie } from "../hooks/cookies";
 
 const AuthStateContext = React.createContext();
 const AuthDispatchContext = React.createContext();
@@ -25,7 +29,7 @@ const initialState = {
   error: null,
   status: false,
 };
-
+console.log(initialState.user);
 function AuthProvider(props) {
   const [state, dispatch] = React.useReducer(reducer, initialState);
   return (
@@ -40,7 +44,10 @@ function doSingUp(dispatch, emailInput, passwordInput) {
     .then((result) => {
       dispatch({
         user: result.user,
-      });
+      })
+        .then(
+          document.cookies.set('user', emailInput, { path: '/' })
+        )
     })
     .catch((error) => {
       if (error.code === "auth/email-already-in-use") {
@@ -48,6 +55,7 @@ function doSingUp(dispatch, emailInput, passwordInput) {
       }
     });
 }
+
 function doLogIn(dispatch, emailInput, passwordInput) {
   auth.signInWithEmailAndPassword(emailInput, passwordInput)
     .then((result) => {
@@ -55,6 +63,8 @@ function doLogIn(dispatch, emailInput, passwordInput) {
         user: result.user,
         userEmail: result.user.email
       });
+      removeCookie('user')
+      setCookie('user', result.user.email)
     })
     .catch((error) => {
       if (error.code === "auth/user-not-found") {
@@ -62,6 +72,8 @@ function doLogIn(dispatch, emailInput, passwordInput) {
       }
     });
 }
+
+
 function resetPass(dispatch, emailInput) {
   auth.sendPasswordResetEmail(emailInput)
     .then(() => {
@@ -72,5 +84,14 @@ function resetPass(dispatch, emailInput) {
       console.log(error);
     });
 }
+function doLoginCookie(dispatch, userCookie) {
+  initialState.userEmail = userCookie
+  console.log(userCookie);
+  dispatch({
+    // user: userCookie,
+    userEmail: userCookie
+  })
+}
 
-export { AuthProvider, useAuthState, useAuthDispatch, doSingUp, doLogIn, resetPass };
+export { AuthProvider, useAuthState, useAuthDispatch, doSingUp, doLogIn, resetPass, doLoginCookie };
+

@@ -11,7 +11,9 @@ import "../assets/styles/tradeingCoin.css";
 const TradingCoin = () => {
   const { coin } = useParams();
 
-  const { user } = useAuthState();
+  const { userEmail } = useAuthState();
+
+
   const [coinPriceLive, setCoinPriceLive] = React.useState(Number);
 
   const [usdtWallet, setUsdtWallet] = React.useState(Number);
@@ -45,12 +47,10 @@ const TradingCoin = () => {
     }
 
   }, [calcOrder, usdtWallet, coinInput, coinTrade, orderType, usdtInput])
-
   const orderTypeHandler = (e) => {
     if (e.target.outerText === "Sell") setOrderType(false)
     if (e.target.outerText === "Buy") setOrderType(true)
   }
-
   const usdtInputHandler = (e) => {
     setUsdtInput(Number(e.target.value));
     setCalcOrder(usdtInput * coinInput);
@@ -65,16 +65,17 @@ const TradingCoin = () => {
 
   // * GET USDT
   React.useEffect(() => {
-    if (user) {
-      dbCoins(user).where("coin", "==", "USDT").onSnapshot((snapshot) => {
+    if (userEmail) {
+      console.log(userEmail);
+      dbCoins(userEmail).where("coin", "==", "USDT").onSnapshot((snapshot) => {
         if (typeof snapshot.docs[0] === "undefined") {
-          dbCoins(user).add({
+          dbCoins(userEmail).add({
             coin: "USDT",
             amount: 0,
             timestamp: firebase.firestore.FieldValue.serverTimestamp(),
           });
         } else {
-          dbCoins(user).where("coin", "==", "USDT").onSnapshot((snapshot) => {
+          dbCoins(userEmail).where("coin", "==", "USDT").onSnapshot((snapshot) => {
             setUsdtWallet(snapshot.docs[0].data().amount);
             setUsdtWalletId(snapshot.docs[0].id);
           });
@@ -82,21 +83,19 @@ const TradingCoin = () => {
       });
     }
 
-  }, [user]);
-
+  }, [userEmail]);
   // * GET COIN OR CREATE COIN
   React.useEffect(() => {
-
-    if (user) {
-      dbCoins(user).where("coin", "==", `${coin.toLocaleUpperCase()}`).onSnapshot((snapshot) => {
+    if (userEmail) {
+      dbCoins(userEmail).where("coin", "==", `${coin.toLocaleUpperCase()}`).onSnapshot((snapshot) => {
         if (typeof snapshot.docs[0] === "undefined") {
-          dbCoins(user).add({
+          dbCoins(userEmail).add({
             coin: coin.toLocaleUpperCase(),
             amount: 0,
             timestamp: firebase.firestore.FieldValue.serverTimestamp(),
           });
         } else {
-          dbCoins(user).where("coin", "==", `${coin.toLocaleUpperCase()}`).onSnapshot((snapshot) => {
+          dbCoins(userEmail).where("coin", "==", `${coin.toLocaleUpperCase()}`).onSnapshot((snapshot) => {
             setCoinTrade(snapshot.docs[0].data().amount);
             setCoinTradeId(snapshot.docs[0].id);
           });
@@ -104,13 +103,12 @@ const TradingCoin = () => {
       });
     }
 
-  }, [coin, user]);
-
+  }, [coin, userEmail]);
   //*  CREATE ORDER
   const setOrderHandler = () => {
     if (calcOrder > 0) {
       if (orderType === true) {
-        dbOrders(user).add({
+        dbOrders(userEmail).add({
           coin: coin.toLocaleLowerCase(),
           type: orderType,
           amount: coinInput,
@@ -118,10 +116,10 @@ const TradingCoin = () => {
           timestamp: firebase.firestore.FieldValue.serverTimestamp(),
         });
         const newWaletUsdts = usdtWallet - Number(usdtInput * coinInput);
-        dbCoins(user).doc(usdtWalletId).set({ amount: newWaletUsdts }, { merge: true });
+        dbCoins(userEmail).doc(usdtWalletId).set({ amount: newWaletUsdts }, { merge: true });
       }
       if (orderType === false) {
-        dbOrders(user).add({
+        dbOrders(userEmail).add({
           coin: coin.toLocaleLowerCase(),
           type: orderType,
           amount: coinInput,
@@ -129,15 +127,14 @@ const TradingCoin = () => {
           timestamp: firebase.firestore.FieldValue.serverTimestamp(),
         });
         const newCoinAmount = coinTrade - Number(coinInput)
-        dbCoins(user).doc(coinTradeId).set({ amount: newCoinAmount }, { merge: true });
+        dbCoins(userEmail).doc(coinTradeId).set({ amount: newCoinAmount }, { merge: true });
       }
     }
   };
-
   // * GET ORDERS FROM API
   React.useEffect(() => {
-    if (user) {
-      dbOrders(user).orderBy("inPrice", "desc").onSnapshot((snapshot) => {
+    if (userEmail) {
+      dbOrders(userEmail).orderBy("inPrice", "desc").onSnapshot((snapshot) => {
         setOrders(snapshot.docs.map((doc) => ({
           id: doc.id,
           type: doc.data().type,
@@ -148,12 +145,11 @@ const TradingCoin = () => {
       });
     }
 
-  }, [user]);
-
+  }, [userEmail]);
   // *GET TRADES FROM API
   React.useEffect(() => {
-    if (user) {
-      dbTrades(user).orderBy("timestamp", "desc").onSnapshot((snapshot) => {
+    if (userEmail) {
+      dbTrades(userEmail).orderBy("timestamp", "desc").onSnapshot((snapshot) => {
         setTrades(snapshot.docs.map((doc) => ({
           id: doc.id,
           type: doc.data().type,
@@ -165,36 +161,35 @@ const TradingCoin = () => {
       });
     }
 
-  }, [user, orderType]);
-
+  }, [userEmail, orderType]);
   // *  ORDER TO TRADE => // DELL ORDER // ADD TRADE // USDT WALLET DEC//
   React.useEffect(() => {
-    if (user) {
+    if (userEmail) {
       if (orders.length > 0) {
         const orderMatchFind = orders.find((item) => item.inPrice === Number(coinPriceLive));
         if (orderMatchFind !== undefined) {
-          dbTrades(user).add({
+          dbTrades(userEmail).add({
             coin: coin,
             type: orderMatchFind.type,
             amount: Number(orderMatchFind.amount),
             inPrice: Number(orderMatchFind.inPrice),
             timestamp: firebase.firestore.FieldValue.serverTimestamp(),
           });
-          dbOrders(user).doc(orderMatchFind.id).delete();
+          dbOrders(userEmail).doc(orderMatchFind.id).delete();
           if (orderType === true) {
             const newCoinAmount = coinTrade + Number(orderMatchFind.amount);
-            dbCoins(user).doc(coinTradeId).set({ amount: newCoinAmount }, { merge: true });
+            dbCoins(userEmail).doc(coinTradeId).set({ amount: newCoinAmount }, { merge: true });
           }
           if (orderType === false) {
             const newWaletUsdts = usdtWallet + Number(orderMatchFind.inPrice * orderMatchFind.amount);
-            dbCoins(user).doc(usdtWalletId).set({ amount: newWaletUsdts }, { merge: true });
+            dbCoins(userEmail).doc(usdtWalletId).set({ amount: newWaletUsdts }, { merge: true });
           }
+          navigator.vibrate(100)
         }
       }
     }
 
-  }, [coin, coinPriceLive, coinTrade, coinTradeId, orderType, orders, usdtWallet, usdtWalletId, user]);
-
+  }, [coin, coinPriceLive, coinTrade, coinTradeId, orderType, orders, usdtWallet, usdtWalletId, userEmail]);
   // * GET COIN PRICE FROM BINANCE API
   React.useEffect(() => {
     const binanceSocket = new WebSocket("wss://stream.binance.com:9443/ws");
@@ -216,8 +211,7 @@ const TradingCoin = () => {
       }
     };
   }, [coin]);
-
-  // if (!user) return <Navigate to="/" />;
+  // if (!userEmail) return <Navigate to="/" />;
   return (
     <div className="containerTrade col-md-12 p-2">
       {/* Live Price from Binance  */}
@@ -253,7 +247,7 @@ const TradingCoin = () => {
         </div>
         <div className="  mb-3 px-4 text-center">
 
-          {user ?
+          {userEmail ?
             (<button className="btn  btn-primary w-50" disabled={btnDisabled}
               onClick={(e) => setOrderHandler(e)}>
               {orderType ? " Buy" : "Sell"}
@@ -271,7 +265,7 @@ const TradingCoin = () => {
       <div className="chart  m-2 rounded-3  ">{<TradingChart />}</div>
       {/* Balance */}
       {
-        user ?
+        userEmail ?
           (<div className="balance  m-2 p-3 bg-white rounded-3">
             <Balance />
           </div>)
@@ -281,7 +275,7 @@ const TradingCoin = () => {
 
       {/* Orders */}
       {
-        user ?
+        userEmail ?
           (
             <div className="order  m-2 p-3 bg-white rounded-3">
               <h3 className="text-center">Orders</h3>
@@ -305,7 +299,7 @@ const TradingCoin = () => {
 
       {/* Trades */}
       {
-        user ?
+        userEmail ?
           (
             <div className="trades  m-2 p-3 bg-white rounded-3">
               <h3 className="text-center">Trades History</h3>

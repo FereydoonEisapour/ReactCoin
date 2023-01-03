@@ -5,7 +5,7 @@ import { useAuthState } from "../contexts/AuthContext";
 import firebase from "firebase/compat/app";
 import { dbCoins, dbOrders } from "../data/db";
  const OrderItem = ({ coin, amount, inPrice, id, type, usdtId }) => {
-  const { user } = useAuthState();
+  const { userEmail } = useAuthState();
 
   const [usdtWallet, setUsdtWallet] = React.useState(Number);
   const [usdtWalletId, setUsdtWalletId] = React.useState("");
@@ -14,17 +14,17 @@ import { dbCoins, dbOrders } from "../data/db";
   const [coinTradeId, setCoinTradeId] = React.useState("");
   // * GET COIN OR CREATE COIN
   React.useEffect(() => {
-    dbCoins(user)
+    dbCoins(userEmail)
       .where("coin", "==", `${coin.toLocaleUpperCase()}`)
       .onSnapshot((snapshot) => {
         if (typeof snapshot.docs[0] === "undefined") {
-          dbCoins(user).add({
+          dbCoins(userEmail).add({
             coin: coin.toLocaleUpperCase(),
             amount: 0,
             timestamp: firebase.firestore.FieldValue.serverTimestamp(),
           });
         } else {
-          dbCoins(user)
+          dbCoins(userEmail)
             .where("coin", "==", `${coin.toLocaleUpperCase()}`)
             .onSnapshot((snapshot) => {
               setCoinTrade(snapshot.docs[0].data().amount);
@@ -33,27 +33,27 @@ import { dbCoins, dbOrders } from "../data/db";
         }
       });
     return () => { };
-  }, [coin, user, user.email]);
+  }, [coin, userEmail]);
   React.useEffect(() => {
-    dbCoins(user)
+    dbCoins(userEmail)
       .where("coin", "==", "USDT")
       .onSnapshot((snapshot) => {
         setUsdtWallet(snapshot.docs[0].data().amount);
         setUsdtWalletId(snapshot.docs[0].id);
       });
 
-  }, [user])
+  }, [userEmail])
 
   const deleteOrder = () => {
     if (type === true) {
       const newWaletUsdts = usdtWallet + Number(amount * inPrice);
-      dbCoins(user).doc(usdtWalletId).set({ amount: newWaletUsdts }, { merge: true });
-      dbOrders(user).doc(id).delete();
+      dbCoins(userEmail).doc(usdtWalletId).set({ amount: newWaletUsdts }, { merge: true });
+      dbOrders(userEmail).doc(id).delete();
     }
     if (type === false) {
       const newCoinTrade = coinTrade + Number(amount);
-      dbCoins(user).doc(coinTradeId).set({ amount: newCoinTrade }, { merge: true });
-      dbOrders(user).doc(id).delete();
+      dbCoins(userEmail).doc(coinTradeId).set({ amount: newCoinTrade }, { merge: true });
+      dbOrders(userEmail).doc(id).delete();
     }
 
   };

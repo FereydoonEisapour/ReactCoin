@@ -9,7 +9,7 @@ import { TradeBuyFast } from "../components/TradeItems";
 
 const BuyFastCoins = () => {
   const { coin } = useParams();
-  const { user } = useAuthState();
+  const { userEmail } = useAuthState();
   const [usdtWallet, setUsdtWallet] = React.useState(Number);
   const [usdtWalletId, setUsdtWalletId] = React.useState("");
 
@@ -22,18 +22,18 @@ const BuyFastCoins = () => {
 
   // * GET USDT AND COIN  FROM API
   React.useEffect(() => {
-    if (user) {
-      dbCoins(user)
+    if (userEmail) {
+      dbCoins(userEmail)
         .where("coin", "==", "USDT")
         .onSnapshot((snapshot) => {
           if (typeof snapshot.docs[0] === "undefined") {
-            dbCoins(user).add({
+            dbCoins(userEmail).add({
               coin: "USDT",
               amount: 0,
               timestamp: firebase.firestore.FieldValue.serverTimestamp(),
             });
           } else {
-            dbCoins(user)
+            dbCoins(userEmail)
               .where("coin", "==", "USDT")
               .onSnapshot((snapshot) => {
                 setUsdtWallet(snapshot.docs[0].data().amount);
@@ -43,11 +43,11 @@ const BuyFastCoins = () => {
         });
     }
 
-  }, [user]);
+  }, [userEmail]);
 
   React.useEffect(() => {
-    if (user) {
-      dbBestMarketBuy(user)
+    if (userEmail) {
+      dbBestMarketBuy(userEmail)
         .orderBy("timestamp", "desc")
         .onSnapshot((snapshot) => {
           setBestPriceTrades(
@@ -61,10 +61,10 @@ const BuyFastCoins = () => {
         });
     }
 
-  }, [user]);
+  }, [userEmail]);
 
   React.useEffect(() => {
-    if (user) {
+    if (userEmail) {
       const binanceSocket = new WebSocket("wss://stream.binance.com:9443/ws");
       binanceSocket.onopen = function () {
         binanceSocket.send(
@@ -85,25 +85,25 @@ const BuyFastCoins = () => {
       };
     }
 
-  }, [coin, user]);
+  }, [coin, userEmail]);
 
   const USDTInputHandler = (event) => {
     setUSDTInput(parseFloat(event.target.value));
   };
   // * GET COIN OR CREATE COIN
   React.useEffect(() => {
-    if (user) {
-      dbCoins(user)
+    if (userEmail) {
+      dbCoins(userEmail)
         .where("coin", "==", `${coin.toLocaleUpperCase()}`)
         .onSnapshot((snapshot) => {
           if (typeof snapshot.docs[0] === "undefined") {
-            db.collection(user.email).doc(user.email).collection("coins").add({
+            db.collection(userEmail.email).doc(userEmail.email).collection("coins").add({
               coin: coin.toLocaleUpperCase(),
               amount: 0,
               timestamp: firebase.firestore.FieldValue.serverTimestamp(),
             });
           } else {
-            dbCoins(user)
+            dbCoins(userEmail)
               .where("coin", "==", `${coin.toLocaleUpperCase()}`)
               .onSnapshot((snapshot) => {
                 setCoinTrade(snapshot.docs[0].data().amount);
@@ -113,24 +113,24 @@ const BuyFastCoins = () => {
         });
     }
 
-  }, [coin, user]);
+  }, [coin, userEmail]);
 
   const bestMarketPrice = () => {
-    if (user) {
+    if (userEmail) {
       if (USDTInput > usdtWallet) {
         toast.error("not enough USDT , Please Deposit");
       } else if (USDTInput > 0) {
         const order = (USDTInput / coinPriceLive).toFixed(5);
-        dbBestMarketBuy(user).add({
+        dbBestMarketBuy(userEmail).add({
           coin: coin.toLocaleUpperCase(),
           amount: Number(order),
           inPrice: coinPriceLive,
           timestamp: firebase.firestore.FieldValue.serverTimestamp(),
         });
-        dbCoins(user)
+        dbCoins(userEmail)
           .doc(usdtWalletId)
           .set({ amount: usdtWallet - USDTInput }, { merge: true });
-        dbCoins(user)
+        dbCoins(userEmail)
           .doc(coinTradeId)
           .set({ amount: coinTrade + Number(order) }, { merge: true });
       }
@@ -159,7 +159,7 @@ const BuyFastCoins = () => {
           </div>
           <div className="  mb-3 px-4">
 
-            {user ?
+            {userEmail ?
               (<button
                 className="btn  btn-primary w-100"
                 onClick={(e) => bestMarketPrice(e)}
@@ -180,7 +180,7 @@ const BuyFastCoins = () => {
         </div>
 
         {
-          user ?
+          userEmail ?
             (
               <div className=" col-10 col-md-7">
                 <div className="d-flex justify-content-between p-2 m-2 rounded-3 trade-success">

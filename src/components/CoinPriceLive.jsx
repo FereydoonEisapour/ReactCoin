@@ -6,6 +6,7 @@ const CoinPriceLive = ({ symbol }) => {
   const [btcPriceBinance, setBtcPriceBinance] = React.useState(Number);
   React.useEffect(() => {
     const binanceSocket = new WebSocket("wss://stream.binance.com:9443/ws");
+   //  const binanceSocket = new WebSocket("wss://ws-feed.pro.coinbase.com");
     binanceSocket.onopen = function () {
       binanceSocket.send(
         JSON.stringify({
