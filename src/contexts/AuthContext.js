@@ -29,7 +29,7 @@ const initialState = {
   error: null,
   status: false,
 };
-console.log(initialState.user);
+
 function AuthProvider(props) {
   const [state, dispatch] = React.useReducer(reducer, initialState);
   return (
@@ -81,12 +81,10 @@ function resetPass(dispatch, emailInput) {
     })
     .catch((error) => {
       toast.error(error.code);
-      console.log(error);
     });
 }
 function doLoginCookie(dispatch, userCookie) {
   initialState.userEmail = userCookie
-  console.log(userCookie);
   dispatch({
     // user: userCookie,
     userEmail: userCookie

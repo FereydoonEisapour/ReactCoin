@@ -30,7 +30,7 @@ const Balance = () => {
       {userEmail ? (
         <>
           <h3 className="text-center fw-bolder"> Balance</h3>
-          {balance ? 
+          {balance.length !==0 ? 
 
             balance.map((coin) => (
               <div
@@ -46,6 +46,7 @@ const Balance = () => {
                 </div>
               </div>)) 
               :
+              
               <div className="mt-4">
                 <Loading />
               </div> 

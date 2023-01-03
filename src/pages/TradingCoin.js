@@ -66,7 +66,6 @@ const TradingCoin = () => {
   // * GET USDT
   React.useEffect(() => {
     if (userEmail) {
-      console.log(userEmail);
       dbCoins(userEmail).where("coin", "==", "USDT").onSnapshot((snapshot) => {
         if (typeof snapshot.docs[0] === "undefined") {
           dbCoins(userEmail).add({
