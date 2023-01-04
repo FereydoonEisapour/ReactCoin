@@ -49,6 +49,7 @@ const BuyFastCoins = () => {
     if (userEmail) {
       dbBestMarketBuy(userEmail)
         .orderBy("timestamp", "desc")
+        .limit(10)
         .onSnapshot((snapshot) => {
           setBestPriceTrades(
             snapshot.docs.map((doc) => ({
@@ -189,7 +190,7 @@ const BuyFastCoins = () => {
                   <div className="">Amount</div>
                   <div className="">Price</div>
                 </div>
-                {bestPirceTrades.map((trade) => (
+                { bestPirceTrades.map((trade) => (
                   <TradeBuyFast
                     key={trade.id}
                     id={trade.id}
@@ -202,9 +203,6 @@ const BuyFastCoins = () => {
             )
             : null
         }
-
-
-
       </div>
     </>
   );

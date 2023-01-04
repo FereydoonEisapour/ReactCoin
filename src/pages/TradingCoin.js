@@ -32,6 +32,9 @@ const TradingCoin = () => {
 
   const [orderType, setOrderType] = React.useState(true)
   const [btnDisabled, setBtnDisabled] = React.useState(false)
+
+  const [limitTrades, setLimitTrades] = React.useState(10)
+
   React.useEffect(() => {
     if (orderType === true) {
       calcOrder > usdtWallet ? setBtnDisabled(true) : setBtnDisabled(false)
@@ -147,8 +150,9 @@ const TradingCoin = () => {
   }, [userEmail]);
   // *GET TRADES FROM API
   React.useEffect(() => {
+    console.log(limitTrades);
     if (userEmail) {
-      dbTrades(userEmail).orderBy("timestamp", "desc").onSnapshot((snapshot) => {
+      dbTrades(userEmail).orderBy("timestamp", "desc").limit(limitTrades).onSnapshot((snapshot) => {
         setTrades(snapshot.docs.map((doc) => ({
           id: doc.id,
           type: doc.data().type,
@@ -160,7 +164,12 @@ const TradingCoin = () => {
       });
     }
 
-  }, [userEmail, orderType]);
+  }, [userEmail, orderType, limitTrades]);
+  const morelimitTrades = () => {
+    return setLimitTrades(prev => prev + 10)
+  }
+
+
   // *  ORDER TO TRADE => // DELL ORDER // ADD TRADE // USDT WALLET DEC//
   React.useEffect(() => {
     if (userEmail) {
@@ -216,7 +225,7 @@ const TradingCoin = () => {
       {/* Live Price from Binance  */}
       <div className="livePrice  d-flex justify-content-between  m-2 p-1 bg-white rounded-3">
         <div className="coinName fw-bold p-3">{coin.toLocaleUpperCase()} / USDT</div>
-        <div className="coinPrice fw-bolder display-6 px-4">{coinPriceLive === 0 ? <Loading /> : coinPriceLive}</div>
+        <div className="coinPrice fw-bolder display-6 px-4 mt-2">{coinPriceLive === 0 ? <Loading /> : coinPriceLive}</div>
       </div>
       {/*  Trade */}
       <div className="trade row   m-2 p-3 bg-white rounded-3 ">
@@ -313,6 +322,9 @@ const TradingCoin = () => {
                 />
               ))
                 : <Loading />}
+              <div className="d-flex justify-content-center">
+                <button className="btn btn-outline-success" onClick={morelimitTrades}>More last Trades</button>
+              </div>
             </div>
           )
           :
