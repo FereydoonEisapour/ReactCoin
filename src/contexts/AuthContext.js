@@ -55,7 +55,6 @@ function doSingUp(dispatch, emailInput, passwordInput) {
       }
     });
 }
-
 function doLogIn(dispatch, emailInput, passwordInput) {
   auth.signInWithEmailAndPassword(emailInput, passwordInput)
     .then((result) => {
@@ -72,8 +71,6 @@ function doLogIn(dispatch, emailInput, passwordInput) {
       }
     });
 }
-
-
 function resetPass(dispatch, emailInput) {
   auth.sendPasswordResetEmail(emailInput)
     .then(() => {
@@ -90,6 +87,10 @@ function doLoginCookie(dispatch, userCookie) {
     userEmail: userCookie
   })
 }
-
-export { AuthProvider, useAuthState, useAuthDispatch, doSingUp, doLogIn, resetPass, doLoginCookie };
+function doLogOut() {
+  initialState.userEmail = null
+  initialState.user=null
+  removeCookie('user')
+}
+export { AuthProvider, useAuthState, useAuthDispatch, doSingUp, doLogIn, resetPass, doLoginCookie, doLogOut };
 

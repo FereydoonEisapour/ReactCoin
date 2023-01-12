@@ -6,6 +6,7 @@ import firebase from "firebase/compat/app";
 import { Balance } from "../components";
 import { dbCoins } from "../data/db";
 import { getCookie } from "../hooks/cookies";
+import UserInfo from "../components/UserInfo";
 
 const Dashboard = () => {
 
@@ -13,9 +14,6 @@ const Dashboard = () => {
   const [usdtWallet, setUsdtWallet] = React.useState(Number);
   const [usdtWalletId, setUsdtWalletId] = React.useState("");
   const [depositInput, setDepositInput] = React.useState(Number);
-
-
-
 
   React.useEffect(() => {
     if (userEmail) {
@@ -52,10 +50,14 @@ const Dashboard = () => {
   //if (!userEmail) return <Navigate to="/" />;
   return (
     <div className=" d-flex row justify-content-center col-12  ">
+      {userEmail ?
+        <>
+          <div className="col-10  col-md-5  p-2 m-2 bg-white rounded-3">
+            <UserInfo />
+          </div>
+        </> : null
+      }
 
-      <div className="col-10  col-md-5  p-2 m-2 bg-white rounded-3">
-        <Balance />
-      </div>
       <div className="col-10  col-md-5  p-2 m-2  bg-white  rounded-3">
         <h4 className="text-center fw-bold">Deposit USDT</h4>
         <div className="input-group mb-3  mt-3 ">
@@ -80,6 +82,9 @@ const Dashboard = () => {
             </button>
           )
         }
+      </div>
+      <div className="col-10  col-md-5  p-2 m-2 bg-white rounded-3">
+        <Balance />
       </div>
 
     </div>

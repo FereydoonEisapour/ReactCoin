@@ -12,7 +12,7 @@ const getCookie = (cookiename) => {
    return Cookie.get(cookiename)
 }
 
-const removeCookie = (cookiename, user) => {
+const removeCookie = (cookiename) => {
     Cookie.remove(cookiename)
 }
 export { removeCookie, setCookie, getCookie };

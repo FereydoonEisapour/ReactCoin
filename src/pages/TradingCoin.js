@@ -84,7 +84,6 @@ const TradingCoin = () => {
         }
       });
     }
-
   }, [userEmail]);
   // * GET COIN OR CREATE COIN
   React.useEffect(() => {
@@ -150,7 +149,6 @@ const TradingCoin = () => {
   }, [userEmail]);
   // *GET TRADES FROM API
   React.useEffect(() => {
-    console.log(limitTrades);
     if (userEmail) {
       dbTrades(userEmail).orderBy("timestamp", "desc").limit(limitTrades).onSnapshot((snapshot) => {
         setTrades(snapshot.docs.map((doc) => ({
