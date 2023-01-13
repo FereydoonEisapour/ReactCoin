@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 
 
 import { auth } from "../data/Firebase";
-import { setCookie, removeCookie } from "../hooks/cookies";
+import { setCookie, removeCookie, getCookie } from "../hooks/cookies";
 
 const AuthStateContext = React.createContext();
 const AuthDispatchContext = React.createContext();
@@ -64,6 +64,7 @@ function doLogIn(dispatch, emailInput, passwordInput) {
       });
       removeCookie('user')
       setCookie('user', result.user.email)
+
     })
     .catch((error) => {
       if (error.code === "auth/user-not-found") {
@@ -87,10 +88,12 @@ function doLoginCookie(dispatch, userCookie) {
     userEmail: userCookie
   })
 }
-function doLogOut() {
-  initialState.userEmail = null
-  initialState.user=null
+function doLogOut(dispatch) {
+  dispatch({
+    userEmail: null
+  })
   removeCookie('user')
 }
+
 export { AuthProvider, useAuthState, useAuthDispatch, doSingUp, doLogIn, resetPass, doLoginCookie, doLogOut };
 

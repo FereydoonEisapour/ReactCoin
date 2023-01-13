@@ -1,15 +1,20 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
-import { doLogOut, useAuthState } from "../contexts/AuthContext";
-import { getCookie } from "../hooks/cookies";
+import {
+  doLogOut,
+  useAuthDispatch,
+  useAuthState,
+} from "../contexts/AuthContext";
+
 
 function UserInfo() {
   const { userEmail } = useAuthState();
-
+  const dispatch = useAuthDispatch();
   const logOut = () => {
-    doLogOut();
+    doLogOut(dispatch);
   };
- 
+
+  // console.log(userEmail);
 
   return (
     <div>

@@ -8,6 +8,7 @@ import { dbCoins } from "../data/db";
 import { getCookie } from "../hooks/cookies";
 import UserInfo from "../components/UserInfo";
 
+
 const Dashboard = () => {
 
   const { userEmail } = useAuthState();
@@ -46,8 +47,18 @@ const Dashboard = () => {
       .doc(usdtWalletId)
       .set({ amount: usdtWallet + depositInput }, { merge: true });
   };
+  //if (userEmailCookie === undefined) return <Navigate to="/dashboard" />;
 
-  //if (!userEmail) return <Navigate to="/" />;
+  // console.log(userEmail)
+
+  React.useEffect(() => {
+
+    if (!userEmail)
+      return () => {
+        <Navigate to="/" />;
+      }
+  }, [userEmail])
+// console.log(userEmail);
   return (
     <div className=" d-flex row justify-content-center col-12  ">
       {userEmail ?
