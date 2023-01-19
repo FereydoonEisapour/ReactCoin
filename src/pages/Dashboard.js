@@ -1,16 +1,12 @@
 import React from "react";
 import { useAuthState } from "../contexts/AuthContext";
 import { Navigate } from "react-router-dom";
-
 import firebase from "firebase/compat/app";
 import { Balance } from "../components";
 import { dbCoins } from "../data/db";
-import { getCookie } from "../hooks/cookies";
 import UserInfo from "../components/UserInfo";
 
-
 const Dashboard = () => {
-
   const { userEmail } = useAuthState();
   const [usdtWallet, setUsdtWallet] = React.useState(Number);
   const [usdtWalletId, setUsdtWalletId] = React.useState("");
@@ -47,10 +43,6 @@ const Dashboard = () => {
       .doc(usdtWalletId)
       .set({ amount: usdtWallet + depositInput }, { merge: true });
   };
-  //if (userEmailCookie === undefined) return <Navigate to="/dashboard" />;
-
-  // console.log(userEmail)
-
   React.useEffect(() => {
 
     if (!userEmail)
@@ -58,7 +50,6 @@ const Dashboard = () => {
         <Navigate to="/" />;
       }
   }, [userEmail])
-// console.log(userEmail);
   return (
     <div className=" d-flex row justify-content-center col-12  ">
       {userEmail ?

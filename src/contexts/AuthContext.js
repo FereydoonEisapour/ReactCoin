@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 
 
 import { auth } from "../data/Firebase";
-import { setCookie, removeCookie, getCookie } from "../hooks/cookies";
+import { setCookie, removeCookie,  } from "../hooks/cookies";
 
 const AuthStateContext = React.createContext();
 const AuthDispatchContext = React.createContext();
