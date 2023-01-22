@@ -1,10 +1,20 @@
 import { Link } from "react-router-dom";
 import { useAuthState } from "../contexts/AuthContext";
+import { changeTheme, useThemeDispatch, useThemeState } from "../contexts/ThemeContext";
+
 const Navbar = () => {
   const { userEmail } = useAuthState();
+  const { theme } = useThemeState()
+  const dispatch = useThemeDispatch()
+
+  const changeThemeButton = () => {
+    changeTheme(dispatch, theme)
+  }
+  console.log(theme)
   return (
-    <div className="container-fluid d-flex justify-content-between px-2 py-2 ">
+    <div className={`container-fluid d-flex justify-content-between px-2 py-2 ${theme === 'dark' ? "dark" : "light"}`}>
       <div className="d-flex align-items-center">
+        <button onClick={changeThemeButton}>theme</button>
         <nav className="px-1 ">
           <Link
             className="text-decoration-none px-1 text-dark fw-bold  "

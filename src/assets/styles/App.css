@@ -25,11 +25,21 @@ body {
 .main-color{
   background-color: #ebf2f9;
 }
+
+/* Dark Mode */
 .App{
-  background-color: #ebf2f9;
+  /* background-color: #ebf2f9; */
   padding-bottom: 200px;
   height: max-content;
   min-height: 100vh;
+}
+.light{
+  background-color: #ebf2f9 !important;
+  color: #27292c;
+}
+.dark{
+  background-color: #27292c !important;
+  color: #ffffff !important;
 }
 .text-overflow{
   overflow-wrap: anywhere;

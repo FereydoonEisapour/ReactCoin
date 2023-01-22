@@ -5,22 +5,36 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { TopCoinList, CoinDetails, TradingCoin, BuyFastCoins, Login, Dashboard } from "./pages";
 import { Footer } from './components'
 import { Navbar } from "./components";
-import {  doLoginCookie, useAuthDispatch } from "./contexts/AuthContext";
+import { doLoginCookie, useAuthDispatch } from "./contexts/AuthContext";
 import { Toaster } from "react-hot-toast";
 import { getCookie } from "./hooks/cookies";
+import { changeTheme, useThemeDispatch, useThemeState } from "./contexts/ThemeContext";
+
 
 function App() {
   const dispatch = useAuthDispatch();
+  const dispatchTheme = useThemeDispatch()
   React.useEffect(() => {
     const userCookie = getCookie('user')
     if (userCookie !== "") {
       doLoginCookie(dispatch, userCookie)
     }
   }, [dispatch])
+
+  const { theme } = useThemeState()
+
+  React.useEffect(() => {
+    const localTheme = window.localStorage.getItem('theme')
+    if (localTheme) {
+      if (localTheme === "dark") changeTheme(dispatchTheme, "light")
+      if (localTheme === "light") changeTheme(dispatchTheme, "dark")
+    }
+  }, [dispatchTheme, theme])
+
   return (
     <BrowserRouter>
       <Toaster />
-      <div className="App ">
+      <div className={`App ${theme === 'light' ? 'light' : 'dark'} `}>
         <Navbar />
         <Routes>
           <Route path="/" element={<TopCoinList />}></Route>
