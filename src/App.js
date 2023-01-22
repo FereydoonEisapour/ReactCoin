@@ -34,7 +34,7 @@ function App() {
   return (
     <BrowserRouter>
       <Toaster />
-      <div className={`App ${theme === 'light' ? 'light' : 'dark'} `}>
+      <div className={`App ${theme === 'light' ? 'bgLight' : 'bgDark'} `}>
         <Navbar />
         <Routes>
           <Route path="/" element={<TopCoinList />}></Route>

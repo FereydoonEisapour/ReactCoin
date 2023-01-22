@@ -33,14 +33,26 @@ body {
   height: max-content;
   min-height: 100vh;
 }
-.light{
-  background-color: #ebf2f9 !important;
-  color: #27292c;
+.bgLight{
+  background-color: #ebf2f9 ;
+  transition: background-color 0.5s ease-in-out;
+
 }
-.dark{
-  background-color: #27292c !important;
-  color: #ffffff !important;
+.bgDark{
+  background-color: #27292c ;
+  transition: background-color 0.5s ease-in-out;
 }
+.textLight{
+  color: #fff !important;
+}
+.textDark{
+  color: #27292c !important;
+}
+
+
+
+
+
 .text-overflow{
   overflow-wrap: anywhere;
 }
