@@ -21,13 +21,13 @@ const TopCoinList = () => {
 
 
   return (
-    <div className="d-flex flex-column  align-items-center m-3">
-      <div className="col-12 col-md-10 d-flex justify-content-center">
+    <div className="d-flex flex-column  align-items-center m-3 top-coinList-container ">
+      <div className="col-12 col-md-10 d-flex justify-content-center mt-4">
         <div className="col-12 ">
-          <table className="table">
+          <table className="table ">
             <thead className="">
-              <tr className="text-center bg-light d-flex">
-                <th scope="col" className="col-2 col-md-1"></th>
+              <tr className="text-center  d-flex text-color">
+                <th scope="col" className="col-2 col-md-1 "></th>
                 <th scope="col" className="col-3 col-md-2 text-center">Coin</th>
                 <th scope="col" className="d-none d-md-block col-md-2">Symbol</th>
                 <th scope="col" className="col-3 ">Price</th>
@@ -61,22 +61,4 @@ const TopCoinList = () => {
     </div>
   );
 };
-
 export default TopCoinList;
-
-
-
-// {/* <div className="coin-container">
-//         <div className="coin-row bg-light m-1 px-3">
-//           <div className="coin">
-//             <div></div>
-//             <h1 className="px-5">Coin</h1>
-//             <div className="coin-symbol">Symbol</div>
-//           </div>
-//           <div className="d-flex px-1 ">
-//             <p className="px-5">Price</p>
-//             <p className="px-5">Volume</p>
-//             <p className="px-5">Change</p>
-//           </div>
-//         </div>
-//       </div> */}

@@ -1,59 +1,88 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Montserrat&display=swap");
 
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
 }
 body {
   position: relative;
   margin: 0;
-  /* padding-bottom: 6rem; */
   min-height: 100%;
   font-family: "Helvetica Neue", Arial, sans-serif;
 }
-.displaynone{
-  display: none;
-}
-.bg-white{
-  background-color: #ffffff ; 
-}
-.text-white{
-  color: #ffffff;
-}
-.main-color{
-  background-color: #ebf2f9;
-}
-
-/* Dark Mode */
-.App{
-  /* background-color: #ebf2f9; */
-  padding-bottom: 200px;
+.App {
+  padding-bottom: 100px;
   height: max-content;
   min-height: 100vh;
 }
-.bgLight{
-  background-color: #ebf2f9 ;
+
+/* Dark Mode */
+:root {
+  --app-container: #f3f6fd;
+  --navbar-link-color: #000;
+  --container-content: #fff;
+}
+
+.dark:root {
+  --app-container: #1f1d2b;
+  --navbar-link-color: #fff;
+  --container-content: #1b2937;
+}
+button,
+a {
+  cursor: pointer;
+}
+.App{
+  background-color: var(--app-container);
   transition: background-color 0.5s ease-in-out;
+}
+.navbar-link {
+  color: var(--navbar-link-color);
+}
+.navbar-link:hover {
+  color: var(--navbar-link-color);
+}
+.top-coinList-container{
+  background-color: var(--container-content);
+  border-radius: 32px;
+}
+.content-cointainer{
+    background-color: var(--container-content);
 
 }
-.bgDark{
-  background-color: #27292c ;
-  transition: background-color 0.5s ease-in-out;
+.text-color{
+   color: var(--navbar-link-color);
 }
-.textLight{
+.btn-color{
+  color: var(--navbar-link-color) !important;
+}
+
+
+
+
+/* .textLight{
   color: #fff !important;
 }
 .textDark{
   color: #27292c !important;
+} */
+
+.displaynone {
+  display: none;
+}
+.bg-white {
+  background-color: #ffffff;
+}
+.text-white {
+  color: #ffffff;
+}
+.main-color {
+  background-color: #ebf2f9;
 }
 
-
-
-
-
-.text-overflow{
+.text-overflow {
   overflow-wrap: anywhere;
 }
 .coin-img {
@@ -78,6 +107,7 @@ body {
   bottom: 0;
   left: 0;
   padding: 1rem;
-  background-color: #ffffff;
+  background-color: var(--app-container);
   text-align: center;
 }
+

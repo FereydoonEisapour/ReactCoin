@@ -51,16 +51,16 @@ const Dashboard = () => {
       }
   }, [userEmail])
   return (
-    <div className=" d-flex row justify-content-center col-12  ">
+    <div className=" d-flex row justify-content-center col-12  text-color">
       {userEmail ?
         <>
-          <div className="col-10  col-md-5  p-2 m-2 bg-white rounded-3">
+          <div className="col-10  col-md-5  p-2 m-2 content-cointainer rounded-3 ">
             <UserInfo />
           </div>
         </> : null
       }
 
-      <div className="col-10  col-md-5  p-2 m-2  bg-white  rounded-3">
+      <div className="col-10  col-md-5  p-2 m-2  content-cointainer  rounded-3">
         <h4 className="text-center fw-bold">Deposit USDT</h4>
         <div className="input-group mb-3  mt-3 ">
           <span
@@ -85,7 +85,7 @@ const Dashboard = () => {
           )
         }
       </div>
-      <div className="col-10  col-md-5  p-2 m-2 bg-white rounded-3">
+      <div className="col-10  col-md-5  p-2 m-2 content-cointainer rounded-3">
         <Balance />
       </div>
 

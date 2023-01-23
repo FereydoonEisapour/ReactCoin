@@ -219,20 +219,20 @@ const TradingCoin = () => {
   }, [coin]);
   // if (!userEmail) return <Navigate to="/" />;
   return (
-    <div className="containerTrade col-md-12 p-2">
+    <div className="containerTrade col-md-12 p-2 text-color">
       {/* Live Price from Binance  */}
-      <div className="livePrice  d-flex justify-content-between  m-2 p-1 bg-white rounded-3">
+      <div className="livePrice  d-flex justify-content-between  m-2 p-1 content-cointainer   rounded-3">
         <div className="coinName fw-bold p-3">{coin.toLocaleUpperCase()} / USDT</div>
         <div className="coinPrice fw-bolder display-6 px-4 mt-2">{coinPriceLive === 0 ? <Loading /> : coinPriceLive}</div>
       </div>
       {/*  Trade */}
-      <div className="trade row   m-2 p-3 bg-white rounded-3 ">
+      <div className="trade row   m-2 p-3 content-cointainer rounded-3 ">
         <div className="trade-tabs ">
           <div className="tabs " >
             <input type="radio" id="radio-1" name="tabs" checked={orderType} readOnly />
-            <label className="tab " htmlFor="radio-1" onClick={e => orderTypeHandler(e)}>Buy</label>
+            <label className="tab text-black " htmlFor="radio-1 " onClick={e => orderTypeHandler(e)}>Buy</label>
             <input type="radio" id="radio-2" name="tabs" checked={!orderType} readOnly />
-            <label className="tab " htmlFor="radio-2" onClick={e => orderTypeHandler(e)}>Sell</label>
+            <label className="tab text-black" htmlFor="radio-2" onClick={e => orderTypeHandler(e)}>Sell</label>
             <span className="glider  "></span>
           </div>
         </div>
@@ -272,7 +272,7 @@ const TradingCoin = () => {
       {/* Balance */}
       {
         userEmail ?
-          (<div className="balance  m-2 p-3 bg-white rounded-3">
+          (<div className="balance  m-2 p-3 content-cointainer rounded-3">
             <Balance />
           </div>)
           :
@@ -283,7 +283,7 @@ const TradingCoin = () => {
       {
         userEmail ?
           (
-            <div className="order  m-2 p-3 bg-white rounded-3">
+            <div className="order  m-2 p-3 content-cointainer rounded-3">
               <h3 className="text-center">Orders</h3>
               {orders ? orders.map((order) => (
                 <OrderItem
@@ -307,7 +307,7 @@ const TradingCoin = () => {
       {
         userEmail ?
           (
-            <div className="trades  m-2 p-3 bg-white rounded-3">
+            <div className="trades  m-2 p-3 content-cointainer rounded-3">
               <h3 className="text-center">Trades History</h3>
               {trades ? trades.map((trade) => (
                 <TradeItem

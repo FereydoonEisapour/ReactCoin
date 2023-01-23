@@ -13,7 +13,7 @@ function UserInfo() {
   return (
     <div>
       <div className="">
-        <div className="avatar">avatar : )</div>
+        <div className="avatar ">avatar : )</div>
       </div>
       <div className="mt-3">
         <div className="">Email : {userEmail}</div>
