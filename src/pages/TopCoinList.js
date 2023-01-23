@@ -21,7 +21,7 @@ const TopCoinList = () => {
 
 
   return (
-    <div className="d-flex flex-column  align-items-center m-3 top-coinList-container ">
+    <div className="d-flex flex-column  align-items-center m-3 top-coinList-container pl-5 ">
       <div className="col-12 col-md-10 d-flex justify-content-center mt-4">
         <div className="col-12 ">
           <table className="table ">

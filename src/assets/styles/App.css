@@ -58,16 +58,9 @@ a {
 .btn-color{
   color: var(--navbar-link-color) !important;
 }
-
-
-
-
-/* .textLight{
-  color: #fff !important;
+.pl-5{
+  padding-left: 2em;
 }
-.textDark{
-  color: #27292c !important;
-} */
 
 .displaynone {
   display: none;
