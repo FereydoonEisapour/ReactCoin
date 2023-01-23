@@ -23,6 +23,7 @@ body {
   --app-container: #f3f6fd;
   --navbar-link-color: #000;
   --container-content: #fff;
+
 }
 
 .dark:root {
@@ -37,6 +38,10 @@ a {
 .App{
   background-color: var(--app-container);
   transition: background-color 0.5s ease-in-out;
+}
+.dark-switch{
+  background-color: transparent;
+  color: var(--navbar-link-color);
 }
 .navbar-link {
   color: var(--navbar-link-color);
@@ -61,6 +66,7 @@ a {
 .pl-5{
   padding-left: 2em;
 }
+
 
 .displaynone {
   display: none;

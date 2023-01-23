@@ -22,7 +22,7 @@ const Navbar = () => {
       </div>
       <div className="d-flex align-items-center px-1">
         <div className="d-flex">
-          <button type="button" onClick={toggleTheme} className="border border-0 ">
+          <button type="button" onClick={toggleTheme} className="border border-0 dark-switch">
             <svg className="moon" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"
               strokeWidth="2" width="24" height="24" viewBox="0 0 24 24">
               <defs></defs>
