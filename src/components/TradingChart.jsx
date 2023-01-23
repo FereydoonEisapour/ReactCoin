@@ -1,13 +1,13 @@
 
 import React, { useEffect, useRef } from 'react';
 import { useParams } from "react-router-dom";
-//import useDarkMode from '../hooks/useDarkMode'
+import useDarkMode from '../hooks/useDarkMode'
 let tvScriptLoadingPromise;
 
 export default function TradingViewWidget() {
   const onLoadScriptRef = useRef();
   const { coin } = useParams();
- // const [ theme] = useDarkMode()
+  const [ theme] = useDarkMode()
   
   useEffect(
     () => {
@@ -37,7 +37,7 @@ export default function TradingViewWidget() {
             symbol:  `BINANCE:${coin}USDT`,
             interval: "240",
             timezone: "Etc/UTC",
-          //  theme: theme,
+            theme: theme,
             style: "1",
             locale: "en",
             toolbar_bg: "#f1f3f6",
@@ -48,7 +48,7 @@ export default function TradingViewWidget() {
         }
       }
     },
-    [coin,]
+    [coin,theme]
   );
 
   return (

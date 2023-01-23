@@ -140,10 +140,10 @@ const BuyFastCoins = () => {
   };
   return (
     <>
-      <div className="  d-flex row col-12 justify-content-center">
-        <div className="col-10 col-md-6 m-3 p-3 rounded-4 bg-white">
-          <div className=" text-center text-dark p-4 fw-bold">Best Market Price </div>
-          <div className=" text-center text-dark p-1 fw-bold ">{coin.toUpperCase()}</div>
+      <div className="  d-flex row col-12 justify-content-center ">
+        <div className="col-10 col-md-6 m-3 p-3 rounded-4  content-cointainer">
+          <div className=" text-center text-color p-4 fw-bold">Best Market Price </div>
+          <div className=" text-center text-color p-1 fw-bold ">{coin.toUpperCase()}</div>
           <div className="">
             <div className="input-group mb-3 px-4 py-4">
               <input
