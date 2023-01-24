@@ -21,18 +21,18 @@ const TopCoinList = () => {
 
 
   return (
-    <div className="d-flex flex-column  align-items-center m-3 top-coinList-container pl-5 ">
-      <div className="col-12 col-md-10 d-flex justify-content-center mt-4">
+    <div className="d-flex flex-column  align-items-center m-2 top-coinList-container pl-3 text-center ">
+      <div className="col-12 col-md-10  mt-4">
         <div className="col-12 ">
-          <table className="table ">
+          <table className="table  ">
             <thead className="">
-              <tr className="text-center  d-flex text-color">
-                <th scope="col" className="col-2 col-md-1 "></th>
-                <th scope="col" className="col-3 col-md-2 text-center">Coin</th>
-                <th scope="col" className="d-none d-md-block col-md-2">Symbol</th>
-                <th scope="col" className="col-3 ">Price</th>
-                <th scope="col" className="d-none d-md-block col-md-2">Change</th>
-                <th scope="col" className="col-2 col-lg-2"></th>
+              <tr className="text-center d-flex  text-color">
+                <th scope="col" className="col col-1  "></th>
+                <th scope="col" className="col  text-center">Coin</th>
+                <th scope="col" className="col d-none d-md-block ">Symbol</th>
+                <th scope="col" className="col ">Price</th>
+                <th scope="col" className="col ">Change</th>
+                <th scope="col" className="col "></th>
               </tr>
             </thead>
           </table>
@@ -53,8 +53,8 @@ const TopCoinList = () => {
           />
         );
       })}
-      <div className="d-flex align-items-center justify-content-center my-3">
-        <button className="btn btn-info w-100  text-light" onClick={moreCoins}>
+      <div className="d-flex align-items-center justify-content-center my-2">
+        <button className="btn btn-dark w-100  text-light" onClick={moreCoins}>
           More
         </button>
       </div>
