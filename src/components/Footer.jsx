@@ -12,7 +12,7 @@ const Footer = () => {
                         <use xlinkHref="#bootstrap"></use>
                     </svg>
                 </a>
-                <span className="mb-3 mb-md-0  fw-bold text-color">© 2022 React Coin </span>
+                <span className="mb-3 mb-md-0  fw-bold text-color">© {new Date().getUTCFullYear()} React Coin </span>
             </div>
             <div className="px-4 ">
                 <a href="https://github.com/FereydoonEisapour/ReactCoin">
