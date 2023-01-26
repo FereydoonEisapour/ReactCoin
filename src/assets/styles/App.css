@@ -110,3 +110,30 @@ a {
   text-align: center;
 }
 
+
+
+.loader {
+  text-align: center;
+}
+
+/*
+  Set the color of the icon
+*/
+.loader svg path,
+svg rect {
+  fill: #488cc8;
+}
+
+.trade-success {
+  /* background-color: #282f2f; */
+  /* color: #ffffff; */
+  /* border: 1px solid; */
+}
+.order-success {
+  background-color: #282f2f;
+  color: #ffffff;
+}
+.order-success button {
+  background-color: #e6f8f8;
+  color: #282f2f;
+}

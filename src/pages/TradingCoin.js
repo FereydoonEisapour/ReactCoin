@@ -1,19 +1,18 @@
 import React from "react";
-import { Navigate, useParams } from "react-router-dom";
+import {  useParams } from "react-router-dom";
 import { useAuthState } from "../contexts/AuthContext";
 import firebase from "firebase/compat/app";
 import { dbCoins, dbOrders, dbTrades } from "../data/db";
 import { Balance, Loading } from "../components";
-import { OrderItem, TradeItem } from '../components/TradeItems'
+import { OrderItem } from '../components/TradeItems'
 import TradingChart from "./../components/TradingChart";
 import "../assets/styles/trade.css"
 import "../assets/styles/tradeingCoin.css";
+import { Trades } from './../components'
 const TradingCoin = () => {
   const { coin } = useParams();
 
   const { userEmail } = useAuthState();
-
-
   const [coinPriceLive, setCoinPriceLive] = React.useState(Number);
 
   const [usdtWallet, setUsdtWallet] = React.useState(Number);
@@ -28,12 +27,12 @@ const TradingCoin = () => {
   const [calcOrder, setCalcOrder] = React.useState(Number);
   const [orders, setOrders] = React.useState([]);
 
-  const [trades, setTrades] = React.useState([]);
+
 
   const [orderType, setOrderType] = React.useState(true)
   const [btnDisabled, setBtnDisabled] = React.useState(false)
 
-  const [limitTrades, setLimitTrades] = React.useState(10)
+
 
   React.useEffect(() => {
     if (orderType === true) {
@@ -147,26 +146,8 @@ const TradingCoin = () => {
     }
 
   }, [userEmail]);
-  // *GET TRADES FROM API
-  React.useEffect(() => {
-    if (userEmail) {
-      dbTrades(userEmail).orderBy("timestamp", "desc").limit(limitTrades).onSnapshot((snapshot) => {
-        setTrades(snapshot.docs.map((doc) => ({
-          id: doc.id,
-          type: doc.data().type,
-          coin: doc.data().coin,
-          amount: doc.data().amount,
-          inPrice: doc.data().inPrice,
-        }))
-        );
-      });
-    }
 
-  }, [userEmail, orderType, limitTrades]);
-  const morelimitTrades = () => {
-    return setLimitTrades(prev => prev + 10)
-  }
-
+  //* click on more button to get all Trade history
 
   // *  ORDER TO TRADE => // DELL ORDER // ADD TRADE // USDT WALLET DEC//
   React.useEffect(() => {
@@ -225,9 +206,10 @@ const TradingCoin = () => {
         <div className="coinName fw-bold p-3">{coin.toLocaleUpperCase()} / USDT</div>
         <div className="coinPrice fw-bolder display-6 px-4 mt-2">{coinPriceLive === 0 ? <Loading /> : coinPriceLive}</div>
       </div>
+      {/*End Live Price from Binance  */}
       {/*  Trade */}
-      <div className="trade row   m-2 p-3 content-cointainer rounded-3 ">
-        <div className="trade-tabs ">
+      <div className="trade row   m-2  content-cointainer rounded-3 ">
+        <div className="trade-tabs pt-5">
           <div className="tabs " >
             <input type="radio" id="radio-1" name="tabs" checked={orderType} readOnly />
             <label className="tab text-black " htmlFor="radio-1 " onClick={e => orderTypeHandler(e)}>Buy</label>
@@ -236,7 +218,7 @@ const TradingCoin = () => {
             <span className="glider  "></span>
           </div>
         </div>
-        <div className="p-4 mt-5 ">
+        <div className="p-4 mt-2 ">
           <div className="coinName fw-bold text-center py-4 display-6">
             {coin.toLocaleUpperCase()} / USDT
           </div>
@@ -267,8 +249,10 @@ const TradingCoin = () => {
 
         </div>
       </div>
+      {/*End  Trade */}
       {/*  Trading Chart  */}
       <div className="chart  m-2 rounded-3  ">{<TradingChart />}</div>
+      {/*End  Trading Chart  */}
       {/* Balance */}
       {
         userEmail ?
@@ -278,7 +262,7 @@ const TradingCoin = () => {
           :
           (null)
       }
-
+      {/*End  Balance */}
       {/* Orders */}
       {
         userEmail ?
@@ -302,13 +286,22 @@ const TradingCoin = () => {
             null
           )
       }
-
+      {/*End Orders */}
       {/* Trades */}
-      {
+      {/* {
         userEmail ?
           (
             <div className="trades  m-2 p-3 content-cointainer rounded-3">
               <h3 className="text-center">Trades History</h3>
+              {tradesCount > 0 ?
+                <div className="d-flex  p-2 m-2 rounded-3 trade-success  ">
+                  <div className="px-5 col">Trade</div>
+                  <div className="px-2 col">Coin</div>
+                  <div className="px-2 col">Amount</div>
+                  <div className="px-2 col">Price</div>
+                 
+                </div> : null
+              }
               {trades ? trades.map((trade) => (
                 <TradeItem
                   key={trade.id}
@@ -317,18 +310,24 @@ const TradingCoin = () => {
                   coin={trade.coin}
                   amount={trade.amount}
                   inPrice={trade.inPrice}
+                  length={trades.length}
                 />
               ))
                 : <Loading />}
               <div className="d-flex justify-content-center">
-                <button className="btn btn-outline-success" onClick={morelimitTrades}>More last Trades</button>
+                {
+                  tradesCount >= limitTrades ?
+                    <button className="btn btn-secondary bo " onClick={morelimitTrades} >More Trades</button>
+                    : null
+                }
               </div>
             </div>
           )
           :
           (null)
-      }
-
+      } */}
+      <Trades />
+      {/*End Trades */}
     </div>
   );
 };

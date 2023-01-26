@@ -97,5 +97,6 @@ function doLogOut(dispatch) {
   removeCookie('user')
 }
 
+
 export { AuthProvider, useAuthState, useAuthDispatch, doSingUp, doLogIn, resetPass, doLoginCookie, doLogOut };
 

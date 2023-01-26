@@ -21,43 +21,37 @@ const Balance = () => {
             }))
           );
         });
-      return () => {};
+      return () => { };
     }
   }, [userEmail]);
 
   return (
     <>
-      {userEmail ? (
+      {userEmail ?
         <>
-          <h3 className="text-center fw-bolder"> Balance</h3>
-          {balance.length !==0 ? 
-
-            balance.map((coin) => (
-              <div
-                className={`${coin.amount === 0 ? "displaynone" : ""} `}
-                key={coin.id}
-              >
-                <div className=" p-1 fw-bold rounded-2   mb-3 px-1 d-flex">
-                  <span className=" col-4 ">{coin.coin.toUpperCase()} </span>
+          <h3 className="text-center fw-bolder p-2"> Balance</h3>
+          {balance.length !== 0 ?
+            balance.map((coin) =>
+              <div className={`${coin.amount === 0 ? "displaynone" : ""} `} key={coin.id} >
+                <div className=" p-2 fw-bold rounded-2   mb-3 px-1 d-flex border    ">
+                  <span className=" col-4 px-3">{coin.coin.toUpperCase()} </span>
                   <span className=" col-8 ">
                     {/* {coin.amount.toFixed(6).replace(/\.0+$/,'')} */}
                     {coin.amount.toString()}
                   </span>
                 </div>
-              </div>)) 
-              :
-              
-              <div className="mt-4">
-                <Loading />
-              </div> 
+              </div>)
+            :
+            <div className="mt-4">
+              <Loading />
+            </div>
           }
-        </>
-      ) : (
+        </> :
         <>
-        <h3 className="text-center fw-bolder"> Balance</h3>
-        <PleaseLogin />
+          <h3 className="text-center fw-bolder"> Balance</h3>
+          <PleaseLogin />
         </>
-      )}
+      }
     </>
   );
 };
