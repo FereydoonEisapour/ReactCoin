@@ -7,8 +7,8 @@ let tvScriptLoadingPromise;
 export default function TradingViewWidget() {
   const onLoadScriptRef = useRef();
   const { coin } = useParams();
-  const [ theme] = useDarkMode()
-  
+  const [theme] = useDarkMode()
+
   useEffect(
     () => {
       onLoadScriptRef.current = createWidget;
@@ -34,7 +34,7 @@ export default function TradingViewWidget() {
           new window.TradingView.widget({
             width: "100%",
             height: "100%",
-            symbol:  `BINANCE:${coin}USDT`,
+            symbol: `BINANCE:${coin}USDT`,
             interval: "240",
             timezone: "Etc/UTC",
             theme: theme,
@@ -48,12 +48,15 @@ export default function TradingViewWidget() {
         }
       }
     },
-    [coin,theme]
+    [coin, theme]
   );
 
   return (
-    <div className='tradingview-widget-container  '>
-      <div id='tradingview_12bac' className=''/>
+    <div className="chart  m-2 rounded-3">
+
+      <div className='tradingview-widget-container  '>
+        <div id='tradingview_12bac' className='' />
+      </div>
     </div>
   );
 }

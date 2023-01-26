@@ -251,9 +251,7 @@ const TradingCoin = () => {
         </div>
       </div>
       {/*End  Trade */}
-      {/*  Trading Chart  */}
-      <div className="chart  m-2 rounded-3  ">{<TradingChart />}</div>
-      {/*End  Trading Chart  */}
+      <TradingChart />
       <Balance />
       <Orders />
       <Trades />
