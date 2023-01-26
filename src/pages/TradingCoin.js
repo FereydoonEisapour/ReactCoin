@@ -1,5 +1,5 @@
 import React from "react";
-import {  useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useAuthState } from "../contexts/AuthContext";
 import firebase from "firebase/compat/app";
 import { dbCoins, dbOrders, dbTrades } from "../data/db";
@@ -8,7 +8,8 @@ import { OrderItem } from '../components/TradeItems'
 import TradingChart from "./../components/TradingChart";
 import "../assets/styles/trade.css"
 import "../assets/styles/tradeingCoin.css";
-import { Trades } from './../components'
+import { Trades, Orders } from './../components'
+
 const TradingCoin = () => {
   const { coin } = useParams();
 
@@ -131,23 +132,23 @@ const TradingCoin = () => {
       }
     }
   };
-  // * GET ORDERS FROM API
-  React.useEffect(() => {
-    if (userEmail) {
-      dbOrders(userEmail).orderBy("inPrice", "desc").onSnapshot((snapshot) => {
-        setOrders(snapshot.docs.map((doc) => ({
-          id: doc.id,
-          type: doc.data().type,
-          coin: doc.data().coin,
-          amount: Number(doc.data().amount),
-          inPrice: Number(doc.data().inPrice),
-        })));
-      });
-    }
+  // // * GET ORDERS FROM API
+  // React.useEffect(() => {
+  //   if (userEmail) {
+  //     dbOrders(userEmail).orderBy("inPrice", "desc").onSnapshot((snapshot) => {
+  //       setOrders(snapshot.docs.map((doc) => ({
+  //         id: doc.id,
+  //         type: doc.data().type,
+  //         coin: doc.data().coin,
+  //         amount: Number(doc.data().amount),
+  //         inPrice: Number(doc.data().inPrice),
+  //       })));
+  //     });
+  //   }
 
-  }, [userEmail]);
+  // }, [userEmail]);
 
-  //* click on more button to get all Trade history
+
 
   // *  ORDER TO TRADE => // DELL ORDER // ADD TRADE // USDT WALLET DEC//
   React.useEffect(() => {
@@ -263,71 +264,8 @@ const TradingCoin = () => {
           (null)
       }
       {/*End  Balance */}
-      {/* Orders */}
-      {
-        userEmail ?
-          (
-            <div className="order  m-2 p-3 content-cointainer rounded-3">
-              <h3 className="text-center">Orders</h3>
-              {orders ? orders.map((order) => (
-                <OrderItem
-                  key={order.id}
-                  coin={order.coin}
-                  type={order.type}
-                  amount={order.amount}
-                  inPrice={order.inPrice}
-                  id={order.id}
-                  usdtId={usdtWalletId}
-                />
-              )) : <Loading />}
-            </div>
-          ) :
-          (
-            null
-          )
-      }
-      {/*End Orders */}
-      {/* Trades */}
-      {/* {
-        userEmail ?
-          (
-            <div className="trades  m-2 p-3 content-cointainer rounded-3">
-              <h3 className="text-center">Trades History</h3>
-              {tradesCount > 0 ?
-                <div className="d-flex  p-2 m-2 rounded-3 trade-success  ">
-                  <div className="px-5 col">Trade</div>
-                  <div className="px-2 col">Coin</div>
-                  <div className="px-2 col">Amount</div>
-                  <div className="px-2 col">Price</div>
-                 
-                </div> : null
-              }
-              {trades ? trades.map((trade) => (
-                <TradeItem
-                  key={trade.id}
-                  id={trade.id}
-                  type={trade.type}
-                  coin={trade.coin}
-                  amount={trade.amount}
-                  inPrice={trade.inPrice}
-                  length={trades.length}
-                />
-              ))
-                : <Loading />}
-              <div className="d-flex justify-content-center">
-                {
-                  tradesCount >= limitTrades ?
-                    <button className="btn btn-secondary bo " onClick={morelimitTrades} >More Trades</button>
-                    : null
-                }
-              </div>
-            </div>
-          )
-          :
-          (null)
-      } */}
+      <Orders />
       <Trades />
-      {/*End Trades */}
     </div>
   );
 };
