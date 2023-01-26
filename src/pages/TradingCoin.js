@@ -254,16 +254,7 @@ const TradingCoin = () => {
       {/*  Trading Chart  */}
       <div className="chart  m-2 rounded-3  ">{<TradingChart />}</div>
       {/*End  Trading Chart  */}
-      {/* Balance */}
-      {
-        userEmail ?
-          (<div className="balance  m-2 p-3 content-cointainer rounded-3">
-            <Balance />
-          </div>)
-          :
-          (null)
-      }
-      {/*End  Balance */}
+      <Balance />
       <Orders />
       <Trades />
     </div>

@@ -28,7 +28,7 @@ const Balance = () => {
   return (
     <>
       {userEmail ?
-        <>
+        <div className="balance  m-2 p-3 content-cointainer rounded-3">
           <h3 className="text-center fw-bolder p-2"> Balance</h3>
           {balance.length !== 0 ?
             balance.map((coin) =>
@@ -46,7 +46,7 @@ const Balance = () => {
               <Loading />
             </div>
           }
-        </> :
+        </div> :
         <>
           <h3 className="text-center fw-bolder"> Balance</h3>
           <PleaseLogin />
