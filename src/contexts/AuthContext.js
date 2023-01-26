@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 
 
 import { auth } from "../data/Firebase";
-import { setCookie, removeCookie,  } from "../hooks/cookies";
+import { setCookie, removeCookie, } from "../hooks/cookies";
 
 const AuthStateContext = React.createContext();
 const AuthDispatchContext = React.createContext();
@@ -44,9 +44,11 @@ function doSingUp(dispatch, emailInput, passwordInput) {
     .then((result) => {
       dispatch({
         user: result.user,
+        userEmail: result.user.email
       })
         .then(
-          document.cookies.set('user', emailInput, { path: '/' })
+          removeCookie('user'),
+          setCookie('user', result.user.email, { path: '/' })
         )
     })
     .catch((error) => {
