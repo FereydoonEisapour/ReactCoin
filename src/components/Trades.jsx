@@ -16,6 +16,7 @@ function Trades() {
         if (userEmail) {
             dbTrades(userEmail).get().then(snap => {
                 setTradesCount(snap.size) // will return the collection size
+               // console.log(snap.size)
             });
             dbTrades(userEmail).orderBy("timestamp", "desc").limit(limitTrades).onSnapshot((snapshot) => {
                 setTrades(snapshot.docs.map((doc) => ({
@@ -49,10 +50,7 @@ function Trades() {
                             </div> : null
                         }
                         {
-                            tradesCount === -1 ? <Loading /> : null
-                        }
-                        {
-                            tradesCount === 0 ? <div className='d-flex  justify-content-center'>
+                            trades.length === 0 ? <div className='d-flex  justify-content-center'>
                                 <div className=' p-3 fw-bolder '>
                                     You dont have any Trade
                                 </div>

@@ -110,7 +110,7 @@ function Trade({ coin }) {
                     timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                 });
                 const newWaletUsdts = usdtWallet - Number(usdtInput * coinInput);
-                dbCoins(userEmail).doc(usdtWalletId).set({ amount: newWaletUsdts }, { merge: true });
+                dbCoins(userEmail).doc(usdtWalletId).update({ amount: newWaletUsdts }, { merge: true });
             }
             if (orderType === false) {
                 dbOrders(userEmail).add({
@@ -121,7 +121,7 @@ function Trade({ coin }) {
                     timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                 });
                 const newCoinAmount = coinTrade - Number(coinInput)
-                dbCoins(userEmail).doc(coinTradeId).set({ amount: newCoinAmount }, { merge: true });
+                dbCoins(userEmail).doc(coinTradeId).update({ amount: newCoinAmount }, { merge: true });
             }
         }
     };
