@@ -8,10 +8,7 @@ const Balance = () => {
   const [balance, setBalance] = React.useState([]);
   React.useEffect(() => {
     if (userEmail) {
-      db.collection(userEmail)
-        .doc(userEmail)
-        .collection("coins")
-        .orderBy("coin", "asc")
+      const unsubscribe = db.collection(userEmail).doc(userEmail).collection('coins').orderBy('coin', 'asc')
         .onSnapshot((snapshot) => {
           setBalance(
             snapshot.docs.map((doc) => ({
@@ -19,11 +16,13 @@ const Balance = () => {
               coin: doc.data().coin,
               amount: doc.data().amount,
             }))
-          );
-        });
-      return () => { };
+          )
+        })
+      return () => {
+        unsubscribe()
+      }
     }
-  }, [userEmail]);
+  }, [userEmail])
 
   return (
     <>

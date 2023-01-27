@@ -10,7 +10,7 @@ function Orders() {
     // * GET ORDERS FROM API
     React.useEffect(() => {
         if (userEmail) {
-            dbOrders(userEmail).orderBy("inPrice", "desc").onSnapshot((snapshot) => {
+            const unsubscribe = dbOrders(userEmail).orderBy("inPrice", "desc").onSnapshot((snapshot) => {
                 setOrders(snapshot.docs.map((doc) => ({
                     id: doc.id,
                     type: doc.data().type,
@@ -18,9 +18,12 @@ function Orders() {
                     amount: Number(doc.data().amount),
                     inPrice: Number(doc.data().inPrice),
                 })));
-            });
+            }
+            )
+            return () => {
+                unsubscribe()
+            }
         }
-
     }, [userEmail]);
 
     return (
@@ -31,10 +34,10 @@ function Orders() {
                         <h3 className="text-center">Orders</h3>
                         {
                             orders.length === 0 ? <div className='d-flex  justify-content-center'>
-                            <div className=' p-3 fw-bolder '>
-                                You dont have any Order
-                            </div>
-                        </div> : null
+                                <div className=' p-3 fw-bolder '>
+                                    You dont have any Order
+                                </div>
+                            </div> : null
                         }
                         {orders ? orders.map((order) => (
                             <OrderItem
