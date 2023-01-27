@@ -1,9 +1,6 @@
 const Loading = () => {
     return (
         <div className="d-flex justify-content-center align-items-center align-content-center">
-            {/* <div className="spinner-border text-secondary" role="status">
-                <span className="visually-hidden">Loading...</span>
-            </div> */}
             <div className="loader loader--style2" title="1">
                 <svg version="1.1" id="loader-1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                     className="red" width="40px" height="40px" viewBox="0 0 50 50"  xmlSpace="preserve">
@@ -19,7 +16,6 @@ const Loading = () => {
                     </path>
                 </svg>
             </div>
-
         </div>
     )
 }

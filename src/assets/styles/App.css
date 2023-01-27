@@ -50,15 +50,15 @@ a {
   color: var(--navbar-link-color);
 }
 .top-coinList-container{
-  background-color: var(--container-content);
-  border-radius: 32px;
+  background-color: var(--container-content) !important;
+  border-radius: 32px !important;
 }
 .content-cointainer{
-    background-color: var(--container-content);
+    background-color: var(--container-content) !important;
 
 }
 .text-color{
-   color: var(--navbar-link-color);
+   color: var(--navbar-link-color) !important;
 }
 .btn-color{
   color: var(--navbar-link-color) !important;
