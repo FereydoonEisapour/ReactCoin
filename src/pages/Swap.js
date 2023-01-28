@@ -183,13 +183,13 @@ const Swap = () => {
         {
           userEmail ?
             (
-              <div className=" col-10 col-md-7">
-                <div className="d-flex justify-content-between p-2 m-2 rounded-3 trade-success">
-                  {/* <div className="">Buy</div> */}
+              <div className=" col-10 col-md-6 content-cointainer text-color rounded-4">
+                <div className="d-flex justify-content-between p-2 m-2 rounded-3 trade-success ">
                   <div className="">Coin</div>
                   <div className="">Amount</div>
                   <div className="">Price</div>
                 </div>
+                <hr />
                 { bestPirceTrades.map((trade) => (
                   <TradeBuyFast
                     key={trade.id}
@@ -199,6 +199,7 @@ const Swap = () => {
                     inPrice={trade.inPrice}
                   />
                 ))}
+                
               </div>
             )
             : null
