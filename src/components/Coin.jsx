@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-const Coin = ({ name, price, symbol,  image, priceChange, id }) => {
+const Coin = ({ name, price, symbol, image, priceChange, id }) => {
 
   return (
     <div className="col-12 col-md-10 d-flex  ">
@@ -28,10 +28,13 @@ const Coin = ({ name, price, symbol,  image, priceChange, id }) => {
                   :
                   <div className=" green">{priceChange.toFixed(2)}%</div>}
               </td>
-              <td className="col  fw-bold  ">
-                  <Link className="text-decoration-none navbar-link " to={`/trade/${symbol}`}>
-                    Trade
-                  </Link>
+              <td className="col  d-flex flex-wrap  p-0 m-0 fw-bold align-content-center justify-content-center  ">
+                <Link className="text-decoration-none navbar-link px-1 " to={`/Trade/${symbol.toUpperCase()}`}>
+                  Trade
+                </Link>
+                <Link className="text-decoration-none navbar-link px-1" to={`/Swap/${symbol.toUpperCase()}`}>
+                  Swap
+                </Link>
               </td>
             </tr>
           </tbody>

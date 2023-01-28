@@ -12,11 +12,11 @@ const Navbar = () => {
           <Link className="text-decoration-none px-1  fw-bold navbar-link" to="/" >
             ReactCoin
           </Link>
-          <Link className="text-decoration-none px-1  fw-bold navbar-link" to="/trade/btc" >
+          <Link className="text-decoration-none px-1  fw-bold navbar-link" to="/Trade/btc" >
             Trade
           </Link>
-          <Link className="text-decoration-none px-1  fw-bold navbar-link" to="/buyfast/btc" >
-            Buy Now
+          <Link className="text-decoration-none px-1  fw-bold navbar-link" to="/Swap/btc" >
+            Swap
           </Link>
         </nav>
       </div>
@@ -31,12 +31,12 @@ const Navbar = () => {
           </button>
           {userEmail ?
             <div className="me-auto mb-2  my-2">
-              <Link to="/dashboard" className="text-decoration-none px-1  fw-bold navbar-link" >
+              <Link to="/Dashboard" className="text-decoration-none px-1  fw-bold navbar-link" >
                 Dashboard
               </Link>
             </div>
             :
-            <Link to="/login" className="text-decoration-none px-1  fw-bold navbar-link" type="submit" >
+            <Link to="/Login" className="text-decoration-none px-1  fw-bold navbar-link" type="submit" >
               Login
             </Link>
           }

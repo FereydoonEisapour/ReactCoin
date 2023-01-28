@@ -15,6 +15,9 @@ const TopCoinList = () => {
       .catch((err) => console.error(err));
   }, [coinsListNumber]);
 
+
+
+
   const moreCoins = () => {
     setCoinsListNumber((prev) => prev + 10);
   };

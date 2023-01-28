@@ -7,7 +7,7 @@ import db from "../data/Firebase";
 import { dbCoins, dbBestMarketBuy } from "../data/db";
 import { TradeBuyFast } from "../components/TradeItems";
 
-const BuyFastCoins = () => {
+const Swap = () => {
   const { coin } = useParams();
   const { userEmail } = useAuthState();
   const [usdtWallet, setUsdtWallet] = React.useState(Number);
@@ -207,4 +207,4 @@ const BuyFastCoins = () => {
     </>
   );
 };
-export default BuyFastCoins;
+export default Swap;
