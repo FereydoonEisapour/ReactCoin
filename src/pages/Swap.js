@@ -142,8 +142,8 @@ const Swap = () => {
     <>
       <div className="  d-flex row col-12 justify-content-center ">
         <div className="col-10 col-md-6 m-3 p-3 rounded-4  content-cointainer">
-          <div className=" text-center text-color p-4 fw-bold">Best Market Price </div>
-          <div className=" text-center text-color p-1 fw-bold ">{coin.toUpperCase()}</div>
+          <div className=" text-center text-color p-4 fw-bold">Swap {coin.toUpperCase()}</div>
+   
           <div className="">
             <div className="input-group mb-3 px-4 py-4">
               <input
