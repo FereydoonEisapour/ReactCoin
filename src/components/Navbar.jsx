@@ -11,7 +11,7 @@ const Navbar = () => {
       <div className="d-flex align-items-center">
         <nav className="px-1 d-flex ">
           <Link className="text-decoration-none px-1  navbar-link " to="/" >
-           <img src={logo} alt="" srcset="" className="logo " />
+           <img src={logo} alt="logo"  className="logo " />
           </Link>
           <Link className="text-decoration-none px-1 d-none d-sm-block  fw-bold navbar-link" to="/" >
             ReactCoin

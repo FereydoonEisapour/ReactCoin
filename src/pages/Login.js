@@ -1,14 +1,15 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
 import { doSingUp, doLogIn, resetPass, useAuthDispatch, useAuthState } from "../contexts/AuthContext";
-
+import { Loading } from './../components'
 const Login = () => {
-  const { userEmail } = useAuthState();
+  const { userEmail, error } = useAuthState();
   const dispatch = useAuthDispatch();
 
   const [loginModal, setLoginModal] = React.useState(true);
   const [emailInput, setEmailInput] = React.useState("");
   const [passwordInput, setPasswordInput] = React.useState("");
+  const [loadingg, setLoading] = React.useState(false)
 
   const modalHandler = () => {
     setLoginModal(!loginModal);
@@ -25,16 +26,18 @@ const Login = () => {
   };
   const LogInUserWithEmailAndPassword = (e) => {
     e.preventDefault();
+    setLoading(true)
     doLogIn(dispatch, emailInput, passwordInput);
   };
   const resetPassword = () => {
     resetPass(dispatch, emailInput)
   }
-
+  console.log(error)
   if (userEmail) return <Navigate to="/dashboard" />;
   return (
     <div className="d-flex justify-content-center align-items-center mt-5 mb-0 col-12 ">
       <div className="form  col-11 col-md-6 col-lg-4  p-3 m-3 content-cointainer">
+
         <div className="inputs d-flex justify-content-center row  m-4">
           <label htmlFor="email" className="text-color">Email</label>
           <input
@@ -52,15 +55,15 @@ const Login = () => {
           />
         </div>
         <div className="buttons m-4 text-center">
-          {loginModal ? (
+          {loginModal ?
             <button className="btn btn-primary col-8 " onClick={(e) => LogInUserWithEmailAndPassword(e)} >
               Login
             </button>
-          ) : (
+            :
             <button className="btn btn-primary col-8 " onClick={(e) => SignInUserWithEmailAndPassword(e)}>
               Signup
             </button>
-          )}
+          }
         </div>
         <div className="text-center">
           {loginModal ?

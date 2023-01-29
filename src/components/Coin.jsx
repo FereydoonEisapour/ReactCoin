@@ -9,14 +9,14 @@ const Coin = ({ name, price, symbol, image, priceChange, id }) => {
           <tbody className="">
             <tr className=" text-color d-flex ">
               <th scope="row" className="col col-1">
-                <img className="coin-img " src={image} alt="coin" />
+                <img className="coin-img" src={image} alt="coin" />
               </th>
-              <td className="col   fw-bold ">
-                <Link to={`/coin/${id}`} style={{ textDecoration: "none" }}>
+              <td className="col   fw-bold d-flex row   ">
+                <Link to={`/details/${id}`} style={{ textDecoration: "none" }}>
                   <span style={{ fontSize: "14px" }} className="navbar-link"> {name} </span>
                 </Link>
               </td>
-              <td className="col d-none d-md-block  fw-bold" style={{ fontSize: "14px" }}>
+              <td className="col d-none d-md-block  fw-bold  " style={{ fontSize: "14px" }}>
                 {symbol.toUpperCase()}
               </td>
               <td className="col fw-bold ">
@@ -28,8 +28,8 @@ const Coin = ({ name, price, symbol, image, priceChange, id }) => {
                   :
                   <div className=" green">{priceChange.toFixed(2)}%</div>}
               </td>
-              <td className="col  d-flex flex-wrap  p-0 m-0 fw-bold align-content-center justify-content-center  ">
-                <Link className="text-decoration-none navbar-link px-1 " to={`/Trade/${symbol.toUpperCase()}`}>
+              <td className="col d-flex flex-wrap  p-0 m-0 fw-bold align-content-center justify-content-center  ">
+                <Link className="text-decoration-none navbar-link  " to={`/Trade/${symbol.toUpperCase()}`}>
                   Trade
                 </Link>
                 <Link className="text-decoration-none navbar-link px-1" to={`/Swap/${symbol.toUpperCase()}`}>

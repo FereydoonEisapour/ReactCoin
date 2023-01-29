@@ -24,8 +24,8 @@ const TopCoinList = () => {
 
 
   return (
-    <div className="d-flex flex-column  align-items-center m-2 top-coinList-container pl-3 text-center ">
-      <div className="col-12 col-md-10  mt-4">
+    <div className="d-flex flex-column  align-items-center  top-coinList-container  text-center mx-2  mx-md-5 pl-3  ">
+      <div className="col-12 col-md-10  mt-2">
         <div className="col-12 ">
           <table className="table  ">
             <thead className="">
@@ -56,11 +56,15 @@ const TopCoinList = () => {
           />
         );
       })}
-      <div className="d-flex align-items-center justify-content-center my-2">
-        <button className="btn btn-dark w-100  text-light" onClick={moreCoins}>
-          More
-        </button>
-      </div>
+      {coins.length>0 ?
+
+        <div className="d-flex align-items-center justify-content-center my-2">
+          <button className="btn btn-dark w-100  text-light" onClick={moreCoins}>
+            More
+          </button>
+        </div>
+        : null
+      }
     </div>
   );
 };

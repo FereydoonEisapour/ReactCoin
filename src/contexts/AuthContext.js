@@ -71,6 +71,9 @@ function doLogIn(dispatch, emailInput, passwordInput) {
     .catch((error) => {
       if (error.code === "auth/user-not-found") {
         toast.error("Email not found , Please Signup");
+        dispatch({
+          error: error.code
+        })
       }
     });
 }

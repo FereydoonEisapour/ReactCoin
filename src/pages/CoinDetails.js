@@ -31,7 +31,7 @@ const CoinDetails = () => {
         </div>
         <div className="d-flex flex-wrap justify-content-start content-cointainer">
           
-          <div className="col-12 col-md-4  border border-1">
+          <div className="col-12 col-md-4  ">
             <div className="list-group w-auto p-1 ">
               <div className="list-group-item list-group-item-action  align-items-center d-flex gap-3 py-3 content-cointainer">
                 <div className="d-flex gap-2 w-100 justify-content-between text-color">
@@ -41,7 +41,7 @@ const CoinDetails = () => {
               </div>
             </div>
           </div>
-          <div className="col-12 col-md-4 border border-1">
+          <div className="col-12 col-md-4 ">
             <div className="list-group w-auto p-1">
               <div className="list-group-item list-group-item-action  align-items-center d-flex gap-3 py-3 content-cointainer">
                 <div className="d-flex gap-2 w-100 justify-content-between text-color ">
@@ -51,7 +51,7 @@ const CoinDetails = () => {
               </div>
             </div>
           </div>
-          <div className="col-12 col-md-4  border border-1">
+          <div className="col-12 col-md-4  ">
             <div className="list-group w-auto p-1">
               <div className="list-group-item list-group-item-action  align-items-center d-flex gap-3 py-3 content-cointainer">
                 <div className="d-flex gap-2 w-100 justify-content-between text-color">
@@ -61,7 +61,7 @@ const CoinDetails = () => {
               </div>
             </div>
           </div>
-          <div className="col-12 col-md-4   border border-1">
+          <div className="col-12 col-md-4   ">
             <div className="list-group w-auto p-1 ">
               <div className="list-group-item list-group-item-action  align-items-center d-flex gap-3 py-3 content-cointainer">
                 <div className="d-flex gap-2 w-100 justify-content-between  text-color">
@@ -71,11 +71,11 @@ const CoinDetails = () => {
               </div>
             </div>
           </div>
-          <div className="col-12 my-1 text-color p-2 border border-1">
+          <div className="col-12 my-1 text-color p-2 border border-1 rounded-2  ">
             <div className="p-1  ">
               <div className=" list-group-item-action  align-items-center d-flex gap-3 py-3">
                 <div className="d-flex gap-2 justify-content-between px-2 ">
-                  <div className="text-overflow ">{coinDetails.description.en}</div>
+                  <p className="text-overflow letter">{coinDetails.description.en}</p>
                 </div>
               </div>
             </div>
