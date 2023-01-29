@@ -142,8 +142,14 @@ svg rect {
  height: 25px;
 }
 .letter::first-letter {
-  font-size: 1.5rem ;
-  padding-right: 3px;
+  float:left;
+    font-weight: bold;
+    font-size: 60px;
+    font-size: 6rem;
+    line-height: 40px;
+    line-height: 4rem;
+    height:4rem;
+    text-transform: uppercase;
 }
 
 @media only screen and (min-width: 375px) {
