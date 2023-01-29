@@ -195,7 +195,7 @@ function Trade({ coin }) {
     // if (!userEmail) return <Navigate to="/" />;
     return (
         <div className="trade row   m-2  content-cointainer rounded-3 ">
-            <div className="trade-tabs pt-5">
+            <div className="trade-tabs pt-3">
                 <div className="tabs " >
                     <input type="radio" id="radio-1" name="tabs" checked={orderType} readOnly />
                     <label className="tab text-black " htmlFor="radio-1 " onClick={e => orderTypeHandler(e)}>Buy</label>
@@ -204,7 +204,7 @@ function Trade({ coin }) {
                     <span className="glider  "></span>
                 </div>
             </div>
-            <div className="p-4 mt-2 ">
+            <div className="p-3 mt-2 ">
                 <div className="coinName fw-bold text-center py-4 display-6">
                     {coin.toLocaleUpperCase()} / USDT
                 </div>

@@ -43,7 +43,7 @@ function Trades() {
                         <h3 className="text-center">Trades History</h3>
                         {tradesCount > 0 ?
                             <div className="d-flex  p-2 m-2 rounded-3 trade-success  ">
-                                <div className="px-5 col">Trade</div>
+                                <div className="px-2 col">Trade</div>
                                 <div className="px-2 col">Coin</div>
                                 <div className="px-2 col">Amount</div>
                                 <div className="px-2 col">Price</div>

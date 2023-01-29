@@ -30,7 +30,7 @@ function Orders() {
         <>
             {
                 userEmail ?
-                    <div className="order  m-2 p-3 content-cointainer rounded-3">
+                    <div className="order  m-2 p-3 content-cointainer rounded-3 ">
                         <h3 className="text-center">Orders</h3>
                         {
                             orders.length === 0 ? <div className='d-flex  justify-content-center'>

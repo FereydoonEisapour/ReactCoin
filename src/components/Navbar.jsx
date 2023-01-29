@@ -1,4 +1,5 @@
 import React from "react";
+import logo from './../assets/pic/react-coin.png'
 import { Link } from "react-router-dom";
 import { useAuthState } from "../contexts/AuthContext";
 import useDarkMode from "../hooks/useDarkMode";
@@ -8,8 +9,11 @@ const Navbar = () => {
   return (
     <div className="container-fluid d-flex justify-content-between px-2 py-2 ">
       <div className="d-flex align-items-center">
-        <nav className="px-1 ">
-          <Link className="text-decoration-none px-1  fw-bold navbar-link" to="/" >
+        <nav className="px-1 d-flex ">
+          <Link className="text-decoration-none px-1  navbar-link " to="/" >
+           <img src={logo} alt="" srcset="" className="logo " />
+          </Link>
+          <Link className="text-decoration-none px-1 d-none d-sm-block  fw-bold navbar-link" to="/" >
             ReactCoin
           </Link>
           <Link className="text-decoration-none px-1  fw-bold navbar-link" to="/Trade/btc" >

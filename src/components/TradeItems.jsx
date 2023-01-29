@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import { useAuthState } from "../contexts/AuthContext";
 import firebase from "firebase/compat/app";
 import { dbCoins, dbOrders } from "../data/db";
- const OrderItem = ({ coin, amount, inPrice, id, type, usdtId }) => {
+const OrderItem = ({ coin, amount, inPrice, id, type, usdtId }) => {
   const { userEmail } = useAuthState();
 
   const [usdtWallet, setUsdtWallet] = React.useState(Number);
@@ -58,13 +58,13 @@ import { dbCoins, dbOrders } from "../data/db";
 
   };
   return (
-    <div className="d-flex justify-content-between rounded-3 px-4 py-1 m-2 order-success">
+    <div className="d-flex justify-content-between rounded-3 px-4 py-1 m-2 order-success content-cointainer text-color border">
       <div className="">{coin.toUpperCase()}</div>
       <div className="">{type ? "Buy" : "Sell"}</div>
       <div className="">{amount}</div>
       <div className="">{inPrice}</div>
       <button onClick={(e) => deleteOrder(e)} className=" ">
-        ❌
+        ✖
       </button>
     </div>
   );
@@ -78,40 +78,40 @@ OrderItem.propTypes = {
   inPrice: PropTypes.number,
 };
 
- const TradeItem = ({ id, coin, amount, inPrice, type }) => {
-    return (
-        <div className="d-flex  p-2 m-2 rounded-3 trade-success border border-1" key={id}>
-            <div className="px-5 col">{type ? "Buy" : "Sell"}</div>
-            <div className="px-2 col">{coin.toUpperCase()}</div>
-            <div className="px-2 col">{amount}</div>
-            <div className="px-2 col">{inPrice}</div>
-        </div>
-    );
+const TradeItem = ({ id, coin, amount, inPrice, type }) => {
+  return (
+    <div className="d-flex  p-2 m-2 rounded-3 trade-success border border-1" key={id}>
+      <div className="px-2 col">{type ? "Buy" : "Sell"}</div>
+      <div className="px-2 col">{coin.toUpperCase()}</div>
+      <div className="px-2 col">{amount}</div>
+      <div className="px-2 col">{inPrice}</div>
+    </div>
+  );
 };
 TradeItem.propTypes = {
-    id: PropTypes.string,
-    type: PropTypes.bool,
-    coin: PropTypes.string,
-    amount: PropTypes.number,
-    inPrice: PropTypes.number,
+  id: PropTypes.string,
+  type: PropTypes.bool,
+  coin: PropTypes.string,
+  amount: PropTypes.number,
+  inPrice: PropTypes.number,
 };
 
 
- const TradeBuyFast = ({ id, coin, amount, inPrice, }) => {
-    return (
-        <div className="d-flex justify-content-between p-2 m-2 rounded-3 trade-success border" key={id}>
-            <div className="px-2">{coin.toUpperCase()}</div>
-            <div className="px-2">{amount}</div>
-            <div className="px-2">{inPrice}</div>
-        </div>
-    )
+const TradeBuyFast = ({ id, coin, amount, inPrice, }) => {
+  return (
+    <div className="d-flex justify-content-between p-2 m-2 rounded-3 trade-success border" key={id}>
+      <div className="px-2">{coin.toUpperCase()}</div>
+      <div className="px-2">{amount}</div>
+      <div className="px-2">{inPrice}</div>
+    </div>
+  )
 }
 TradeBuyFast.propTypes = {
-    id: PropTypes.string,
-    coin: PropTypes.string,
-    amount: PropTypes.number,
-    inPrice: PropTypes.number,
+  id: PropTypes.string,
+  coin: PropTypes.string,
+  amount: PropTypes.number,
+  inPrice: PropTypes.number,
 };
 
 
-export  {TradeBuyFast ,OrderItem,TradeItem}
+export { TradeBuyFast, OrderItem, TradeItem }
