@@ -11,7 +11,7 @@ const CoinDetails = () => {
       .catch((err) => console.error(err));
   }, [coin]);
   return coinDetails ? (
-    <div className="d-flex  justify-content-center   top-coinList-container m-4">
+    <div className="d-flex  justify-content-center   top-coinList-container m-4 fw-bold ">
       <div className="col-11 my-4 text-color ">
         <div className="list-group  border border-1">
           <div className="list-group-item list-group-item-action  align-items-center   d-flex gap-3 py-3 content-cointainer">
