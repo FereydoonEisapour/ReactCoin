@@ -1,11 +1,12 @@
-import firebase from "firebase/compat/app";
 import React from "react";
+import firebase from "firebase/compat/app";
 import toast from "react-hot-toast";
-import { Link, useParams } from "react-router-dom";
-import { useAuthState } from "../contexts/AuthContext";
 import db from "../data/Firebase";
+import { useParams } from "react-router-dom";
+import { useAuthState } from "../contexts/AuthContext";
 import { dbCoins, dbBestMarketBuy } from "../data/db";
 import { SwapTrades } from "../components/TradeItems";
+import PleaseLogin from "../components/PleaseLogin";
 
 const Swap = () => {
   const { coin } = useParams();
@@ -136,11 +137,7 @@ const Swap = () => {
                 {coinPriceLive === 0 ? "Please Wait" : "Buy now"}
               </button>
               :
-              <div className="d-flex justify-content-center">
-                <Link to="/Login" className="text-decoration-none navbar-link text-color ">
-                  Please Login
-                </Link>
-              </div>
+              <PleaseLogin />
             }
           </div>
         </div>
