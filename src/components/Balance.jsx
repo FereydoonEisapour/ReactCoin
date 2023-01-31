@@ -1,7 +1,7 @@
 import React from "react";
 import db from "../data/Firebase";
 import { useAuthState } from "../contexts/AuthContext";
-import Loading from "./Loading";
+import LoadingComponent from "./LoadingComponent";
 import PleaseLogin from "./PleaseLogin";
 const Balance = () => {
   const { userEmail } = useAuthState();
@@ -42,7 +42,7 @@ const Balance = () => {
               </div>)
             :
             <div className="mt-4">
-              <Loading />
+              <LoadingComponent />
             </div>
           }
         </div> :

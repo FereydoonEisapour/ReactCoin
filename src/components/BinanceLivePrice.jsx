@@ -1,5 +1,5 @@
 import React from 'react'
-import Loading from './Loading';
+import LoadingComponent from './LoadingComponent';
 
 function BinanceLivePrice({ coin }) {
   const [coinPriceLive, setCoinPriceLive] = React.useState(Number);
@@ -28,7 +28,7 @@ function BinanceLivePrice({ coin }) {
   return (
     <div className="livePrice  d-flex justify-content-between  m-2 p-1 content-cointainer   rounded-3">
       <div className="coinName fw-bold p-3">{coin.toLocaleUpperCase()} / USDT</div>
-      <div className="coinPrice fw-bolder display-6 px-4 mt-2">{coinPriceLive === 0 ? <Loading /> : coinPriceLive}</div>
+      <div className="coinPrice fw-bolder display-6 px-4 mt-2">{coinPriceLive === 0 ? <LoadingComponent /> : coinPriceLive}</div>
     </div>
   )
 }

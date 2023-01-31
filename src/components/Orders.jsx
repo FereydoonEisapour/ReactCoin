@@ -1,7 +1,7 @@
 import React from 'react'
 import { useAuthState } from '../contexts/AuthContext';
 import { dbOrders } from '../data/db';
-import Loading from './Loading';
+import LoadingComponent from './LoadingComponent';
 import { OrderItem } from './TradeItems';
 
 function Orders() {
@@ -49,7 +49,7 @@ function Orders() {
                                 id={order.id}
                             // usdtId={usdtWalletId}
                             />
-                        )) : <Loading />}
+                        )) : <LoadingComponent />}
                     </div>
                     :
                     null

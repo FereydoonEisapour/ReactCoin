@@ -1,7 +1,7 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
 import { doSingUp, doLogIn, resetPass, useAuthDispatch, useAuthState } from "../contexts/AuthContext";
-import { Loading } from './../components'
+import { LoadingComponent } from './../components'
 const Login = () => {
   const { userEmail, error } = useAuthState();
   const dispatch = useAuthDispatch();
@@ -32,7 +32,6 @@ const Login = () => {
   const resetPassword = () => {
     resetPass(dispatch, emailInput)
   }
-  console.log(error)
   if (userEmail) return <Navigate to="/dashboard" />;
   return (
     <div className="d-flex justify-content-center align-items-center mt-5 mb-0 col-12 ">

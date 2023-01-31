@@ -1,7 +1,7 @@
 import React from 'react'
 import { useAuthState } from '../contexts/AuthContext';
 import { dbTrades } from '../data/db';
-import Loading from './Loading';
+import LoadingComponent from './LoadingComponent';
 import { TradeItem } from './TradeItems';
 
 function Trades() {
@@ -67,7 +67,7 @@ function Trades() {
                                 length={trades.length}
                             />
                         ))
-                            : <Loading />}
+                            : <LoadingComponent />}
                         <div className="d-flex justify-content-center">
                             {
                                 tradesCount >= limitTrades ?

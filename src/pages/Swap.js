@@ -5,53 +5,38 @@ import { useParams } from "react-router-dom";
 import { useAuthState } from "../contexts/AuthContext";
 import db from "../data/Firebase";
 import { dbCoins, dbBestMarketBuy } from "../data/db";
-import { TradeBuyFast } from "../components/TradeItems";
+import { SwapTrades } from "../components/TradeItems";
 
 const Swap = () => {
   const { coin } = useParams();
   const { userEmail } = useAuthState();
   const [usdtWallet, setUsdtWallet] = React.useState(Number);
   const [usdtWalletId, setUsdtWalletId] = React.useState("");
-
   const [coinTrade, setCoinTrade] = React.useState(Number);
   const [coinTradeId, setCoinTradeId] = React.useState("");
-
   const [coinPriceLive, setCoinPriceLive] = React.useState(Number);
-  const [bestPirceTrades, setBestPriceTrades] = React.useState([]);
+  const [swapTrades, setSwapTrades] = React.useState([]);
   const [USDTInput, setUSDTInput] = React.useState(Number);
 
-  // * GET USDT AND COIN  FROM API
+  // * GET USDT FROM API
   React.useEffect(() => {
     if (userEmail) {
       dbCoins(userEmail)
         .where("coin", "==", "USDT")
         .onSnapshot((snapshot) => {
-          if (typeof snapshot.docs[0] === "undefined") {
-            dbCoins(userEmail).add({
-              coin: "USDT",
-              amount: 0,
-              timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-            });
-          } else {
-            dbCoins(userEmail)
-              .where("coin", "==", "USDT")
-              .onSnapshot((snapshot) => {
-                setUsdtWallet(snapshot.docs[0].data().amount);
-                setUsdtWalletId(snapshot.docs[0].id);
-              });
-          }
+          setUsdtWallet(snapshot.docs[0].data().amount);
+          setUsdtWalletId(snapshot.docs[0].id);
         });
     }
-
   }, [userEmail]);
-
+  // * GET SWAPTRADES  FROM API
   React.useEffect(() => {
     if (userEmail) {
       dbBestMarketBuy(userEmail)
         .orderBy("timestamp", "desc")
         .limit(10)
         .onSnapshot((snapshot) => {
-          setBestPriceTrades(
+          setSwapTrades(
             snapshot.docs.map((doc) => ({
               id: doc.id,
               coin: doc.data().coin,
@@ -61,9 +46,8 @@ const Swap = () => {
           );
         });
     }
-
   }, [userEmail]);
-
+  // * GET BINANCE PRICE FROM API 
   React.useEffect(() => {
     if (userEmail) {
       const binanceSocket = new WebSocket("wss://stream.binance.com:9443/ws");
@@ -72,7 +56,7 @@ const Swap = () => {
           JSON.stringify({
             method: "SUBSCRIBE",
             //  params: coin === "usdt" ? [`usdc${coin}@trade`] : [`${coin}usdt@trade`],
-            params: [`${coin}usdt@trade`],
+            params: [`${coin.toLocaleLowerCase()}usdt@trade`],
             id: 1,
           })
         );
@@ -85,13 +69,12 @@ const Swap = () => {
         }
       };
     }
-
   }, [coin, userEmail]);
-
+  // * GET COIN OR CREATE COIN
   const USDTInputHandler = (event) => {
     setUSDTInput(parseFloat(event.target.value));
   };
-  // * GET COIN OR CREATE COIN
+  // * GET COIN AMOUT OR CREATE 0 AMOUNT
   React.useEffect(() => {
     if (userEmail) {
       dbCoins(userEmail)
@@ -109,14 +92,13 @@ const Swap = () => {
               .onSnapshot((snapshot) => {
                 setCoinTrade(snapshot.docs[0].data().amount);
                 setCoinTradeId(snapshot.docs[0].id);
-              });
+              })
           }
-        });
+        })
     }
-
   }, [coin, userEmail]);
-
-  const bestMarketPrice = () => {
+  // * CREATE SWAP TRADE 
+  const SwapCoin = () => {
     if (userEmail) {
       if (USDTInput > usdtWallet) {
         toast.error("not enough USDT , Please Deposit");
@@ -136,72 +118,48 @@ const Swap = () => {
           .set({ amount: coinTrade + Number(order) }, { merge: true });
       }
     }
-
   };
   return (
     <>
       <div className="  d-flex row col-12 justify-content-center ">
         <div className="col-10 col-md-6 m-3 p-3 rounded-4  content-cointainer">
           <div className=" text-center text-color p-4 fw-bold">Swap {coin.toUpperCase()}</div>
-   
           <div className="">
             <div className="input-group mb-3 px-4 py-4">
-              <input
-                onChange={(event) => USDTInputHandler(event)}
-                type="number"
-                className="form-control  col-8"
-              />
-              <span
-                className="input-group-text text-center   border border-0 fw-bold col-4"
-                id="inputGroup-sizing-default">
-                USDT
-              </span>
+              <input onChange={(event) => USDTInputHandler(event)} type="number" className="form-control  col-8" />
+              <span className="input-group-text text-center   border border-0 fw-bold col-4" id="inputGroup-sizing-default"> USDT </span>
             </div>
           </div>
           <div className="  mb-3 px-4">
-
             {userEmail ?
-              (<button
-                className="btn  btn-primary w-100"
-                onClick={(e) => bestMarketPrice(e)}
-                disabled={coinPriceLive === 0}
-              >
+              <button className="btn  btn-primary w-100" onClick={(e) => SwapCoin(e)} disabled={coinPriceLive === 0}>
                 {coinPriceLive === 0 ? "Please Wait" : "Buy now"}
-              </button>)
+              </button>
               :
-              (<button
-                className="btn  btn-primary w-100"
-
-                disabled={true}
-              >
+              <button className="btn  btn-primary w-100" disabled={true} >
                 Please Login
-              </button>)}
-
+              </button>}
           </div>
         </div>
-
         {
           userEmail ?
-            (
-              <div className=" col-10 col-md-6 content-cointainer text-color rounded-4">
-                <div className="d-flex justify-content-between p-2 m-2 rounded-3 trade-success ">
-                  <div className="">Coin</div>
-                  <div className="">Amount</div>
-                  <div className="">Price</div>
-                </div>
-                <hr />
-                { bestPirceTrades.map((trade) => (
-                  <TradeBuyFast
-                    key={trade.id}
-                    id={trade.id}
-                    coin={trade.coin}
-                    amount={trade.amount}
-                    inPrice={trade.inPrice}
-                  />
-                ))}
-                
+            <div className=" col-10 col-md-6 content-cointainer text-color rounded-4">
+              <div className="d-flex justify-content-between p-2 m-2 rounded-3 trade-success ">
+                <div className="">Coin</div>
+                <div className="">Amount</div>
+                <div className="">Price</div>
               </div>
-            )
+              <hr />
+              {swapTrades.map((trade) => (
+                <SwapTrades
+                  key={trade.id}
+                  id={trade.id}
+                  coin={trade.coin}
+                  amount={trade.amount}
+                  inPrice={trade.inPrice}
+                />
+              ))}
+            </div>
             : null
         }
       </div>

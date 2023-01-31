@@ -97,7 +97,7 @@ TradeItem.propTypes = {
 };
 
 
-const TradeBuyFast = ({ id, coin, amount, inPrice, }) => {
+const SwapTrades = ({ id, coin, amount, inPrice, }) => {
   return (
     <div className="d-flex justify-content-between p-2 m-2 rounded-3 trade-success border" key={id}>
       <div className="px-2">{coin.toUpperCase()}</div>
@@ -106,7 +106,7 @@ const TradeBuyFast = ({ id, coin, amount, inPrice, }) => {
     </div>
   )
 }
-TradeBuyFast.propTypes = {
+SwapTrades.propTypes = {
   id: PropTypes.string,
   coin: PropTypes.string,
   amount: PropTypes.number,
@@ -114,4 +114,4 @@ TradeBuyFast.propTypes = {
 };
 
 
-export { TradeBuyFast, OrderItem, TradeItem }
+export { SwapTrades, OrderItem, TradeItem }

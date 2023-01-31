@@ -1,6 +1,6 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import { Loading } from "../components";
+import { LoadingComponent } from "../components";
 const CoinDetails = () => {
   const { coin } = useParams();
   const [coinDetails, setCoinDetails] = React.useState("");
@@ -85,7 +85,7 @@ const CoinDetails = () => {
       </div>
     </div>
   ) : (
-    <Loading />
+    <LoadingComponent />
   );
 };
 
