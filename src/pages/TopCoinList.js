@@ -1,28 +1,29 @@
 import React from "react";
-import { Coin } from "../components";
+import { Coin, LoadingComponent } from "../components";
 
 const TopCoinList = () => {
   const [coins, setCoins] = React.useState([]);
   const [coinsListNumber, setCoinsListNumber] = React.useState(10);
+  const [loading, setLoading] = React.useState(false)
+  const [error, setError] = React.useState("")
 
+  // * Fetch data ( coin ) from Api (coingecko) 
   React.useEffect(() => {
     fetch(
       `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=${coinsListNumber}&page=1&sparkline=false`
     )
       .then((response) => response.json())
       .then((data) => setCoins(data))
-      //  .then((data) => console.log(data))
-      .catch((err) => console.error(err));
+      .then(setLoading(false))
+      .catch((err) => { setError(err); console.error(err) });
   }, [coinsListNumber]);
-
-
-
-
+  // * Get more Coins from Api
   const moreCoins = () => {
-    setCoinsListNumber((prev) => prev + 10);
+    setLoading(true)
+    setTimeout(() => {
+      setCoinsListNumber((prev) => prev + 10);
+    }, 500);
   };
-
-
   return (
     <div className="d-flex flex-column  align-items-center  top-coinList-container  text-center mx-2  mx-md-5 pl-3  ">
       <div className="col-12 col-md-10  mt-2">
@@ -41,6 +42,8 @@ const TopCoinList = () => {
           </table>
         </div>
       </div>
+      {coins.length === 0 ? <LoadingComponent /> : null}
+      {error ? <div>{error}</div> : null}
       {coins.map((coin) => {
         return (
           <Coin
@@ -56,12 +59,15 @@ const TopCoinList = () => {
           />
         );
       })}
-      {coins.length>0 ?
-
+      {coins.length > 0 ?
         <div className="d-flex align-items-center justify-content-center my-2">
-          <button className="btn btn-dark w-100  text-light" onClick={moreCoins}>
-            More
-          </button>
+          {
+            loading ? <LoadingComponent />
+              :
+              <button className="btn btn-dark  px-5" onClick={moreCoins}>
+                More
+              </button>
+          }
         </div>
         : null
       }
