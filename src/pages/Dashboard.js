@@ -8,11 +8,9 @@ const Dashboard = () => {
   return (
     <div className=" d-flex row justify-content-center col-12  text-color">
       {userEmail ?
-        <>
           <div className="col-10  col-md-5  p-2 m-2 content-cointainer rounded-3 ">
             <UserInfo />
           </div>
-        </>
         : null
       }
       <Deposit />

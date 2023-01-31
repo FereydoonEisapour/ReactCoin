@@ -3,26 +3,24 @@ import { Coin, LoadingComponent } from "../components";
 
 const TopCoinList = () => {
   const [coins, setCoins] = React.useState([]);
-  const [coinsListNumber, setCoinsListNumber] = React.useState(10);
+  const [coinsListAmount, setCoinsListAmount] = React.useState(10);
   const [loading, setLoading] = React.useState(false)
   const [error, setError] = React.useState("")
 
   // * Fetch data ( coin ) from Api (coingecko) 
   React.useEffect(() => {
     fetch(
-      `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=${coinsListNumber}&page=1&sparkline=false`
+      `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=${coinsListAmount}&page=1&sparkline=false`
     )
       .then((response) => response.json())
       .then((data) => setCoins(data))
       .then(setLoading(false))
       .catch((err) => { setError(err); console.error(err) });
-  }, [coinsListNumber]);
+  }, [coinsListAmount]);
   // * Get more Coins from Api
   const moreCoins = () => {
     setLoading(true)
-    setTimeout(() => {
-      setCoinsListNumber((prev) => prev + 10);
-    }, 500);
+    setCoinsListAmount((prev) => prev + 10);
   };
   return (
     <div className="d-flex flex-column  align-items-center  top-coinList-container  text-center mx-2  mx-md-5 pl-3  ">

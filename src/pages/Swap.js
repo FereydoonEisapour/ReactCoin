@@ -7,6 +7,7 @@ import { useAuthState } from "../contexts/AuthContext";
 import { dbCoins, dbBestMarketBuy } from "../data/db";
 import { SwapTrades } from "../components/TradeItems";
 import PleaseLogin from "../components/PleaseLogin";
+import LoadingCoponent from "../components/LoadingComponent";
 
 const Swap = () => {
   const { coin } = useParams();
@@ -144,12 +145,19 @@ const Swap = () => {
         {
           userEmail ?
             <div className=" col-10 col-md-6 content-cointainer text-color rounded-4">
-              <div className="d-flex justify-content-between p-2 m-2 rounded-3 trade-success ">
-                <div className="">Coin</div>
-                <div className="">Amount</div>
-                <div className="">Price</div>
-              </div>
-              <hr />
+              {
+                swapTrades.length === 0 ?
+                  null
+                  :
+                  <>
+                    <div className="d-flex justify-content-between p-2 m-2 rounded-3 trade-success ">
+                      <div className="">Coin</div>
+                      <div className="">Amount</div>
+                      <div className="">Price</div>
+                    </div>
+                    <hr />
+                  </>
+              }
               {swapTrades.map((trade) => (
                 <SwapTrades
                   key={trade.id}
