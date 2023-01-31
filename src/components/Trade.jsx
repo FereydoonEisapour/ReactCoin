@@ -2,6 +2,7 @@ import React from 'react'
 import { dbCoins, dbOrders, dbTrades } from '../data/db';
 import firebase from "firebase/compat/app";
 import { useAuthState } from '../contexts/AuthContext';
+import PleaseLogin from './PleaseLogin';
 function Trade({ coin }) {
     // const { coin } = useParams();
     const { userEmail } = useAuthState();
@@ -97,7 +98,7 @@ function Trade({ coin }) {
         }
 
     }, [coin, userEmail]);
-    
+
     //*  CREATE ORDER
     const setOrderHandler = () => {
         if (calcOrder > 0) {
@@ -220,19 +221,14 @@ function Trade({ coin }) {
                 </div>
             </div>
             <div className="  mb-3 px-4 text-center">
-
                 {userEmail ?
-                    (<button className="btn  btn-primary w-50" disabled={btnDisabled}
+                    <button className="btn  btn-primary w-50" disabled={btnDisabled}
                         onClick={(e) => setOrderHandler(e)}>
                         {orderType ? " Buy" : "Sell"}
-                    </button>)
-                    : (
-                        <button className="btn  btn-primary w-50" disabled={true}
-                        >
-                            Please Login
-                        </button>
-                    )}
-
+                    </button>
+                    :
+                    <PleaseLogin />
+                }
             </div>
         </div>
     )

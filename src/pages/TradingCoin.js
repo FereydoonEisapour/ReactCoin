@@ -13,7 +13,7 @@ const TradingCoin = () => {
     <div className="containerTrade col-md-12 p-2 text-color">
       <BinanceLivePrice coin={coin} />
       <Trade coin={coin} />
-      <TradingChart />
+      <TradingChart />   
       <Balance />
       <Orders />
       <Trades />
