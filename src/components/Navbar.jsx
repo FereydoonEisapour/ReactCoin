@@ -7,7 +7,7 @@ const Navbar = () => {
   const { userEmail } = useAuthState();
   const [theme, toggleTheme] = useDarkMode()
   return (
-    <div className="container-fluid d-flex justify-content-between px-2 py-2 ">
+    <div className="container-fluid d-flex justify-content-between px-2 py-3 ">
       <div className="d-flex align-items-center">
         <nav className="px-1 d-flex ">
           <Link className="text-decoration-none px-1  navbar-link " to="/" >

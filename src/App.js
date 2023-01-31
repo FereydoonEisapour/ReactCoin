@@ -18,7 +18,7 @@ function App() {
   return (
     <BrowserRouter>
       <Toaster />
-      <div className='App fw-bold'>
+      <div className='App '>
         <Navbar />
         <Routes>
           <Route path="/" element={<TopCoinList />}></Route>

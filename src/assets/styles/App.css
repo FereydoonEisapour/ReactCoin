@@ -73,9 +73,9 @@ a {
 .displaynone {
   display: none;
 }
-.bg-white {
+/* .bg-white {
   background-color: #ffffff;
-}
+} */
 .text-white {
   color: #ffffff;
 }

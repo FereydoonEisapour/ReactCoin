@@ -45,7 +45,7 @@ const Login = () => {
             name="email"
             onChange={(e) => emailInputHandler(e)}
           />
-          <label htmlFor="password" className="text-color">Password</label>
+          <label htmlFor="password" className="text-color  ">Password</label>
           <input
             className="m-2 p-1"
             type="password"
@@ -66,16 +66,16 @@ const Login = () => {
         </div>
         <div className="text-center">
           {loginModal ?
-            <button className="btn col-8 btn-color " onClick={resetPassword}> reset password</button> : <></>
+            <button className="btn col-8 btn-color border-0" onClick={resetPassword}> reset password</button> : <></>
           }
         </div>
-        <div className="setlogin text-center p-2">
+        <div className="setlogin text-center p-1">
           {loginModal ?
-            <button className="btn btn-color" onClick={(e) => modalHandler(e)}>
+            <button className="btn btn-color border-0" onClick={(e) => modalHandler(e)}>
               Dont have account
             </button>
             :
-            <button className="btn " onClick={(e) => modalHandler(e)}>
+            <button className="btn border-0 text-color " onClick={(e) => modalHandler(e)}>
               <small> have account .Please Login</small>
             </button>
           }
