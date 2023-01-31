@@ -47,8 +47,13 @@ const Balance = () => {
           }
         </div> :
         <>
-          <h3 className="text-center fw-bolder"> Balance</h3>
-          <PleaseLogin />
+          <div className="balance  m-2 p-3 content-cointainer rounded-3">
+            <h3 className="text-center fw-bolder"> Balance</h3>
+            <div>
+              <PleaseLogin />
+            </div>
+          </div>
+          <div />
         </>
       }
     </>
