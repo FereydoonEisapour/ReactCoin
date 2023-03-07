@@ -1,4 +1,4 @@
-const LoadingCoponent = () => {
+const LoadingComponent = () => {
     return (
         <div className="d-flex justify-content-center align-items-center align-content-center">
             <div className="loader loader--style2" title="1">
@@ -20,4 +20,4 @@ const LoadingCoponent = () => {
     )
 }
 
-export default LoadingCoponent
+export default LoadingComponent

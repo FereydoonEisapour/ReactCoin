@@ -7,7 +7,6 @@ import { useAuthState } from "../contexts/AuthContext";
 import { dbCoins, dbBestMarketBuy } from "../data/db";
 import { SwapTrades } from "../components/TradeItems";
 import PleaseLogin from "../components/PleaseLogin";
-import LoadingCoponent from "../components/LoadingComponent";
 
 const Swap = () => {
   const { coin } = useParams();
