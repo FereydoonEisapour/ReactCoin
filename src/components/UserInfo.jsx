@@ -4,7 +4,7 @@ import {
   useAuthDispatch,
   useAuthState,
 } from "../contexts/AuthContext";
-import "./UserInfo.css"; // Assuming you have a CSS file for styling
+
 
 function UserInfo() {
   const { userEmail } = useAuthState();
